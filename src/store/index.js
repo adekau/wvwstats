@@ -1,25 +1,30 @@
-import Firebase from 'firebase'
 import { EventEmitter } from 'events'
 import { Promise } from 'es6-promise'
+import Vue from 'vue'
 
-const api = new Firebase('https://hacker-news.firebaseio.com/v0')
-const itemsCache = Object.create(null)
 const store = new EventEmitter()
-const storiesPerPage = store.storiesPerPage = 30
-
-let topStoryIds = []
+const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
+let matchesCache = Object.create(null)
 
 export default store
 
-/**
- * Subscribe to real time updates of the top 100 stories,
- * and cache the IDs locally.
- */
+console.log(Vue.http)
 
-api.child('topstories').on('value', snapshot => {
-  topStoryIds = snapshot.val()
-  store.emit('topstories-updated')
+Vue.http.get(matchesUrl).then(function (response) {
+  matchesCache = response.data
+  store.emit('matches-updated')
 })
+
+var matchTimer = setInterval(() => {
+  Vue.http.get(matchesUrl).then((response) => {
+    matchesCache = response.data
+    store.emit('matches-updated')
+  })
+}, 10000)
+
+store.fetchMatches = () => {
+  return matchesCache
+}
 
 /**
  * Fetch an item data with given id.

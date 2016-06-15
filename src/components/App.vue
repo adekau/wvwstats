@@ -16,6 +16,18 @@
   </div>
 </template>
 
+<script>
+  import Sidebar from './Sidebar.vue'
+  import Searchbar from './Searchbar.vue'
+
+  export default {
+    components: {
+      Sidebar,
+      Searchbar
+    }
+  }
+</script>
+
 <style lang="stylus">
 @import "../variables.styl"
 
