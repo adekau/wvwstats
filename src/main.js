@@ -1,27 +1,49 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { domain, fromNow } from './filters'
+import Resource from 'vue-resource'
+// import { domain, fromNow } from './filters'
 import App from './components/App.vue'
-import NewsView from './components/NewsView.vue'
+import Homepage from './components/Homepage.vue'
 import ItemView from './components/ItemView.vue'
 import UserView from './components/UserView.vue'
 
 // install router
 Vue.use(Router)
+// install resource, for http requests
+Vue.use(Resource)
 
 // register filters globally
-Vue.filter('fromNow', fromNow)
-Vue.filter('domain', domain)
+// Vue.filter('fromNow', fromNow)
+// Vue.filter('domain', domain)
+
+Vue.directive('progress', {
+  bind: function () {},
+  update: function (value, old) {
+    // The directive may be called before the element have been upgraded
+    window.componentHandler.upgradeElement(this.el)
+    this.el.MaterialProgress.setProgress(value)
+  }
+})
+
+Vue.directive('mdl', {
+  bind: function () {
+    window.componentHandler.upgradeElement(this.el)
+  }
+})
 
 // routing
-var router = new Router()
+var router = new Router({hashbang: false})
 
 router.map({
-  '/news/:page': {
-    component: NewsView
+  '/na': {
+    component: Homepage,
+    pageTitle: 'North American Matches',
+    region: '1-'
   },
-  '/user/:id': {
-    component: UserView
+  '/eu': {
+    component: Homepage,
+    pageTitle: 'European Matches',
+    region: '2-'
   },
   '/item/:id': {
     component: ItemView
@@ -33,7 +55,7 @@ router.beforeEach(function () {
 })
 
 router.redirect({
-  '*': '/news/1'
+  '*': '/na'
 })
 
 router.start(App, '#app')

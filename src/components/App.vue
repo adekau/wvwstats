@@ -1,25 +1,32 @@
 <template>
-  <div id="wrapper">
-    <!-- header -->
-    <div id="header">
-      <a id="yc" href="http://www.ycombinator.com">
-        <img src="https://news.ycombinator.com/y18.gif">
-      </a>
-      <h1><a href="#/">Hacker News</a></h1>
-      <span class="source">
-        Built with <a href="http://vuejs.org" target="_blank">Vue.js</a> |
-        <a href="https://github.com/yyx990803/vue-hackernews" target="_blank">Source</a>
-      </span>
+  <div v-mdl class="mdl-layout__container">
+    <div v-mdl class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <searchbar></searchbar>
+      <sidebar></sidebar>
+      <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid demo-content">
+          <router-view
+            keep-alive
+            transition
+            transition-mode="out-in">
+          </router-view>
+        </div>
+      </main>
     </div>
-    <!-- main view -->
-    <router-view
-      class="view"
-      keep-alive
-      transition
-      transition-mode="out-in">
-    </router-view>
   </div>
 </template>
+
+<script>
+  import Sidebar from './Sidebar.vue'
+  import Searchbar from './Searchbar.vue'
+
+  export default {
+    components: {
+      Sidebar,
+      Searchbar
+    }
+  }
+</script>
 
 <style lang="stylus">
 @import "../variables.styl"
@@ -38,7 +45,7 @@ a
   color #000
   cursor pointer
   text-decoration none
-  
+
 #wrapper
   background-color $bg
   position relative
