@@ -18,9 +18,11 @@ var matchUpdateTimer = setInterval(function () {
 }, 10000)
 
 store.updateMatches = () => {
-  Vue.http.get(matchesUrl).then(function (response) {
+  Vue.http.get(matchesUrl).then((response) => {
     matchesCache = response.data
     store.emit('matches-updated')
+  }, (response) => {
+    store.updateMatches()
   })
 }
 

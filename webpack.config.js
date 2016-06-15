@@ -1,11 +1,11 @@
 var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: './static',
-    publicPath: '/static/',
-    filename: 'build.js'
+    path: './build',
+    filename: '[name].[hash].js'
   },
   module: {
     // avoid webpack trying to shim process
@@ -31,7 +31,14 @@ module.exports = {
   babel: {
     presets: ['es2015'],
     plugins: ['transform-runtime']
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html',
+      inject: true
+    })
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -46,7 +53,19 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      }
+    })
+
   ]
 } else {
   module.exports.devtool = '#source-map'
