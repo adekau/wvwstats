@@ -11,7 +11,7 @@
                                                  role="presentation">list</i>NA Matches</a>
       <a v-link="{ path: '/eu' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">list</i>EU Matches</a>
-      <a id='maplink' @click="goToMap" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+      <a v-link="{ path: '/map' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">autorenew</i>Live</a>
       <a v-link="{ path: '/ratings' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">format_list_numbered</i>Ratings</a>

@@ -22,7 +22,8 @@
     data() {
       return {
         region: '1-',
-        matches: []
+        matches: [],
+        worldlist: []
       }
     },
 
@@ -31,22 +32,29 @@
         const region = to.region
         return {
           region: region,
-          matches: store.fetchMatches()
+          matches: store.fetchMatches(),
+          worldlist: store.fetchWorlds()
         }
       }
     },
 
     created () {
       store.on('matches-updated', this.update)
+      store.on('worlds-updated', this.updateWorlds)
     },
 
     destroyed () {
       store.removeListener('matches-updated', this.update)
+      store.removeListener('worlds-updated', this.updateWorlds)
     },
 
     methods: {
       update () {
         this.matches = store.fetchMatches()
+      },
+
+      updateWorlds () {
+        this.worldlist = store.fetchWorlds()
       }
     },
 

@@ -3,18 +3,18 @@
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <ul class="mdl-list">
         <li>
-          <span data-tooltip="{{ greenServers }}">
+          <span data-tooltip="{{ serverTooltip.green }}">
             {{worldinfo.green}}
           </span>
 
         </li>
         <li>
-          <span data-tooltip="{{ blueServers }}">
+          <span data-tooltip="{{ serverTooltip.blue }}">
             {{worldinfo.blue}}
           </span>
         </li>
         <li>
-          <span data-tooltip="{{ redServers }}">
+          <span data-tooltip="{{ serverTooltip.red }}">
             {{worldinfo.red}}
           </span>
         </li>
@@ -26,10 +26,9 @@
       <ul class="mdl-list" style="width: 100%;">
         <li>
           <div class="first-place" style="padding: 10px;">
-
             <div data-longtooltip=
               "{{worldinfo.blue}}: {{ scoreDiff.green.blue }} &#xa; {{worldinfo.red}}: {{ scoreDiff.green.red}}"
-              v-progress="greenPercent" class="mdl-progress mdl-js-progress">
+              v-progress="percentage.green" class="mdl-progress mdl-js-progress">
             </div>
 
           </div>
@@ -39,7 +38,7 @@
 
             <div data-longtooltip=
               "{{worldinfo.green}}: {{ scoreDiff.blue.green }} &#xa; {{worldinfo.red}}: {{ scoreDiff.blue.red}}"
-              v-progress="bluePercent" class="mdl-progress mdl-js-progress">
+              v-progress="percentage.blue" class="mdl-progress mdl-js-progress">
             </div>
 
           </div>
@@ -49,7 +48,7 @@
 
             <div data-longtooltip=
               "{{worldinfo.green}}: {{ scoreDiff.red.green }} &#xa; {{worldinfo.blue}}: {{ scoreDiff.red.blue}}"
-              v-progress="redPercent" class="mdl-progress mdl-js-progress">
+              v-progress="percentage.red" class="mdl-progress mdl-js-progress">
             </div>
 
           </div>
@@ -72,78 +71,72 @@
       </div>
       <div class="mdl-cell--3-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
         <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-          <ul style="text-align: left; list-style: none; margin-left: -25px;">
-            <li>{{camps.green}}</li>
-            <li>{{camps.blue}}</li>
-            <li>{{camps.red}}</li>
+          <ul style="text-align: left; list-style: none;">
+            <li>{{objectives.camps.green}}</li>
+            <li>{{objectives.camps.blue}}</li>
+            <li>{{objectives.camps.red}}</li>
           <ul>
         </div>
         <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-          <ul style="text-align: left; list-style: none; margin-left: -25px;">
-            <li>{{towers.green}}</li>
-            <li>{{towers.blue}}</li>
-            <li>{{towers.red}}</li>
+          <ul style="text-align: left; list-style: none;">
+            <li>{{objectives.towers.green}}</li>
+            <li>{{objectives.towers.blue}}</li>
+            <li>{{objectives.towers.red}}</li>
           <ul>
         </div>
         <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-          <ul style="text-align: left; list-style: none; margin-left: -25px;">
-            <li>{{keeps.green}}</li>
-            <li>{{keeps.blue}}</li>
-            <li>{{keeps.red}}</li>
+          <ul style="text-align: left; list-style: none;">
+            <li>{{objectives.keeps.green}}</li>
+            <li>{{objectives.keeps.blue}}</li>
+            <li>{{objectives.keeps.red}}</li>
           <ul>
         </div>
         <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-          <ul style="text-align: left; list-style: none; margin-left: -25px;">
-            <li>{{castles.green}}</li>
-            <li>{{castles.blue}}</li>
-            <li>{{castles.red}}</li>
+          <ul style="text-align: left; list-style: none;">
+            <li>{{objectives.castles.green}}</li>
+            <li>{{objectives.castles.blue}}</li>
+            <li>{{objectives.castles.red}}</li>
           <ul>
         </div>
       </div>
       <div class="mdl-cell--1-col mdl-grid no-padding-left mdl-cell--hide-phone mdl-cell--hide-tablet">
         <ul class="mdl-list">
           <li>
-            {{glicko.green | round 3 true}}
+            <!-- {{glicko.green | round 3 true}} -->
           </li>
           <li>
-            {{glicko.blue | round 3 true}}
+            <!-- {{glicko.blue | round 3 true}} -->
           </li>
           <li>
-            {{glicko.red | round 3 true}}
+            <!-- {{glicko.red | round 3 true}} -->
           </li>
         </ul>
       </div>
       <div class="mdl-cell--1-col mdl-grid mdl-cell--hide-phone mdl-cell--hide-tablet">
         <ul class="mdl-list">
           <li>
-            <span v-show="isPositive(glicko.delta.green)" class="glicko glicko-up">
-              <!-- <img width="12" height="12" src="../assets/uparrow.png"> -->
+            <!-- <span v-show="isPositive(glicko.delta.green)" class="glicko glicko-up">
               {{glicko.delta.green | round 3 true}}
             </span>
             <span v-show="!isPositive(glicko.delta.green)" class="glicko glicko-down">
-              <!-- <img width="12" height="12" src="../assets/downarrow.png"> -->
               {{glicko.delta.green | round 3 true}}
-            </span>
+            </span> -->
           </li>
           <li>
-            <span v-show="isPositive(glicko.delta.blue)" class="glicko glicko-up">
-              <!-- <img width="12" height="12" src="../assets/uparrow.png"> -->
+            <!-- <span v-show="isPositive(glicko.delta.blue)" class="glicko glicko-up">
               {{glicko.delta.blue | round 3 true}}
             </span>
             <span v-show="!isPositive(glicko.delta.blue)" class="glicko glicko-down">
-              <!-- <img width="12" height="12" src="../assets/downarrow.png"> -->
               {{glicko.delta.blue | round 3 true}}
-            </span>
+            </span> -->
           </li>
           <li>
-            <span v-show="isPositive(glicko.delta.red)" class="glicko glicko-up">
-              <!-- <img width="12" height="12" src="../assets/uparrow.png"> -->
+            <!-- <span v-show="isPositive(glicko.delta.red)" class="glicko glicko-up">
               {{glicko.delta.red | round 3 true}}
             </span>
             <span v-show="!isPositive(glicko.delta.red)" class="glicko glicko-down">
-              <!-- <img width="12" height="12" src="../assets/downarrow.png"> -->
               {{glicko.delta.red | round 3 true}}
-            </span>
+            </span> -->
           </li>
         </ul>
       </div>
@@ -152,14 +145,154 @@
 
 <script>
   export default {
-    props: ['matchinfo'],
+
+    props: ['matchinfo', 'worldlist'],
+
     data () {
       return {
-        greenPercent: 100,
-        bluePercent: 67,
-        redPercent: 59
+      }
+    },
+
+    created () {
+    },
+
+    computed: {
+      /**
+       * worldinfo
+       * used to compute the name of the servers in the match.
+       */
+      worldinfo () {
+        let ret = Object.create(null)
+        let servers = this.matchinfo.worlds
+        Object.keys(servers).forEach((key) => {
+          let worldId = servers[key]
+          ret[key] = this.getWorldById(worldId).name
+        })
+        return ret
+      },
+
+      /**
+       * objectives
+       * used to store the number of objectives stored.
+       */
+      objectives: function () {
+        // Reset
+        let ret = {
+          camps: {green: 0, blue: 0, red: 0},
+          towers: {green: 0, blue: 0, red: 0},
+          keeps: {green: 0, blue: 0, red: 0},
+          castles: {green: 0, blue: 0, red: 0}
+        }
+
+        let ref = this.matchinfo.maps
+        // Loop though the maps
+        Object.keys(ref).forEach((key) => {
+          // Loop through the map objectives.
+          let refSingleMap = ref[key].objectives
+          Object.keys(refSingleMap).forEach((key) => {
+            let objective = refSingleMap[key]
+            switch (objective.type.toLowerCase()) {
+              case 'camp':
+                ret.camps[objective.owner.toLowerCase()]++
+                break
+              case 'tower':
+                ret.towers[objective.owner.toLowerCase()]++
+                break
+              case 'keep':
+                ret.keeps[objective.owner.toLowerCase()]++
+                break
+              case 'castle':
+                ret.castles[objective.owner.toLowerCase()]++
+                break
+            }
+          })
+        })
+        return ret
+      },
+
+      /**
+       * ppt
+       * Calculates the points per tick per server.
+       */
+      ppt () {
+        return {
+          green: (this.objectives.camps.green * 5) + (this.objectives.towers.green * 10) +
+              (this.objectives.keeps.green * 25) + (this.objectives.castles.green * 35),
+          blue: (this.objectives.camps.blue * 5) + (this.objectives.towers.blue * 10) +
+              (this.objectives.keeps.blue * 25) + (this.objectives.castles.blue * 35),
+          red: (this.objectives.camps.red * 5) + (this.objectives.towers.red * 10) +
+              (this.objectives.keeps.red * 25) + (this.objectives.castles.red * 35)
+        }
+      },
+
+      /**
+       * percentage
+       * Calculates the percentages to fill the progress bars.
+       */
+      percentage () {
+        let leader = Math.max(this.matchinfo.scores.green, this.matchinfo.scores.blue, this.matchinfo.scores.red)
+        return {
+          green: ((this.matchinfo.scores.green / leader) * 100),
+          blue: ((this.matchinfo.scores.blue / leader) * 100),
+          red: ((this.matchinfo.scores.red / leader) * 100)
+        }
+      },
+
+      /**
+       * serverTooltip
+       * Calculates the html message to display in the tooltip for server names.
+       */
+       serverTooltip () {
+         var ret = Object.create(null)
+         let servers = this.matchinfo.all_worlds
+         Object.keys(servers).forEach((key) => {
+           let current = servers[key]
+           if (current.length > 1) {
+             ret[key] = (this.getWorldById(current[1]).name + ' & ' +
+                this.getWorldById(current[0]).name)
+           } else {
+             ret[key] = 'No linked server.'
+           }
+         })
+         return ret
+       },
+
+       scoreDiff () {
+         let s = this.matchinfo.scores
+         return {
+           green: {
+             blue: this.isPositive(s.green - s.blue) ? '⬆ ' + (s.green - s.blue) : '⬇ ' + (s.green - s.blue),
+             red: this.isPositive(s.green - s.red) ? '⬆ ' + (s.green - s.red) : '⬇ ' + (s.green - s.red)
+           },
+           blue: {
+             green: this.isPositive(s.blue - s.green) ? '⬆ ' + (s.blue - s.green) : '⬇ ' + (s.blue - s.green),
+             red: this.isPositive(s.blue - s.red) ? '⬆ ' + (s.blue - s.red) : '⬇ ' + (s.blue - s.red)
+           },
+           red: {
+             green: this.isPositive(s.red - s.green) ? '⬆ ' + (s.red - s.green) : '⬇ ' + (s.red - s.green),
+             blue: this.isPositive(s.red - s.blue) ? '⬆ ' + (s.red - s.blue) : '⬇ ' + (s.red - s.blue)
+           }
+         }
+       }
+
+    },
+
+    methods: {
+      getWorldById (id) {
+        for (var i = 0; i < this.worldlist.length; i++) {
+          let curWorld = this.worldlist[i]
+          if(curWorld.id === id) {
+            return curWorld
+          }
+        }
+        return
+      },
+
+      isPositive (value) {
+        return value >= 0
       }
     }
+
   }
 </script>
 
