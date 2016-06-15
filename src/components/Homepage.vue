@@ -1,10 +1,14 @@
 <template>
 
   <!-- North America Matches -->
-  <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+  <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"
+    :class="{ loading: !matches.length }">
     <!-- <h3>NA Matches</h3> -->
-    <!-- <matchheading></matchheading> -->
-    <scoredetails v-for="match in matches" :matchinfo="match"
+    <matchheading></matchheading>
+    <scoredetails v-for="match in matches
+      | filterBy region in 'id'
+      | orderBy 'id'"
+      :matchinfo="match"
       :worldlist="worldlist" :officialglicko="officialglicko"></scoredetails>
   </div>
 </template>
@@ -12,32 +16,42 @@
 <script>
   import store from '../store'
   import Scoredetails from './Scoredetails.vue'
+  import Matchheading from './Matchheading.vue'
 
   export default {
     data() {
       return {
+        region: '1-',
         matches: []
       }
     },
+
     route: {
       data ({ to }) {
+        const region = to.region
         return {
+          region: region,
           matches: store.fetchMatches()
         }
       }
     },
+
     created () {
       store.on('matches-updated', this.update)
     },
+
     destroyed () {
       store.removeListener('matches-updated', this.update)
     },
+
     methods: {
       update () {
         this.matches = store.fetchMatches()
       }
     },
+
     components: {
+      Matchheading,
       Scoredetails
     }
   }

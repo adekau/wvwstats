@@ -2,7 +2,7 @@
   <div v-mdl class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
     <header class="demo-drawer-header">
     <header class="demo-drawer-header" style="text-align: center;">
-      <img class="logo" src="http://www.wvwstats.com/static/img/logo.4729448.png">
+      <img class="logo" src="../assets/logo.png">
       <span>WvW Stats</span>
     </header>
     </header>

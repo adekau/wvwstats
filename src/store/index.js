@@ -4,23 +4,25 @@ import Vue from 'vue'
 
 const store = new EventEmitter()
 const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
-let matchesCache = Object.create(null)
+let matchesCache = []
+let matchesPromise = null
 
 export default store
 
-console.log(Vue.http)
+var initialMatchUpdate = setTimeout(function () {
+  store.updateMatches()
+}, 1)
 
-Vue.http.get(matchesUrl).then(function (response) {
-  matchesCache = response.data
-  store.emit('matches-updated')
-})
+var matchUpdateTimer = setInterval(function () {
+  store.updateMatches()
+}, 10000)
 
-var matchTimer = setInterval(() => {
-  Vue.http.get(matchesUrl).then((response) => {
+store.updateMatches = () => {
+  Vue.http.get(matchesUrl).then(function (response) {
     matchesCache = response.data
     store.emit('matches-updated')
   })
-}, 10000)
+}
 
 store.fetchMatches = () => {
   return matchesCache

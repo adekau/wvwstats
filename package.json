@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "es6-promise": "^3.0.2",
+    "file-loader": "^0.8.5",
     "firebase": "^2.3.1",
     "vue": "^1.0.8",
     "vue-resource": "^0.7.4",

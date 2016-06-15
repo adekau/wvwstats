@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Resource from 'vue-resource'
-import { domain, fromNow } from './filters'
+// import { domain, fromNow } from './filters'
 import App from './components/App.vue'
 import Homepage from './components/Homepage.vue'
 import ItemView from './components/ItemView.vue'
@@ -13,8 +13,8 @@ Vue.use(Router)
 Vue.use(Resource)
 
 // register filters globally
-Vue.filter('fromNow', fromNow)
-Vue.filter('domain', domain)
+// Vue.filter('fromNow', fromNow)
+// Vue.filter('domain', domain)
 
 Vue.directive('progress', {
   bind: function () {},
@@ -37,11 +37,13 @@ var router = new Router({hashbang: false})
 router.map({
   '/na': {
     component: Homepage,
-    pageTitle: 'North American Matches'
+    pageTitle: 'North American Matches',
+    region: '1-'
   },
   '/eu': {
     component: Homepage,
-    pageTitle: 'European Matches'
+    pageTitle: 'European Matches',
+    region: '2-'
   },
   '/item/:id': {
     component: ItemView

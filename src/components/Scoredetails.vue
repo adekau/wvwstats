@@ -152,6 +152,7 @@
 
 <script>
   export default {
+    props: ['matchinfo'],
     data () {
       return {
         greenPercent: 100,
