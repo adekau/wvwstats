@@ -41,3 +41,119 @@ ul
   &.v-enter, &.v-leave
     opacity 0
 </style>
+
+<style>
+
+
+  html, body {
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+  }
+
+  .demo-layout .demo-header .mdl-textfield {
+    padding: 0px;
+    margin-top: 41px;
+  }
+
+  .demo-layout .demo-header .mdl-textfield .mdl-textfield__expandable-holder {
+    bottom: 19px;
+  }
+
+  .demo-layout .mdl-layout__header .mdl-layout__drawer-button {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .mdl-layout__drawer .avatar {
+    margin-bottom: 16px;
+  }
+
+  .demo-drawer {
+    border: none;
+  }
+
+  /* iOS Safari specific workaround */
+  .demo-drawer .mdl-menu__container {
+    z-index: -1;
+  }
+
+  .demo-drawer .demo-navigation {
+    z-index: -2;
+  }
+
+  /* END iOS Safari specific workaround */
+  .demo-drawer .mdl-menu .mdl-menu__item {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .demo-drawer-header {
+    box-sizing: border-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+    padding: 21px;
+    height: 195px;
+    font-weight: bold;
+  }
+  .demo-drawer-header span {
+    padding-top: 4px;
+    font-size: 30px;
+  }
+
+  .demo-avatar-dropdown {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .demo-navigation {
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+
+  .demo-layout .demo-navigation .mdl-navigation__link {
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.56);
+    font-weight: 500;
+  }
+
+  .demo-layout .demo-navigation .mdl-navigation__link:hover {
+    color: #37474F;
+  }
+
+  .demo-navigation .mdl-navigation__link .material-icons {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.56);
+    margin-right: 32px;
+  }
+
+  .demo-content {
+    max-width: 1080px;
+  }
+</style>
