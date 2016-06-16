@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events'
 import { Promise } from 'es6-promise'
+import Firebase from 'firebase'
 import Vue from 'vue'
 
 const store = new EventEmitter()
@@ -8,12 +9,13 @@ const store = new EventEmitter()
  */
 const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
 const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
-
+let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
 /**
  * Local Cache variables
  */
 let matchesCache = []
 let worldsCache = []
+let glickoCache = {}
 
 // ------- BEGIN STORE.
 export default store
@@ -24,6 +26,7 @@ export default store
 var initialUpdate = setTimeout(function () {
   store.updateMatches()
   store.updateWorlds()
+  store.updateGlicko()
 }, 1)
 
 /**
@@ -53,6 +56,14 @@ var matchUpdateTimer = setInterval(function () {
      store.updateWorlds()
    })
  }
+
+ store.updateGlicko = () => {
+   var ref = api.child('official_glicko')
+   ref.once('value', (snapshot) => {
+     glickoCache = snapshot.val()
+     store.emit('glicko-updated')
+   })
+ }
 /**
  * Getters used from pages
  */
@@ -62,4 +73,8 @@ store.fetchMatches = () => {
 
 store.fetchWorlds = () => {
   return worldsCache
+}
+
+store.fetchGlicko = () => {
+  return glickoCache
 }
