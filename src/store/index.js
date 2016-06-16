@@ -23,6 +23,7 @@ const store = new EventEmitter()
  */
 const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
 const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
+const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
 let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
 /**
  * Local Cache variables
@@ -30,6 +31,7 @@ let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
 let matchesCache = []
 let worldsCache = []
 let glickoCache = {}
+let objectiveCache = []
 
 // ------- BEGIN STORE.
 export default store
@@ -72,6 +74,8 @@ var matchUpdateTimer = setInterval(function () {
    })
  }
 
+ // TODO: note, once I remake this, remember to add a fallback option for incase
+ // the request fails.
  store.updateGlicko = () => {
    var ref = api.child('official_glicko')
    ref.once('value', (snapshot) => {
@@ -85,7 +89,13 @@ var matchUpdateTimer = setInterval(function () {
    for (var id in objectiveIds) {
      requestIds += objectiveIds[id] + ','
    }
-   console.log(requestIds)
+
+   Vue.http.get(objectivesUrl + requestIds).then((response) => {
+     objectiveCache = response.data
+     store.emit('objectives-updated')
+   }, (response) => {
+     store.updateObjectives()
+   })
  }
 
 /**
@@ -101,4 +111,8 @@ store.fetchWorlds = () => {
 
 store.fetchGlicko = () => {
   return glickoCache
+}
+
+store.fetchObjectives = () => {
+  return objectiveCache
 }
