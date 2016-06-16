@@ -257,6 +257,10 @@
          return ret
        },
 
+       /**
+        * scoreDiff
+        * generates the tooltips for hoving over the progress bars.
+        */
        scoreDiff () {
          let s = this.matchinfo.scores
          return {
@@ -278,6 +282,11 @@
     },
 
     methods: {
+      /**
+       * getWorldById
+       * id : numerical id of the world (1001-2301)
+       * returns the world object of the form: {id: _, name: _, population: _}
+       */
       getWorldById (id) {
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
@@ -288,6 +297,12 @@
         return
       },
 
+      /**
+       * isPositive
+       * value : numeral to determine positivity
+       * returns true if positive, false if not.
+       * used by glicko numbers to show green/red based on gain/loss
+       */
       isPositive (value) {
         return value >= 0
       }
