@@ -21,7 +21,7 @@
   export default {
     data() {
       return {
-        region: '1-',
+        region: '2-',
         matches: [],
         worldlist: []
       }
