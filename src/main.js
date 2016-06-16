@@ -4,6 +4,7 @@ import Resource from 'vue-resource'
 // import { domain, fromNow } from './filters'
 import App from './components/App.vue'
 import Homepage from './components/Homepage.vue'
+import EUMatches from './components/EUMatches.vue'
 import Map from './components/Map.vue'
 
 // install router
@@ -40,7 +41,7 @@ router.map({
     region: '1-'
   },
   '/eu': {
-    component: Homepage,
+    component: EUMatches,
     pageTitle: 'European Matches',
     region: '2-'
   },
