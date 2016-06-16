@@ -4,6 +4,20 @@ import Firebase from 'firebase'
 import Vue from 'vue'
 
 const store = new EventEmitter()
+
+/**
+ * Constants
+ */
+ const objectiveIds = [
+   '94-35', '95-35', '96-35', '94-32', '95-32', '96-32', '94-33', '95-33', '96-33',
+   '94-34', '95-34', '96-34', '94-36', '95-36', '96-36', '94-37', '95-37', '96-37',
+   '94-38', '95-38', '96-38', '94-39', '95-39', '96-39', '94-40', '95-40', '96-40',
+   '94-50', '95-50', '96-50', '94-51', '95-51', '96-51', '94-52', '95-52', '96-52',
+   '94-53', '95-53', '96-53', '38-1', '38-2', '38-3', '38-4', '38-5', '38-6',
+   '38-7', '38-8', '38-9', '38-10', '38-11', '38-12', '38-13', '38-14', '38-15',
+   '38-16', '38-17', '38-18', '38-19', '38-20', '38-21', '38-22'
+ ]
+
 /**
  * URLs for API Requests
  */
@@ -27,6 +41,7 @@ var initialUpdate = setTimeout(function () {
   store.updateMatches()
   store.updateWorlds()
   store.updateGlicko()
+  store.updateObjectives()
 }, 1)
 
 /**
@@ -64,6 +79,15 @@ var matchUpdateTimer = setInterval(function () {
      store.emit('glicko-updated')
    })
  }
+
+ store.updateObjectives = () => {
+   var requestIds = ''
+   for (var id in objectiveIds) {
+     requestIds += objectiveIds[id] + ','
+   }
+   console.log(requestIds)
+ }
+
 /**
  * Getters used from pages
  */
