@@ -216,12 +216,12 @@
        */
       ppt () {
         return {
-          green: (this.objectives.camps.green * 5) + (this.objectives.towers.green * 10) +
-              (this.objectives.keeps.green * 25) + (this.objectives.castles.green * 35),
-          blue: (this.objectives.camps.blue * 5) + (this.objectives.towers.blue * 10) +
-              (this.objectives.keeps.blue * 25) + (this.objectives.castles.blue * 35),
-          red: (this.objectives.camps.red * 5) + (this.objectives.towers.red * 10) +
-              (this.objectives.keeps.red * 25) + (this.objectives.castles.red * 35)
+          green: (this.objectives.camps.green * 2) + (this.objectives.towers.green * 4) +
+              (this.objectives.keeps.green * 8) + (this.objectives.castles.green * 12),
+          blue: (this.objectives.camps.blue * 2) + (this.objectives.towers.blue * 4) +
+              (this.objectives.keeps.blue * 8) + (this.objectives.castles.blue * 12),
+          red: (this.objectives.camps.red * 2) + (this.objectives.towers.red * 4) +
+              (this.objectives.keeps.red * 8) + (this.objectives.castles.red * 12)
         }
       },
 
