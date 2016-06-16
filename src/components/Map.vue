@@ -32,7 +32,20 @@
           '94-53', '95-53', '96-53', '38-1', '38-2', '38-3', '38-4', '38-5', '38-6',
           '38-7', '38-8', '38-9', '38-10', '38-11', '38-12', '38-13', '38-14', '38-15',
           '38-16', '38-17', '38-18', '38-19', '38-20', '38-21', '38-22'
-        ]
+        ],
+        defaultIconSize: [26, 26],
+        mapIcons: {
+          camp: {green: null, blue: null, red: null, neutral: null},
+          tower: {green: null, blue: null, red: null, neutral: null},
+          keep: {green: null, blue: null, red: null, neutral: null},
+          castle: {green: null, blue: null, red: null, neutral: null},
+          claimed: {
+            camp: {green: null, blue: null, red: null, neutral: null},
+            tower: {green: null, blue: null, red: null, neutral: null},
+            keep: {green: null, blue: null, red: null, neutral: null},
+            castle: {green: null, blue: null, red: null, neutral: null}
+          }
+        }
       }
     },
 
@@ -70,11 +83,50 @@
     created () {
       store.on('matches-updated', this.updateMatches)
       store.on('worlds-updated', this.updateWorlds)
+      this.prepareIcons()
     },
 
     destroyed () {
       store.removeListener('matches-updated', this.updateMatches)
       store.removeListener('worlds-updated', this.updateWorlds)
+    },
+
+    computed: {
+      /**
+       * worldMatchIds
+       * Loops through each match and assembles an object by world id with what
+       * match that server is in.
+       */
+      worldMatchIds () {
+        var ret = {}
+
+        if(!this.matchArr) {
+            return ret
+        }
+
+        for (var i = 0; i < this.matchArr.length; i++) {
+          let matchId = this.matchArr[i].id
+          let matchServers = this.matchArr[i].all_worlds
+
+          Object.keys(matchServers).forEach((key) => {
+            var serversArray = matchServers[key]
+            for(var server in serversArray) {
+              ret[serversArray[server]] = matchId
+            }
+          })
+        }
+        return ret
+      },
+
+      /**
+       * currentMatch
+       * using worldMatchIds, finds the current match of the selected world.
+       */
+      currentMatch () {
+        var server = this.selectedWorld
+        var id = this.getWorldByName(server).id
+        return this.worldMatchIds[id]
+      }
     },
 
     methods: {
@@ -88,8 +140,57 @@
 
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
+      },
+
+      /**
+       * getWorldByName
+       * name: world's string name
+       * returns the world object of the form: {id: _, name: _, population: _}
+       */
+      getWorldByName (name) {
+        for (var i = 0; i < this.worldlist.length; i++) {
+          let curWorld = this.worldlist[i]
+          if(curWorld.name === name) {
+            return curWorld
+          }
+        }
+        return
+      },
+
+      /**
+       * prepareIcons
+       * Prepares the mapIcons object.
+       */
+      prepareIcons () {
+        var types = ['camp', 'tower', 'keep', 'castle']
+        var colors = ['green', 'blue', 'red', 'neutral']
+
+        for (var type in types) {
+          for (var color in colors) {
+            this.mapIcons[types[type]][colors[color]] = window.L.icon({
+              iconUrl: 'http://www.wvwstats.com/static/img/' + types[type] + '_' + colors[color] + '.png',
+              iconSize: this.defaultIconSize
+            })
+            this.mapIcons.claimed[types[type]][colors[color]] = window.L.icon({
+              iconUrl: 'http://www.wvwstats.com/static/img/' + types[type] + '_' + colors[color] + '.png',
+              iconSize: this.defaultIconSize,
+              shadowUrl: 'http://www.wvwstats.com/static/img/claimed.svg',
+              shadowSize: [12, 12],
+              shadowAnchor: [18, 18]
+            })
+          }
+        }
+        console.log(this.mapIcons)
+      }
+
+    },
+
+    watch: {
+      'selectedWorld': function () {
+        console.log(this.currentMatch)
       }
     }
+
   }
 </script>
 

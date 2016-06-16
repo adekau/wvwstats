@@ -290,13 +290,18 @@
         */
         glicko () {
           var ret = {
-            green: null, blue: null, red: null,
+            green: 0, blue: 0, red: 0,
             delta: {
-              green: null, blue: null, red: null
+              green: 0, blue: 0, red: 0
             }
           }
+
           var scores = this.matchinfo.scores
           var worlds = this.matchinfo.worlds
+
+          if (!this.officialglicko[worlds.green]) {
+            return ret
+          }
 
           var oldRatings = {
             green: this.officialglicko[worlds.green].rating,
