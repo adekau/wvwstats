@@ -102,41 +102,47 @@
       <div class="mdl-cell--1-col mdl-grid no-padding-left mdl-cell--hide-phone mdl-cell--hide-tablet">
         <ul class="mdl-list">
           <li>
-            <!-- {{glicko.green | round 3 true}} -->
+            {{glicko.green | round 3 true}}
           </li>
           <li>
-            <!-- {{glicko.blue | round 3 true}} -->
+            {{glicko.blue | round 3 true}}
           </li>
           <li>
-            <!-- {{glicko.red | round 3 true}} -->
+            {{glicko.red | round 3 true}}
           </li>
         </ul>
       </div>
       <div class="mdl-cell--1-col mdl-grid mdl-cell--hide-phone mdl-cell--hide-tablet">
         <ul class="mdl-list">
           <li>
-            <!-- <span v-show="isPositive(glicko.delta.green)" class="glicko glicko-up">
+            <span v-show="isPositive(glicko.delta.green)" class="glicko glicko-up">
+              <!-- <img src="../assets/uparrow.png" width="10" height="10"> -->
               {{glicko.delta.green | round 3 true}}
             </span>
             <span v-show="!isPositive(glicko.delta.green)" class="glicko glicko-down">
+              <!-- <img src="../assets/downarrow.png" width="10" height="10"> -->
               {{glicko.delta.green | round 3 true}}
-            </span> -->
+            </span>
           </li>
           <li>
-            <!-- <span v-show="isPositive(glicko.delta.blue)" class="glicko glicko-up">
+            <span v-show="isPositive(glicko.delta.blue)" class="glicko glicko-up">
+              <!-- <img src="../assets/uparrow.png" width="10" height="10"> -->
               {{glicko.delta.blue | round 3 true}}
             </span>
             <span v-show="!isPositive(glicko.delta.blue)" class="glicko glicko-down">
+              <!-- <img src="../assets/downarrow.png" width="10" height="10"> -->
               {{glicko.delta.blue | round 3 true}}
-            </span> -->
+            </span>
           </li>
           <li>
-            <!-- <span v-show="isPositive(glicko.delta.red)" class="glicko glicko-up">
+            <span v-show="isPositive(glicko.delta.red)" class="glicko glicko-up">
+              <!-- <img src="../assets/uparrow.png" width="10" height="10"> -->
               {{glicko.delta.red | round 3 true}}
             </span>
             <span v-show="!isPositive(glicko.delta.red)" class="glicko glicko-down">
+              <!-- <img src="../assets/downarrow.png" width="10" height="10"> -->
               {{glicko.delta.red | round 3 true}}
-            </span> -->
+            </span>
           </li>
         </ul>
       </div>
@@ -144,16 +150,15 @@
 </template>
 
 <script>
+  import WvWGlicko from '../custom_modules/WvwGlicko'
+
   export default {
 
-    props: ['matchinfo', 'worldlist'],
+    props: ['matchinfo', 'worldlist', 'officialglicko'],
 
     data () {
       return {
       }
-    },
-
-    created () {
     },
 
     computed: {
@@ -277,7 +282,49 @@
              blue: this.isPositive(s.red - s.blue) ? '⬆ ' + (s.red - s.blue) : '⬇ ' + (s.red - s.blue)
            }
          }
-       }
+       },
+
+       /**
+        * glicko
+        * calculates the changes in glicko for each server.
+        */
+        glicko () {
+          var ret = {
+            green: null, blue: null, red: null,
+            delta: {
+              green: null, blue: null, red: null
+            }
+          }
+          var scores = this.matchinfo.scores
+          var worlds = this.matchinfo.worlds
+
+          var oldRatings = {
+            green: this.officialglicko[worlds.green].rating,
+            blue: this.officialglicko[worlds.blue].rating,
+            red: this.officialglicko[worlds.red].rating
+          }
+
+          var deviations = {
+            green: this.officialglicko[worlds.green].rd,
+            blue: this.officialglicko[worlds.blue].rd,
+            red: this.officialglicko[worlds.red].rd
+          }
+
+          var volatilities = {
+            green: this.officialglicko[worlds.green].volatility,
+            blue: this.officialglicko[worlds.blue].volatility,
+            red: this.officialglicko[worlds.red].volatility
+          }
+
+          var glickObj = new WvWGlicko(scores, deviations, volatilities, oldRatings)
+          ret.green = glickObj.newRatingG
+          ret.blue = glickObj.newRatingB
+          ret.red = glickObj.newRatingR
+          ret.delta.green = glickObj.newRatingG - oldRatings.green
+          ret.delta.blue = glickObj.newRatingB - oldRatings.blue
+          ret.delta.red = glickObj.newRatingR - oldRatings.red
+          return ret
+        }
 
     },
 
@@ -306,6 +353,20 @@
       isPositive (value) {
         return value >= 0
       }
+    },
+
+    filters: {
+      round: function (value, accuracy, keep) {
+        if (typeof value !== 'number') return value
+
+        var fixed = value.toFixed(accuracy)
+
+        return keep ? fixed : +fixed
+      },
+      removeNegative: function (value) {
+        return Math.abs(value)
+      }
+
     }
 
   }
@@ -452,9 +513,11 @@
     color: rgb(182, 89, 91);
     font-weight: bold;
   }
+
   .glicko-up-container {
     display: inline-block;
   }
+
   .mdl-progress>.bufferbar {
     background-image: none;
     background-color: rgb(191,200,215);
