@@ -51,9 +51,16 @@ router.map({
   }
 })
 
-router.beforeEach(function () {
-  window.scrollTo(0, 0)
-})
+/**
+ * uncomment if want page to go back to top..
+ * TODO: Maybe animate this?
+ */
+
+/*router.afterEach(function () {
+  console.log('hi')
+  var _router_el = document.getElementById('router_view')
+  _router_el.scrollTop = 0
+})*/
 
 router.redirect({
   '*': '/na'
