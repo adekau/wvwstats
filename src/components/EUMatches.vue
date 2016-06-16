@@ -23,7 +23,8 @@
       return {
         region: '2-',
         matches: [],
-        worldlist: []
+        worldlist: [],
+        officialglicko: {}
       }
     },
 
@@ -33,7 +34,8 @@
         return {
           region: region,
           matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds()
+          worldlist: store.fetchWorlds(),
+          officialglicko: store.fetchGlicko()
         }
       }
     },
@@ -41,11 +43,13 @@
     created () {
       store.on('matches-updated', this.update)
       store.on('worlds-updated', this.updateWorlds)
+      store.on('glicko-updated', this.updateGlicko)
     },
 
     destroyed () {
       store.removeListener('matches-updated', this.update)
       store.removeListener('worlds-updated', this.updateWorlds)
+      store.removeListener('glicko-updated', this.updateGlicko)
     },
 
     methods: {
@@ -55,6 +59,10 @@
 
       updateWorlds () {
         this.worldlist = store.fetchWorlds()
+      },
+      
+      updateGlicko () {
+        this.officialglicko = store.fetchGlicko()
       }
     },
 
