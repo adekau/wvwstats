@@ -56,12 +56,20 @@
 </style>
 
 <script>
+  import store from '../store'
+
   export default {
     data () {
       return {
+        map: false,
+        worldlist: [],
+        selectedWorld: '',
+        worldlist: [],
+        matchArr: []
       }
     },
-    created () {
+
+    ready () {
       var southWest, northEast
 
       this.map = window.L.map('map', {
@@ -81,6 +89,30 @@
         maxZoom: 7,
         continuousWorld: true
       }).addTo(this.map)
+    },
+
+    created () {
+      store.on('matches-updated', this.updateMatches)
+      store.on('worlds-updated', this.updateWorlds)
+    },
+
+    destroyed () {
+      store.removeListener('matches-updated', this.updateMatches)
+      store.removeListener('worlds-updated', this.updateWorlds)
+    },
+
+    methods: {
+      updateMatches () {
+        this.matchArr = store.fetchMatches()
+      },
+
+      updateWorlds () {
+        this.worldlist = store.fetchWorlds()
+      },
+
+      unproject: function (coord) {
+        return this.map.unproject(coord, this.map.getMaxZoom())
+      }
     }
   }
 </script>
