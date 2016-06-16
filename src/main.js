@@ -4,8 +4,8 @@ import Resource from 'vue-resource'
 // import { domain, fromNow } from './filters'
 import App from './components/App.vue'
 import Homepage from './components/Homepage.vue'
-import ItemView from './components/ItemView.vue'
-import UserView from './components/UserView.vue'
+import EUMatches from './components/EUMatches.vue'
+import Map from './components/Map.vue'
 
 // install router
 Vue.use(Router)
@@ -41,12 +41,13 @@ router.map({
     region: '1-'
   },
   '/eu': {
-    component: Homepage,
+    component: EUMatches,
     pageTitle: 'European Matches',
     region: '2-'
   },
-  '/item/:id': {
-    component: ItemView
+  '/map': {
+    component: Map,
+    pageTitle: 'Live Map'
   }
 })
 

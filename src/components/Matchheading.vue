@@ -14,22 +14,22 @@
     </div>
     <div class="mdl-cell--3-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <div class="mdl-grid mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-        <div data-tooltip="Camp - 5 Points" style="display: inline-block; margin:auto;">
+        <div data-tooltip="Camp - 5 Points" style="display: inline-block; margin-left: -4px;">
           <img height="22" width="22" src="../assets/camp.png">
         </div>
       </div>
       <div class="mdl-grid mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-        <div data-tooltip="Tower - 10 Points" style="display: inline-block; margin:auto;">
+        <div data-tooltip="Tower - 10 Points" style="display: inline-block; margin-left: -4px;">
           <img height="18" width="18" src="../assets/tower.png">
         </div>
       </div>
       <div class="mdl-grid mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-        <div data-tooltip="Keep - 25 Points" style="display: inline-block; margin:auto;">
+        <div data-tooltip="Keep - 25 Points" style="display: inline-block; margin-left: -4px;">
           <img height="20" width="20" src="../assets/keep.png">
         </div>
       </div>
       <div class="mdl-grid mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
-        <div data-tooltip="Castle - 35 Points" style="display: inline-block; margin:auto;">
+        <div data-tooltip="Castle - 35 Points" style="display: inline-block; margin-left: -4px;">
           <img height="20" width="20" src="../assets/castle.png">
         </div>
       </div>
