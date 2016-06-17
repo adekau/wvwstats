@@ -149,7 +149,7 @@
 
       selectChanged () {
         console.log(this.selectedWorld)
-        console.log(this.getWorldByName(this.selectedWorld).id)
+        console.log(this.getWorldByName(this.selectedWorld))
         console.log(this.currentMatch)
         console.log(this.worldMatchIds)
         console.log(this.worldMatchIds[this.getWorldByName(this.selectedWorld).id])
