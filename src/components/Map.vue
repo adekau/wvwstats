@@ -3,7 +3,7 @@
     <div class="server-select mdl-shadow--2dp">
       <div class="server-select-container">
         <strong>Server: &nbsp;</strong>
-        <select class="map-select" v-model="selectedWorld">
+        <select class="map-select" v-model="selectedWorld" :disabled="!mapPrepared">
           <option v-for="world in worldlist">
             {{world.name}}
           </option>
@@ -24,6 +24,7 @@
         worldlist: [],
         selectedWorld: '',
         matchArr: [],
+        objectiveIds: [],
         objectives: [],
         objectiveInfo: {},
         objectivesById: {},
@@ -40,7 +41,8 @@
             keep: {green: null, blue: null, red: null, neutral: null},
             castle: {green: null, blue: null, red: null, neutral: null}
           }
-        }
+        },
+        mapPrepared: 0
       }
     },
 
@@ -77,7 +79,8 @@
         return {
           worldlist: store.fetchWorlds(),
           matchArr: store.fetchMatches(),
-          objectives: store.fetchObjectives()
+          objectives: store.fetchObjectives(),
+          objectiveIds: store.fetchObjectiveIds()
         }
       }
     },
@@ -118,6 +121,40 @@
               ret[serversArray[server]] = matchId
             }
           })
+        }
+        return ret
+      },
+
+      /**
+       * objectivesById
+       * returns an object indexed by id of the objectives in the match-up
+       */
+      objectivesById () {
+        var curMatchId = this.currentMatch // alias. force compute
+        var curMatch = Object.create(null)
+        var ret = Object.create(null)
+
+        if (!this.matchArr[0]) {
+          return curMatch
+        }
+
+        for (let i = 0; i < this.matchArr.length; i++) {
+          let match = this.matchArr[i]
+          if(match.id === curMatchId) {
+            curMatch = match
+          }
+        }
+
+        var maps = curMatch.maps
+        for (var map in maps) {
+
+          for (let z = 0; z < maps[map].objectives.length; z++) {
+            let oid = maps[map].objectives[z]
+            let id = oid.id
+            delete oid.id
+            ret[id] = oid
+          }
+
         }
         return ret
       },
@@ -208,6 +245,22 @@
             icon: this.mapIcons[obj.type.toLowerCase()].neutral
           }).addTo(this.map)
           .bindPopup(name)
+          this.mapPrepared = 1
+        }
+      },
+
+      /**
+       * updateMap
+       * Modify the icons based on who owns them
+       */
+      updateMap () {
+        let objectives = this.objectivesById
+        for (let i = 0; i < this.objectiveIds.length; i++) {
+          let item = this.objectiveIds[i]
+          let curObjective = objectives[item]
+          this.mapMarkers[item].setIcon(
+            this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()]
+          )
         }
       }
 
@@ -216,6 +269,7 @@
     watch: {
       'selectedWorld': function (val, oldVal) {
         console.log(this.currentMatch)
+        this.updateMap()
       }
     }
 
