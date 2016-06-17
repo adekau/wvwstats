@@ -135,27 +135,28 @@
         var ret = Object.create(null)
 
         if (!this.matchArr[0]) {
+          console.log('No match arr')
           return curMatch
         }
 
-        for (let i = 0; i < this.matchArr.length; i++) {
+        for (var i = 0; i < this.matchArr.length; i++) {
           let match = this.matchArr[i]
           if(match.id === curMatchId) {
             curMatch = match
           }
         }
 
-        var maps = curMatch.maps
-        for (var map in maps) {
+        let temp = curMatch.maps.map( (obj) => {
+          return obj.objectives
+        })
 
-          for (let z = 0; z < maps[map].objectives.length; z++) {
-            let oid = maps[map].objectives[z]
-            let id = oid.id
-            delete oid.id
-            ret[id] = oid
-          }
+        temp = [].concat.apply([], temp)
 
+        for (var z = 0; z < temp.length; z++) {
+          let id = temp[z].id
+          ret[id] = temp[z]
         }
+
         return ret
       },
 
@@ -254,13 +255,19 @@
        * Modify the icons based on who owns them
        */
       updateMap () {
+        if(!mapPrepared) {
+          return
+        }
+
         let objectives = this.objectivesById
-        for (let i = 0; i < this.objectiveIds.length; i++) {
+
+        for (var i = 0; i < this.objectiveIds.length; i++) {
           let item = this.objectiveIds[i]
           let curObjective = objectives[item]
-          this.mapMarkers[item].setIcon(
-            this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()]
-          )
+          if (curObjective) {
+            this.mapMarkers[item].setIcon(
+              this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
+          }
         }
       }
 
