@@ -3,7 +3,7 @@
     <div class="server-select mdl-shadow--2dp">
       <div class="server-select-container">
         <strong>Server: &nbsp;</strong>
-        <select class="map-select" v-model="selectedWorld" v-on:change="selectChanged">
+        <select class="map-select" v-model="selectedWorld">
           <option v-for="world in worldlist">
             {{world.name}}
           </option>
@@ -147,14 +147,6 @@
         this.prepareMap()
       },
 
-      selectChanged () {
-        console.log(this.selectedWorld)
-        console.log(this.getWorldByName(this.selectedWorld))
-        console.log(this.currentMatch)
-        console.log(this.worldMatchIds)
-        console.log(this.worldMatchIds[this.getWorldByName(this.selectedWorld).id])
-      },
-
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
       },
@@ -165,12 +157,9 @@
        * returns the world object of the form: {id: _, name: _, population: _}
        */
       getWorldByName (name) {
-        console.log('World list length:')
-        console.log(this.worldlist)
         name = name.trim()
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
-          console.log('Comparing ' + curWorld.name + ' to ' + name)
           if(curWorld.name === name) {
             return curWorld
           }
@@ -224,11 +213,11 @@
 
     },
 
-    // watch: {
-    //   'selectedWorld': function (val, oldVal) {
-    //     console.log(this.currentMatch)
-    //   }
-    // }
+    watch: {
+      'selectedWorld': function (val, oldVal) {
+        console.log(this.currentMatch)
+      }
+    }
 
   }
 </script>
