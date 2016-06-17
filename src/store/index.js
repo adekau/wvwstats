@@ -116,3 +116,7 @@ store.fetchGlicko = () => {
 store.fetchObjectives = () => {
   return objectiveCache
 }
+
+store.fetchObjectiveIds = () => {
+  return objectiveIds
+}
