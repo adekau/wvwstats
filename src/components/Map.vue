@@ -167,8 +167,10 @@
       getWorldByName (name) {
         console.log('World list length:')
         console.log(this.worldlist)
+        name = name.trim()
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
+          console.log('Comparing ' + curWorld.name + ' to ' + name)
           if(curWorld.name === name) {
             return curWorld
           }
