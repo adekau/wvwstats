@@ -24,6 +24,10 @@
         worldlist: [],
         selectedWorld: '',
         matchArr: [],
+        objectives: [],
+        objectiveInfo: {},
+        objectivesById: {},
+        mapMarkers: {},
         defaultIconSize: [26, 26],
         mapIcons: {
           camp: {green: null, blue: null, red: null, neutral: null},
@@ -60,13 +64,20 @@
         maxZoom: 7,
         continuousWorld: true
       }).addTo(this.map)
+
+      if(this.objectives.length > 0) {
+        this.prepareMap()
+      } else {
+        store.updateObjectives()
+      }
     },
 
     route: {
       data ({ to }) {
         return {
           worldlist: store.fetchWorlds(),
-          matchArr: store.fetchMatches()
+          matchArr: store.fetchMatches(),
+          objectives: store.fetchObjectives()
         }
       }
     },
@@ -74,12 +85,14 @@
     created () {
       store.on('matches-updated', this.updateMatches)
       store.on('worlds-updated', this.updateWorlds)
+      store.on('objectives-updated', this.updateObjectives)
       this.prepareIcons()
     },
 
     destroyed () {
       store.removeListener('matches-updated', this.updateMatches)
       store.removeListener('worlds-updated', this.updateWorlds)
+      store.removeListener('objectives-updated', this.updateObjectives)
     },
 
     computed: {
@@ -129,6 +142,11 @@
         this.worldlist = store.fetchWorlds()
       },
 
+      updateObjectives () {
+        this.objectives = store.fetchObjectives()
+        this.prepareMap()
+      },
+
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
       },
@@ -171,13 +189,31 @@
             })
           }
         }
-        console.log(this.mapIcons)
+      },
+
+      /**
+       * prepareMap
+       * create neutral icons on the map and register the map markers.
+       */
+      prepareMap () {
+        for (var bit in this.objectives) {
+          let obj = this.objectives[bit]
+          let name = obj.name
+          let id = obj.id
+          delete obj.id
+          this.objectiveInfo[id] = obj
+          this.mapMarkers[id] = window.L.marker(this.unproject(obj.coord), {
+            title: name,
+            icon: this.mapIcons[obj.type.toLowerCase()].neutral
+          }).addTo(this.map)
+          .bindPopup(name)
+        }
       }
 
     },
 
     watch: {
-      'selectedWorld': function () {
+      'selectedWorld': function (val, oldVal) {
         console.log(this.currentMatch)
       }
     }
