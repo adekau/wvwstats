@@ -3,7 +3,7 @@
     <div class="server-select mdl-shadow--2dp">
       <div class="server-select-container">
         <strong>Server: &nbsp;</strong>
-        <select class="map-select" v-model="selectedWorld">
+        <select class="map-select" v-model="selectedWorld" v-on:change="selectChanged">
           <option v-for="world in worldlist">
             {{world.name}}
           </option>
@@ -147,6 +147,12 @@
         this.prepareMap()
       },
 
+      selectChanged () {
+        console.log(this.selectedWorld)
+        console.log(this.currentMatch)
+        console.log(this.worldMatchIds)
+      },
+
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
       },
@@ -212,11 +218,11 @@
 
     },
 
-    watch: {
-      'selectedWorld': function (val, oldVal) {
-        console.log(this.currentMatch)
-      }
-    }
+    // watch: {
+    //   'selectedWorld': function (val, oldVal) {
+    //     console.log(this.currentMatch)
+    //   }
+    // }
 
   }
 </script>
