@@ -165,6 +165,8 @@
        * returns the world object of the form: {id: _, name: _, population: _}
        */
       getWorldByName (name) {
+        console.log('World list length:')
+        console.log(this.worldlist)
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
           if(curWorld.name === name) {
