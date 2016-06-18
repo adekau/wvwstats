@@ -16,6 +16,7 @@
 
 <script>
   import store from '../store'
+  import moment from 'moment'
 
   export default {
     data () {
@@ -43,7 +44,8 @@
           }
         },
         mapPrepared: 0,
-        paramServer: 0
+        paramServer: 0,
+        riTimer: null
       }
     },
 
@@ -84,7 +86,8 @@
     route: {
       data ({ to }) {
         const server = to.params.server
-
+        // Increase timeout if this not working.
+        setTimeout(this.setServer, 30)
         return {
           worldlist: store.fetchWorlds(),
           matchArr: store.fetchMatches(),
@@ -309,6 +312,10 @@
             this.handleObjective(curObjective, item)
           }
         }
+
+        if (!this.riTimer) {
+          this.riTimer = setInterval(this.timerUpdate, 1000)
+        }
       },
 
       /**
@@ -317,17 +324,54 @@
        * tooltip with the correct information.
        */
       handleObjective (curObjective, item) {
+        var unclaimedLastFlippedTime = moment(curObjective.last_flipped)
+        var unclaimedLastFlippedFmt = unclaimedLastFlippedTime.fromNow()
+
         if(curObjective.claimed_by) {
           let guildId = curObjective.claimed_by
           this.mapMarkers[item].setIcon(
             this.mapIcons.claimed[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
 
           store.fetchGuildById(guildId).then((guild) => {
-
+            this.mapMarkers[item].unbindPopup()
+            this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
+              'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
+              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.guild_name)
           })
         } else {
           this.mapMarkers[item].setIcon(
             this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
+          this.mapMarkers[item].unbindPopup()
+          this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
+            'Last flipped <b>' + unclaimedLastFlippedFmt + '</b>')
+        }
+      },
+
+      timerUpdate: function () {
+        for (var i = 0; i < this.objectiveIds.length; i++) {
+          var item = this.objectiveIds[i]
+          var curObjective = this.objectivesById[item]
+          // Variables
+          var lastFlippedTime = moment(curObjective.last_flipped)
+          var timeOwned = moment(new Date()).unix() - lastFlippedTime.unix()
+          // Label Configuration
+          if (timeOwned < 300) {
+            var riTime = 300 - timeOwned
+            var minutes = Math.floor(riTime / 60)
+            var seconds = riTime % 60
+            if (seconds < 10) {
+              seconds = '0' + seconds
+            }
+            var labelText = minutes + ':' + seconds
+            this.mapMarkers[item].unbindLabel()
+            this.mapMarkers[item].bindLabel(labelText, {
+              noHide: true,
+              className: 'maptimer',
+              offset: [-16, 14]
+            }).showLabel()
+          } else {
+            this.mapMarkers[item].unbindLabel()
+          }
         }
       }
 
