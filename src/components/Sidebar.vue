@@ -46,9 +46,9 @@
     computed: {
       mapUrl () {
         if (this.selectedWorld == 0) {
-          return '/#/map'
+          return '/map'
         } else {
-          return '/#/map/' + this.selectedWorld
+          return '/map/' + this.selectedWorld
         }
       }
     },
