@@ -42,7 +42,8 @@
             castle: {green: null, blue: null, red: null, neutral: null}
           }
         },
-        mapPrepared: 0
+        mapPrepared: 0,
+        paramServer: 0
       }
     },
 
@@ -72,15 +73,24 @@
       } else {
         store.updateObjectives()
       }
+
+      if(this.worldlist.length > 0) {
+        this.setServer()
+      } else {
+        store.updateWorlds()
+      }
     },
 
     route: {
       data ({ to }) {
+        const server = to.params.server
+
         return {
           worldlist: store.fetchWorlds(),
           matchArr: store.fetchMatches(),
           objectives: store.fetchObjectives(),
-          objectiveIds: store.fetchObjectiveIds()
+          objectiveIds: store.fetchObjectiveIds(),
+          paramServer: server
         }
       }
     },
@@ -174,10 +184,14 @@
     methods: {
       updateMatches () {
         this.matchArr = store.fetchMatches()
+        if (this.mapPrepared && this.worldlist.length > 0 && this.selectedWorld) {
+          this.updateMap()
+        }
       },
 
       updateWorlds () {
         this.worldlist = store.fetchWorlds()
+        this.setServer()
       },
 
       updateObjectives () {
@@ -189,6 +203,17 @@
         return this.map.unproject(coord, this.map.getMaxZoom())
       },
 
+      setServer () {
+        if (this.mapPrepared && this.matchArr[0]) {
+          var server = this.paramServer
+          if(server) {
+            this.selectedWorld = this.getWorldById(server).name
+            this.updateMap()
+          }
+        } else {
+          setTimeout(this.setServer, 30)
+        }
+      },
       /**
        * getWorldByName
        * name: world's string name
@@ -199,6 +224,21 @@
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
           if(curWorld.name === name) {
+            return curWorld
+          }
+        }
+        return
+      },
+
+      /**
+       * getWorldById
+       * id: world's id
+       * returns the world object of the form: {id: _, name: _, population: _}
+       */
+      getWorldById (id) {
+        for (var i = 0; i < this.worldlist.length; i++) {
+          let curWorld = this.worldlist[i]
+          if(curWorld.id == id) {
             return curWorld
           }
         }
@@ -255,7 +295,7 @@
        * Modify the icons based on who owns them
        */
       updateMap () {
-        if(!mapPrepared) {
+        if(!this.mapPrepared) {
           return
         }
 
@@ -264,10 +304,30 @@
         for (var i = 0; i < this.objectiveIds.length; i++) {
           let item = this.objectiveIds[i]
           let curObjective = objectives[item]
+
           if (curObjective) {
-            this.mapMarkers[item].setIcon(
-              this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
+            this.handleObjective(curObjective, item)
           }
+        }
+      },
+
+      /**
+       * handleObjective
+       * takes an objective and fills the map with the correct icon and
+       * tooltip with the correct information.
+       */
+      handleObjective (curObjective, item) {
+        if(curObjective.claimed_by) {
+          let guildId = curObjective.claimed_by
+          this.mapMarkers[item].setIcon(
+            this.mapIcons.claimed[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
+
+          store.fetchGuildById(guildId).then((guild) => {
+
+          })
+        } else {
+          this.mapMarkers[item].setIcon(
+            this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
         }
       }
 
@@ -275,7 +335,8 @@
 
     watch: {
       'selectedWorld': function (val, oldVal) {
-        console.log(this.currentMatch)
+        this.$router.go('/map/' + this.getWorldByName(val).id)
+        store.updateSelectedWorld(this.getWorldByName(val).id)
         this.updateMap()
       }
     }

@@ -24,14 +24,17 @@ const store = new EventEmitter()
 const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
 const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
 const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
+const guildUrl = 'https://api.guildwars2.com/v1/guild_details.json?guild_id='
 let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
 /**
  * Local Cache variables
  */
+let selectedWorld = 0
 let matchesCache = []
 let worldsCache = []
 let glickoCache = {}
 let objectiveCache = []
+let guildCache = {}
 
 // ------- BEGIN STORE.
 export default store
@@ -98,6 +101,11 @@ var matchUpdateTimer = setInterval(function () {
    })
  }
 
+ store.updateSelectedWorld = id => {
+   selectedWorld = id
+   store.emit('selectedWorld-updated')
+ }
+
 /**
  * Getters used from pages
  */
@@ -119,4 +127,23 @@ store.fetchObjectives = () => {
 
 store.fetchObjectiveIds = () => {
   return objectiveIds
+}
+
+store.fetchSelectedWorld = () => {
+  return selectedWorld
+}
+
+store.fetchGuildById = id => {
+  return new Promise( (resolve, reject) => {
+    if (guildCache[id]) {
+      resolve(guildCache[id])
+    } else {
+      Vue.http.get(guildUrl + id).then((response) => {
+        const guild = guildCache[id] = response.data
+        resolve(guild)
+      }, (response) => {
+        reject('Failed to get guild info.')
+      })
+    }
+  })
 }

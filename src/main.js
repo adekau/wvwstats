@@ -48,6 +48,10 @@ router.map({
   '/map': {
     component: Map,
     pageTitle: 'Live Map'
+  },
+  '/map/:server': {
+    component: Map,
+    pageTitle: 'Live Map'
   }
 })
 

@@ -11,7 +11,7 @@
                                                  role="presentation">list</i>NA Matches</a>
       <a v-link="{ path: '/eu' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">list</i>EU Matches</a>
-      <a v-link="{ path: '/map' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+      <a href="{{mapUrl}}" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">autorenew</i>Live</a>
       <a v-link="{ path: '/ratings' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">format_list_numbered</i>Ratings</a>
@@ -23,6 +23,43 @@
     </nav>
   </div>
 </template>
+
+<script>
+  import store from '../store'
+
+  export default {
+    data () {
+      return {
+        selectedWorld: 0
+      }
+    },
+
+    created () {
+      this.selectedWorld = store.fetchSelectedWorld()
+      store.on('selectedWorld-updated', this.update)
+    },
+
+    destroyed () {
+      store.removeListener('selectedWorld-updated', this.update)
+    },
+
+    computed: {
+      mapUrl () {
+        if (this.selectedWorld == 0) {
+          return '/#/map'
+        } else {
+          return '/#/map/' + this.selectedWorld
+        }
+      }
+    },
+
+    methods: {
+      update () {
+        this.selectedWorld = store.fetchSelectedWorld()
+      }
+    }
+  }
+</script>
 
 <style>
   .logo {
