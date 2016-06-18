@@ -32,7 +32,7 @@ Vue.directive('mdl', {
 })
 
 // routing
-var router = new Router({hashbang: false})
+var router = new Router({hashbang: false, history: true})
 
 router.map({
   '/na': {
