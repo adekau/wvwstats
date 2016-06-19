@@ -30,7 +30,7 @@
       </div>
       <div class="mdl-grid mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
         <div data-tooltip="Castle - 35 Points" style="display: inline-block; margin-left: -4px;">
-          <img height="20" width="20" src="/static/castle.png">
+          <img height="20" width="20" src="/static/img/castle.png">
         </div>
       </div>
     </div>
