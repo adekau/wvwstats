@@ -33,6 +33,7 @@ let selectedWorld = 0
 let matchesCache = []
 let worldsCache = []
 let glickoCache = {}
+let predictedGlickoCache = {}
 let objectiveCache = []
 let guildCache = {}
 
@@ -106,6 +107,11 @@ var matchUpdateTimer = setInterval(function () {
    store.emit('selectedWorld-updated')
  }
 
+ store.updatePredictedGlicko = (id, glicko) => {
+   predictedGlickoCache[id] = glicko
+   store.emit('predictedGlicko-updated')
+ }
+
 /**
  * Getters used from pages
  */
@@ -131,6 +137,10 @@ store.fetchObjectiveIds = () => {
 
 store.fetchSelectedWorld = () => {
   return selectedWorld
+}
+
+store.fetchPredictedGlicko = () => {
+  return predictedGlickoCache
 }
 
 store.fetchGuildById = id => {
