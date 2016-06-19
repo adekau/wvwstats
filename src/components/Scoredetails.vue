@@ -1,19 +1,20 @@
 <template>
   <div class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
-      <ul class="mdl-list">
-        <li>
+      <ul class="mdl-list" style="width: 100%;">
+        <li class="worldname">
           <span data-tooltip="{{ serverTooltip.green }}">
             {{worldinfo.green}}
           </span>
-
         </li>
-        <li>
+        <li class="worldname">
+          <span class="name-text"></span>
           <span data-tooltip="{{ serverTooltip.blue }}">
             {{worldinfo.blue}}
           </span>
         </li>
-        <li>
+        <li class="worldname">
+          <span class="name-text"></span>
           <span data-tooltip="{{ serverTooltip.red }}">
             {{worldinfo.red}}
           </span>
@@ -151,6 +152,7 @@
 
 <script>
   import WvWGlicko from '../custom_modules/WvwGlicko'
+  import store from '../store'
 
   export default {
 
@@ -248,7 +250,14 @@
        * Calculates the html message to display in the tooltip for server names.
        */
        serverTooltip () {
-         var ret = Object.create(null)
+         var ret = {
+           green: '', blue: '', red: ''
+         }
+
+         if (!this.worldlist) {
+           return ret
+         }
+
          let servers = this.matchinfo.all_worlds
          Object.keys(servers).forEach((key) => {
            let current = servers[key]
@@ -328,6 +337,9 @@
           ret.delta.green = glickObj.newRatingG - oldRatings.green
           ret.delta.blue = glickObj.newRatingB - oldRatings.blue
           ret.delta.red = glickObj.newRatingR - oldRatings.red
+          store.updatePredictedGlicko(worlds.green, ret.green)
+          store.updatePredictedGlicko(worlds.blue, ret.blue)
+          store.updatePredictedGlicko(worlds.red, ret.red)
           return ret
         }
 
@@ -536,5 +548,15 @@
   }
   .third-place>.mdl-progress>.progressbar {
     background-color: rgb(182,89,91);
+  }
+
+  .worldname {
+    display: flex;
+  }
+
+  .worldname span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
