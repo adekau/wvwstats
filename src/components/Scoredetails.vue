@@ -8,13 +8,11 @@
           </span>
         </li>
         <li class="worldname">
-          <span class="name-text"></span>
           <span data-tooltip="{{ serverTooltip.blue }}">
             {{worldinfo.blue}}
           </span>
         </li>
         <li class="worldname">
-          <span class="name-text"></span>
           <span data-tooltip="{{ serverTooltip.red }}">
             {{worldinfo.red}}
           </span>
@@ -550,13 +548,18 @@
     background-color: rgb(182,89,91);
   }
 
-  .worldname {
+  /*.worldname {
     display: flex;
   }
 
   .worldname span {
     white-space: nowrap;
-    overflow: hidden;
+    overflow: scroll;
     text-overflow: ellipsis;
   }
+
+  .worldname span [data-tooltip] {
+    white-space: normal;
+    overflow: auto;
+  }*/
 </style>

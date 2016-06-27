@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import { Promise } from 'es6-promise'
-import Firebase from 'firebase'
+// import Firebase from 'firebase'
 import Vue from 'vue'
 
 const store = new EventEmitter()
@@ -25,7 +25,8 @@ const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
 const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
 const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
 const guildUrl = 'https://api.guildwars2.com/v1/guild_details.json?guild_id='
-let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
+const glickoUrl = 'http://www.wvwstats.com/api/v1/officialglicko'
+// let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
 /**
  * Local Cache variables
  */
@@ -81,11 +82,20 @@ var matchUpdateTimer = setInterval(function () {
  // TODO: note, once I remake this, remember to add a fallback option for incase
  // the request fails.
  store.updateGlicko = () => {
-   var ref = api.child('official_glicko')
-   ref.once('value', (snapshot) => {
-     glickoCache = snapshot.val()
-     store.emit('glicko-updated')
-   })
+  //  var ref = api.child('official_glicko')
+  //  ref.once('value', (snapshot) => {
+  //    glickoCache = snapshot.val()
+  //    store.emit('glicko-updated')
+  //  })
+  Vue.http.get(glickoUrl).then((response) => {
+    for (var i = 0; i < response.data.length; i++) {
+      let curGlicko = response.data[i]
+      glickoCache[response.data[i].id] = response.data[i].glicko
+    }
+    store.emit('glicko-updated')
+  }, (response) => {
+    store.updateGlicko()
+  })
  }
 
  store.updateObjectives = () => {

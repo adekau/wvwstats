@@ -28,7 +28,7 @@
         </thead>
         <tbody>
           <tr v-for="server in servers
-            | orderBy 'official' -1">
+            | orderBy 'predicted' -1">
             <td data-label="Rank">
               {{$index + 1}}
             </td>
