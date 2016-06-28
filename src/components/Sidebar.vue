@@ -13,8 +13,8 @@
                                                  role="presentation">list</i>EU Matches</a>
       <a href="{{mapUrl}}" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">autorenew</i>Live</a>
-      <!-- <a v-link="{ path: '/ratings' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">format_list_numbered</i>Ratings</a> -->
+      <a v-link="{ path: '/leaderboard' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">format_list_numbered</i>Leaderboard</a>
       <!-- <a v-link="{ path: '/predictions' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">help_outline</i>Predictions</a> -->
       <div class="mdl-layout-spacer"></div>

@@ -156,4 +156,55 @@ ul
   .demo-content {
     max-width: 1080px;
   }
+
+  @media only screen and (max-width: 575px) {
+
+    .ratings table, .ratings thead,
+    .ratings tbody, .ratings th,
+    .ratings td, .ratings tr {
+        display: block;
+    }
+
+    .ratings thead {
+      display: none;
+    }
+
+    /*mdl */
+
+    .ratings.mdl-data-table tbody tr {
+      height: auto;
+    }
+
+    .ratings.mdl-data-table tbody tr:nth-child(even) {
+      background-color: #eee;
+    }
+
+    .ratings.mdl-data-table td,
+    .ratings.mdl-data-table td:first-of-type {
+      padding-left: 50%;
+    }
+
+    .mdl-data-table__cell--non-numeric {
+      text-align: right !important;
+    }
+
+    .ratings.mdl-data-table td:before {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding: 6px 18px 0;
+      white-space: nowrap;
+      content: attr(data-label);
+      text-align: left;
+      color: rgba(0, 0, 0, 0.541176);
+      font-weight: bold;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    .ratings.mdl-data-table td:last-of-type {
+      padding-right: 18px;
+    }
+  }
 </style>

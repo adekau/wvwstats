@@ -6,6 +6,7 @@ import App from './components/App.vue'
 import Homepage from './components/Homepage.vue'
 import EUMatches from './components/EUMatches.vue'
 import Map from './components/Map.vue'
+import Leaderboard from './components/Leaderboard.vue'
 
 // install router
 Vue.use(Router)
@@ -52,6 +53,10 @@ router.map({
   '/map/:server': {
     component: Map,
     pageTitle: 'Live Map'
+  },
+  '/leaderboard': {
+    component: Leaderboard,
+    pageTitle: 'Leaderboard'
   }
 })
 

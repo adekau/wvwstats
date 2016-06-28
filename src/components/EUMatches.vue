@@ -15,7 +15,7 @@
         Ratings
       </h4>
 
-      <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
+      <table class="ratings mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
         mdl-cell--4-col-phone mdl-cell--8-col-tablet">
         <thead>
           <tr>
@@ -187,54 +187,5 @@
 
   tbody tr:nth-child(even) {
     background-color: rgb(248,248,248);
-  }
-
-  @media only screen and (max-width: 575px) {
-
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    thead {
-      display: none;
-    }
-
-    /*mdl */
-
-    .mdl-data-table tbody tr {
-      height: auto;
-    }
-
-    .mdl-data-table tbody tr:nth-child(even) {
-      background-color: #eee;
-    }
-
-    .mdl-data-table td,
-    .mdl-data-table td:first-of-type {
-      padding-left: 50%;
-    }
-
-    .mdl-data-table__cell--non-numeric {
-      text-align: right !important;
-    }
-
-    .mdl-data-table td:before {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      width: 45%;
-      padding: 6px 18px 0;
-      white-space: nowrap;
-      content: attr(data-label);
-      text-align: left;
-      color: rgba(0, 0, 0, 0.541176);
-      font-weight: bold;
-      font-family: Helvetica, Arial, sans-serif;
-      font-size: 12px;
-    }
-
-    .mdl-data-table td:last-of-type {
-      padding-right: 18px;
-    }
   }
 </style>

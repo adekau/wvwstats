@@ -1,10 +1,15 @@
 <template>
-  <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-  </div>
+  <leaderboarditems></leaderboarditems>
 </template>
 
 <script>
+  import Leaderboarditems from './Leaderboarditems.vue'
 
+  export default {
+    components: {
+      Leaderboarditems
+    }
+  }
 </script>
 
 <style>
