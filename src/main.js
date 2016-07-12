@@ -7,6 +7,7 @@ import Homepage from './components/Homepage.vue'
 import EUMatches from './components/EUMatches.vue'
 import Map from './components/Map.vue'
 import Leaderboard from './components/Leaderboard.vue'
+import Match from './components/Match.vue'
 
 // install router
 Vue.use(Router)
@@ -57,6 +58,10 @@ router.map({
   '/leaderboard': {
     component: Leaderboard,
     pageTitle: 'Leaderboard'
+  },
+  '/match/:matchid': {
+    component: Match,
+    pageTitle: 'Match Details'
   }
 })
 
