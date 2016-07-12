@@ -3,17 +3,23 @@
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="worldname">
-          <span data-tooltip="{{ serverTooltip.green }}">
+          <span class="worldname_link"
+            v-link="{ path: '/match/' + matchinfo.id }"
+            data-tooltip="{{ serverTooltip.green }}">
             {{worldinfo.green}}
           </span>
         </li>
         <li class="worldname">
-          <span data-tooltip="{{ serverTooltip.blue }}">
+          <span class="worldname_link"
+            v-link="{ path: '/match/' + matchinfo.id }"
+            data-tooltip="{{ serverTooltip.blue }}">
             {{worldinfo.blue}}
           </span>
         </li>
         <li class="worldname">
-          <span data-tooltip="{{ serverTooltip.red }}">
+          <span class="worldname_link"
+            v-link="{ path: '/match/' + matchinfo.id }"
+            data-tooltip="{{ serverTooltip.red }}">
             {{worldinfo.red}}
           </span>
         </li>
@@ -258,10 +264,17 @@
 
          let servers = this.matchinfo.all_worlds
          Object.keys(servers).forEach((key) => {
+           ret[key] = ''
            let current = servers[key]
            if (current.length > 1) {
-             ret[key] = (this.getWorldById(current[1]).name + ' & ' +
-                this.getWorldById(current[0]).name)
+             let currentLen = current.length
+             for (var i = 0; i < currentLen; i++) {
+               if (i === currentLen - 1) {
+                 ret[key] += this.getWorldById(current[currentLen - 1 - i]).name
+               } else {
+                 ret[key] += this.getWorldById(current[currentLen - 1 - i]).name + ' & '
+               }
+             }
            } else {
              ret[key] = 'No linked server.'
            }
@@ -546,6 +559,11 @@
   }
   .third-place>.mdl-progress>.progressbar {
     background-color: rgb(182,89,91);
+  }
+
+  span.worldname_link:hover {
+    color: rgb(89,91,182);
+    text-decoration: underline;
   }
 
   /*.worldname {
