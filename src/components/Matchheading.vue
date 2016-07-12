@@ -1,7 +1,7 @@
 <template>
   <div class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
-      <div class="mdl-cell wvw-mh"> Servers </div>
+      <div class="mdl-cell wvw-mh"> Server </div>
     </div>
     <div class="mdl-cell--3-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <div class="mdl-cell wvw-mh" style="width: auto;"> Score Percent </div>
@@ -10,7 +10,7 @@
       <div class="mdl-grid wvw-mh"> Score </div>
     </div>
     <div class="mdl-cell--1-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
-      <div class="mdl-grid wvw-mh"> <span data-tooltip="Points Per Tick (15 min)">PPT</span> </div>
+      <div class="mdl-grid wvw-mh"> <span data-tooltip="Points Per Tick (5 min)">PPT</span> </div>
     </div>
     <div class="mdl-cell--3-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <div class="mdl-grid mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
