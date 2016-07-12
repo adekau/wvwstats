@@ -2,42 +2,40 @@
   <div class="leaderboard-container">
     <div id="lb-nav" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--4-col-phone
       mdl-cell--12-col mdl-cell--8-col-tablet mdl-grid">
-      <ul class="lb-nav">
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('kd').scrollIntoView(true);">KD Ratio</a>
-        </li>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('kd').scrollIntoView(true);">
+        KD Ratio
+      </button>
 
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('kills').scrollIntoView(true);">Kills</a>
-        </li>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('kills').scrollIntoView(true);">
+        Kills
+      </button>
 
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('deaths').scrollIntoView(true);">Deaths</a>
-        </li>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('deaths').scrollIntoView(true);">
+        Deaths
+      </button>
 
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('scores').scrollIntoView(true);">Score</a>
-        </li>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('scores').scrollIntoView(true);">
+        Scores
+      </button>
 
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('pointsppt').scrollIntoView(true);">Points from PPT</a>
-        </li>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('pointsppt').scrollIntoView(true);">
+        Points From PPT
+      </button>
 
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('percentppt').scrollIntoView(true);">Percent of Points from PPT</a>
-        </li>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('percentppt').scrollIntoView(true);">
+        Percent Points From PPT
+      </button>
 
-        <li>
-          <a class="leaderboard_nav" href="javascript: void(0);"
-            onclick="document.getElementById('percentppk').scrollIntoView(true);">Percent of Points from PPK</a>
-        </li>
-      </ul>
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('percentppk').scrollIntoView(true);">
+        Percent Points From PPK
+      </button>
     </div>
 
     <!-- K/D RATIO -->
@@ -50,8 +48,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -89,8 +89,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -128,8 +130,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -167,8 +171,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -206,8 +212,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -245,8 +253,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -284,8 +294,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <a class="leaderboard_nav_top" href="javascript: void(0);"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">⬆ Back to Nav</a>
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -323,7 +335,8 @@
   export default {
     data () {
       return {
-        weekleaderboard: {},
+        weekleaderboard: {kills: [], deaths: [], kd: [], scores: [],
+        pointsFromPPT: [], percentPointsFromPPK: [], percentPointsFromPPT: []},
         worldlist: []
       }
     },
@@ -387,30 +400,19 @@
     margin: 0 !important;
   }
 
-  ul.lb-nav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: rgb(112,112,112);
+  #lb-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  ul.lb-nav li {
-    float: left;
+  #lb-nav button {
+    margin-right: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
   }
 
-  li a.leaderboard_nav {
-    display:block;
-    padding-right: 12px;
-    text-decoration: none;
-    color: white;
-    text-align: center;
-    padding: 6px 8px;
-    margin: 0px 1px 1px 0px;
-    outline: 1px solid white;
-  }
-
-  a.leaderboard_nav_top {
-    text-decoration: none;
+  .leaderboard-container tr, .leaderboard-container td {
+    height: 0px !important;
   }
 </style>
