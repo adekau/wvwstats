@@ -18,6 +18,11 @@
       </button>
 
       <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('activity').scrollIntoView(true);">
+        Activity
+      </button>
+
+      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('scores').scrollIntoView(true);">
         Scores
       </button>
@@ -29,12 +34,12 @@
 
       <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('percentppt').scrollIntoView(true);">
-        Percent Points From PPT
+        % Points From PPT
       </button>
 
       <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('percentppk').scrollIntoView(true);">
-        Percent Points From PPK
+        % Points From PPK
       </button>
     </div>
 
@@ -155,6 +160,47 @@
             </td>
             <td>
               {{ item.deaths | round 3 false}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Activity -->
+
+    <div id="activity" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col
+      mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-grid">
+      <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
+        style="margin-left: 6px; border-bottom: 1px solid grey;">
+        <span data-tooltip="Kills + Deaths">Activity</span>
+      </h6>
+      <div class="mdl-cell mdl-cell--4-col-phone
+        mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
+        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
+          Back to Nav
+        </button>
+      </div>
+
+      <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
+        mdl-cell--4-col-phone mdl-cell--8-col-tablet">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th style="text-align: left;">Server</th>
+            <th>Activity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in weekleaderboard.activity">
+            <td>
+              {{$index + 1}}
+            </td>
+            <td style="text-align: left;">
+              {{ getWorldById(item.server).name }}
+            </td>
+            <td>
+              {{ item.activity | round 3 false}}
             </td>
           </tr>
         </tbody>
