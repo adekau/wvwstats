@@ -31,7 +31,7 @@
 
   .servername span {
     white-space: nowrap;
-    overflow: scroll;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
 </style>
