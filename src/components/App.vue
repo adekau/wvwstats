@@ -169,8 +169,6 @@ ul
       display: none;
     }
 
-    /*mdl */
-
     .ratings.mdl-data-table tbody tr {
       height: auto;
     }
