@@ -27,6 +27,7 @@ const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
 const guildUrl = 'https://api.guildwars2.com/v1/guild_details.json?guild_id='
 const glickoUrl = 'http://www.wvwstats.com/api/v1/officialglicko'
 const weekleaderboardUrl = 'http://www.wvwstats.com/api/v1/weekleaderboard'
+const matcharchiveUrl = 'http://www.wvwstats.com/api/v1/matcharchive'
 // let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
 /**
  * Local Cache variables
@@ -171,7 +172,23 @@ store.fetchWeekleaderboard = () => {
   return weekleaderboardCache
 }
 
-store.fetchGuildById = id => {
+// TODO: Cache the results..
+store.fetchArchiveData = (matchid, data, start_time, end_time) => {
+  var tmp = new Date(start_time)
+  var tmp2 = new Date(end_time)
+  var timeOffset = tmp.getTimezoneOffset() / 60
+  start_time = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate(),
+    tmp.getHours() - timeOffset, tmp.getMinutes(), tmp.getSeconds()).toISOString()
+    .replace('.000Z','Z')
+  end_time = new Date(tmp2.getFullYear(), tmp2.getMonth(), tmp2.getDate(),
+    tmp2.getHours() - timeOffset, tmp2.getMinutes(), tmp2.getSeconds()).toISOString()
+    .replace('.000Z','Z')
+
+  var url = `${matcharchiveUrl}?data=${data}&match=${matchid}&start_time=${start_time}&end_time=${end_time}`
+  return Vue.http.get(url)
+}
+
+store.fetchGuildById = (id) => {
   return new Promise( (resolve, reject) => {
     if (guildCache[id]) {
       resolve(guildCache[id])
