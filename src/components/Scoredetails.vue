@@ -425,9 +425,9 @@
     bottom: 150%;
     left: 50%;
     margin-bottom: 5px;
-    margin-left: -85px;
+    margin-left: -51px;
     padding: 7px;
-    width: 170px;
+    width: 102px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
@@ -489,7 +489,7 @@
     bottom: 150%;
     left: 50%;
     margin-bottom: 5px;
-    margin-left: -85px;
+    margin-left: -100px;
     padding: 7px;
     /*width: 170px;*/
     -webkit-border-radius: 3px;
@@ -529,6 +529,7 @@
     filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1;
   }
+
 
   .no-padding-left {
     padding-left: 0px;
