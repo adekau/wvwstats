@@ -64,7 +64,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>K/D Ratio</th>
           </tr>
         </thead>
@@ -73,7 +73,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -105,7 +105,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Kills</th>
           </tr>
         </thead>
@@ -114,7 +114,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -146,7 +146,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Deaths</th>
           </tr>
         </thead>
@@ -155,7 +155,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding"  style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -187,7 +187,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Activity</th>
           </tr>
         </thead>
@@ -196,7 +196,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -228,7 +228,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Score</th>
           </tr>
         </thead>
@@ -237,7 +237,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -269,7 +269,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Points</th>
           </tr>
         </thead>
@@ -278,7 +278,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -310,7 +310,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Percent</th>
           </tr>
         </thead>
@@ -319,7 +319,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -351,7 +351,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th style="text-align: left;">Server</th>
+            <th class="reducedPadding" style="text-align: left;">Server</th>
             <th>Percent</th>
           </tr>
         </thead>
@@ -360,7 +360,7 @@
             <td>
               {{$index + 1}}
             </td>
-            <td style="text-align: left;">
+            <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
@@ -460,5 +460,10 @@
 
   .leaderboard-container tr, .leaderboard-container td {
     height: 0px !important;
+  }
+
+  .reducedPadding {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
   }
 </style>
