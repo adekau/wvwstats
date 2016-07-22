@@ -15,6 +15,8 @@
                it takes awhile to fetch worldlist -->
     <matchkd :match="match" :worldlist="worldlist"></matchkd>
     <matchpoints :match="match" :worldlist="worldlist"></matchpoints>
+    <matchmapskd v-for="map in match.maps"
+      :match="match" :worldlist="worldlist" :mapid="map"></matchmapskd>
 
   </div>
 </template>
@@ -42,6 +44,7 @@
   import Matchheading from './Matchheading.vue'
   import Matchkd from './Matchkd.vue'
   import Matchpoints from './Matchpoints.vue'
+  import Matchmapskd from './Matchmapskd.vue'
 
   export default {
     data () {
@@ -134,7 +137,8 @@
       Scoredetails,
       Matchheading,
       Matchkd,
-      Matchpoints
+      Matchpoints,
+      Matchmapskd
     }
 
   }

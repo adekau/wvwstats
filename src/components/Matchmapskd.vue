@@ -1,7 +1,15 @@
+<!-- Pass this vue the an index for the map array as well as the match object.-->
+
 <template>
   <div
     class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--6-col
     mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-grid">
+
+    <div class="mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
+      <center>
+        <h6>{{getMapName()}}</h6>
+      </center>
+    </div>
 
     <div class="mdl-cell--4-col mdl-cell--2-col-phone mdl-cell--3-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
@@ -26,13 +34,13 @@
           Kills
         </li>
         <li>
-          {{ match.kills.green }}
+          {{ mapid.kills.green }}
         </li>
         <li>
-          {{ match.kills.blue }}
+          {{ mapid.kills.blue }}
         </li>
         <li>
-          {{ match.kills.red }}
+          {{ mapid.kills.red }}
         </li>
       </ul>
     </div>
@@ -43,20 +51,19 @@
           Deaths
         </li>
         <li>
-          {{ match.deaths.green }}
+          {{ mapid.deaths.green }}
         </li>
         <li>
-          {{ match.deaths.blue }}
+          {{ mapid.deaths.blue }}
         </li>
         <li>
-          {{ match.deaths.red }}
+          {{ mapid.deaths.red }}
         </li>
       </ul>
     </div>
 
     <div class="mdl-cell--2-col mdl-cell--hide-tablet
       mdl-cell--hide-desktop mdl-cell--2-col-phone mdl-cell--1-col-tablet mdl-grid">
-
     </div>
 
     <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
@@ -65,13 +72,13 @@
           <span data-tooltip="Kills + Deaths">Activity</span>
         </li>
         <li>
-          {{ match.deaths.green + match.kills.green }}
+          {{ mapid.deaths.green + mapid.kills.green }}
         </li>
         <li>
-          {{ match.deaths.blue + match.kills.blue }}
+          {{ mapid.deaths.blue + mapid.kills.blue }}
         </li>
         <li>
-          {{ match.deaths.red + match.kills.red }}
+          {{ mapid.deaths.red + mapid.kills.red }}
         </li>
       </ul>
     </div>
@@ -82,13 +89,13 @@
           K/D
         </li>
         <li>
-          {{ match.kills.green / match.deaths.green | round 3 false }}
+          {{ mapid.kills.green / mapid.deaths.green | round 3 false }}
         </li>
         <li>
-          {{ match.kills.blue / match.deaths.blue | round 3 false }}
+          {{ mapid.kills.blue / mapid.deaths.blue | round 3 false }}
         </li>
         <li>
-          {{ match.kills.red / match.deaths.red | round 3 false }}
+          {{ mapid.kills.red / mapid.deaths.red | round 3 false }}
         </li>
       </ul>
     </div>
@@ -99,7 +106,8 @@
 
 <script>
   export default {
-    props: ['match', 'worldlist'],
+    props: ['match', 'worldlist', 'mapid'],
+
     methods: {
       getWorldById (id) {
         for (var i = 0; i < this.worldlist.length; i++) {
@@ -109,6 +117,18 @@
           }
         }
         return
+      },
+
+      getMapName () {
+        if (this.mapid.type.toLowerCase() === 'redhome') {
+          return this.getWorldById(this.match.worlds.red).name + ' Borderlands'
+        } else if (this.mapid.type.toLowerCase() === 'bluehome') {
+          return this.getWorldById(this.match.worlds.blue).name + ' Borderlands'
+        } else if (this.mapid.type.toLowerCase() === 'greenhome') {
+          return this.getWorldById(this.match.worlds.green).name + ' Borderlands'
+        } else {
+          return 'Eternal Battlegrounds'
+        }
       }
     },
 

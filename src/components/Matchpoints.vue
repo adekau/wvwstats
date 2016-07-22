@@ -3,7 +3,7 @@
     class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--6-col
     mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-grid">
 
-    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-grid">
+    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--4-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
           Server
@@ -20,10 +20,10 @@
       </ul>
     </div>
 
-    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-grid">
+    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
-        <li class="list_header">
-          PPT Points
+        <li class="list_header servername">
+          <span>PPT Points</span>
         </li>
         <li>
           {{ match.scores.green - 2 * match.kills.green }}
@@ -37,7 +37,7 @@
       </ul>
     </div>
 
-    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-grid">
+    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
           % PPT
@@ -54,7 +54,7 @@
       </ul>
     </div>
 
-    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-grid">
+    <div class="mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
           % PPK
