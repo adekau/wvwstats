@@ -18,6 +18,9 @@
     <matchmapskd v-for="map in match.maps"
       :match="match" :worldlist="worldlist" :mapid="map"></matchmapskd>
 
+    <div class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
+      <div id="chart_div" style="width:100%; height: 360px;"></div>
+    </div>
   </div>
 </template>
 
@@ -53,12 +56,29 @@
         matchId: 0,
         matches: [],
         match: {},
-        officialglicko: {}
+        officialglicko: {},
+        data: null,
+        options: [],
+        raw: []
       }
+    },
+
+    ready () {
+      window.google.charts.load('current', {
+        'packages': ['corechart', 'line']
+      });
+      window.google.charts.setOnLoadCallback(this.drawChart);
+      window.onresize = this.resizeChart;
     },
 
     route: {
       data ({ to }) {
+        // TODO change this when updating the store...
+        if (this.data) {
+          setTimeout(() => {
+            this.redrawChartData()
+          }, 500)
+        }
         return {
           worldlist: store.fetchWorlds(),
           matchId: this.$route.params.matchid,
@@ -101,6 +121,82 @@
           }
         }
         return
+      },
+
+      drawChart () {
+        store.fetchArchiveData(this.matchId, 'ppt', this.match.start_time, this.match.end_time)
+          .then((response)=> {
+            this.raw = response.data
+            this.data = new window.google.visualization.DataTable();
+            this.data.addColumn('datetime', 'Date')
+            this.data.addColumn('number', this.getWorldById(this.match.worlds.green).name)
+            this.data.addColumn('number', this.getWorldById(this.match.worlds.blue).name)
+            this.data.addColumn('number', this.getWorldById(this.match.worlds.red).name)
+
+            for (var i = 0; i < this.raw.length; i++) {
+            	var date = new Date(this.raw[i].snapshot_time)
+              var red = this.raw[i].ppt.red
+              var blue = this.raw[i].ppt.blue
+              var green = this.raw[i].ppt.green
+            	this.data.addRow([date, green, blue, red])
+            }
+
+            this.options = {
+              //title: 'Dragonbrand vs Tarnished Coast vs Blackgate PPT Evolution',
+              chartArea: {width: '84%', backgroundColor: '#ECF1F5'},
+              legend: 'top',
+              backgroundColor: '#CFD8DC',
+              hAxis: {
+                title: 'Date',
+                titleTextStyle: {
+                  color: '#333'
+                }
+              },
+              vAxis: {
+                minValue: 0
+              },
+              explorer: {
+              	//axis: 'horizontal',
+                keepInBounds: true,
+                actions: ['dragToZoom', 'rightClickToReset'],
+                maxZoomOut: 0
+               },
+              focusTarget: 'category',
+              colors: ['#59B65B','#595BB6','#B6595B'],
+              lineWidth: 1
+            };
+
+            var chart = new window.google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(this.data, this.options);
+          })
+      },
+
+      resizeChart() {
+        var chart = new window.google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(this.data, this.options);
+      },
+
+      redrawChartData() {
+        store.fetchArchiveData(this.matchId, 'ppt', this.match.start_time, this.match.end_time)
+          .then((response)=> {
+            this.raw = response.data
+            this.data = new window.google.visualization.DataTable();
+            this.data.addColumn('datetime', 'Date')
+            this.data.addColumn('number', this.getWorldById(this.match.worlds.green).name)
+            this.data.addColumn('number', this.getWorldById(this.match.worlds.blue).name)
+            this.data.addColumn('number', this.getWorldById(this.match.worlds.red).name)
+
+            for (var i = 0; i < this.raw.length; i++) {
+            	var date = new Date(this.raw[i].snapshot_time)
+              var red = this.raw[i].ppt.red
+              var blue = this.raw[i].ppt.blue
+              var green = this.raw[i].ppt.green
+            	this.data.addRow([date, green, blue, red])
+            }
+
+            var chart = new window.google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(this.data, this.options);
+          })
       }
     },
 
@@ -112,12 +208,10 @@
             if (this.matches[i].id === this.matchId) {
               this.match = this.matches[i]
               ret = true
-              console.log(ret)
               return ret
             }
           }
         }
-        console.log(ret)
         return ret
       }
     },
