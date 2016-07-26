@@ -4,7 +4,7 @@
       <div class="server-select-container">
         <strong>Server: &nbsp;</strong>
         <select class="map-select" v-model="selectedWorld" :disabled="!mapPrepared">
-          <option v-for="world in worldlist">
+          <option v-for="world in worldlist | orderBy 'name'">
             {{world.name}}
           </option>
         </select>
