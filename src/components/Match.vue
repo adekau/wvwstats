@@ -3,23 +3,40 @@
 
     <div v-if="!isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
-      Invalid match id
+      Match {{$route.params.matchid}} does not exist.
     </div>
 
-    <matchheading v-if="isValidMatch"></matchheading>
-    <scoredetails v-if="isValidMatch" :matchinfo="match" :worldlist="worldlist"
+    <div v-if="!dataReady"
+      class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
+      Data is loading...
+    </div>
+
+    <matchheading v-if="isValidMatch && dataReady"></matchheading>
+
+    <scoredetails v-if="isValidMatch && dataReady" :matchinfo="match" :worldlist="worldlist"
       :officialglicko="officialglicko"></scoredetails>
 
-    <!-- Todo: Should change both of these to use computed properties for server name
-               to prevent them from occasionally being blank on page load when
-               it takes awhile to fetch worldlist -->
-    <matchkd :match="match" :worldlist="worldlist"></matchkd>
-    <matchpoints :match="match" :worldlist="worldlist"></matchpoints>
-    <matchmapskd v-for="map in match.maps"
+    <matchkd v-if="isValidMatch && dataReady" :match="match" :worldlist="worldlist"></matchkd>
+
+    <matchpoints v-if="isValidMatch && dataReady" :match="match" :worldlist="worldlist"></matchpoints>
+
+    <matchmapskd v-if="isValidMatch && dataReady" v-for="map in match.maps"
       :match="match" :worldlist="worldlist" :mapid="map"></matchmapskd>
 
-    <div class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
-      <div id="chart_div" style="width:100%; height: 360px;"></div>
+    <div v-if="isValidMatch"
+      class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
+      <chart v-if='dataReady'
+        chartname="ppt" chartdata="ppt" :match='match' :worldlist='worldlist'
+        chartheight="360px" charttitle="PPT Evolution"></chart>
+
+    </div>
+
+    <div v-if="isValidMatch"
+      class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
+      <chart v-if='dataReady'
+        chartname="scores" chartdata="scores" :match='match' :worldlist='worldlist'
+        chartheight="360px" charttitle="Score Evolution"></chart>
+
     </div>
   </div>
 </template>
@@ -48,6 +65,7 @@
   import Matchkd from './Matchkd.vue'
   import Matchpoints from './Matchpoints.vue'
   import Matchmapskd from './Matchmapskd.vue'
+  import Chart from './Chart.vue'
 
   export default {
     data () {
@@ -56,19 +74,8 @@
         matchId: 0,
         matches: [],
         match: {},
-        officialglicko: {},
-        data: null,
-        options: [],
-        raw: []
+        officialglicko: {}
       }
-    },
-
-    ready () {
-      window.google.charts.load('current', {
-        'packages': ['corechart', 'line']
-      });
-      window.google.charts.setOnLoadCallback(this.drawChart);
-      window.onresize = this.resizeChart;
     },
 
     route: {
@@ -121,82 +128,6 @@
           }
         }
         return
-      },
-
-      drawChart () {
-        store.fetchArchiveData(this.matchId, 'ppt', this.match.start_time, this.match.end_time)
-          .then((response)=> {
-            this.raw = response.data
-            this.data = new window.google.visualization.DataTable();
-            this.data.addColumn('datetime', 'Date')
-            this.data.addColumn('number', this.getWorldById(this.match.worlds.green).name)
-            this.data.addColumn('number', this.getWorldById(this.match.worlds.blue).name)
-            this.data.addColumn('number', this.getWorldById(this.match.worlds.red).name)
-
-            for (var i = 0; i < this.raw.length; i++) {
-            	var date = new Date(this.raw[i].snapshot_time)
-              var red = this.raw[i].ppt.red
-              var blue = this.raw[i].ppt.blue
-              var green = this.raw[i].ppt.green
-            	this.data.addRow([date, green, blue, red])
-            }
-
-            this.options = {
-              //title: 'Dragonbrand vs Tarnished Coast vs Blackgate PPT Evolution',
-              chartArea: {width: '84%', backgroundColor: '#ECF1F5'},
-              legend: 'top',
-              backgroundColor: '#CFD8DC',
-              hAxis: {
-                title: 'Date',
-                titleTextStyle: {
-                  color: '#333'
-                }
-              },
-              vAxis: {
-                minValue: 0
-              },
-              explorer: {
-              	//axis: 'horizontal',
-                keepInBounds: true,
-                actions: ['dragToZoom', 'rightClickToReset'],
-                maxZoomOut: 0
-               },
-              focusTarget: 'category',
-              colors: ['#59B65B','#595BB6','#B6595B'],
-              lineWidth: 1
-            };
-
-            var chart = new window.google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(this.data, this.options);
-          })
-      },
-
-      resizeChart() {
-        var chart = new window.google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(this.data, this.options);
-      },
-
-      redrawChartData() {
-        store.fetchArchiveData(this.matchId, 'ppt', this.match.start_time, this.match.end_time)
-          .then((response)=> {
-            this.raw = response.data
-            this.data = new window.google.visualization.DataTable();
-            this.data.addColumn('datetime', 'Date')
-            this.data.addColumn('number', this.getWorldById(this.match.worlds.green).name)
-            this.data.addColumn('number', this.getWorldById(this.match.worlds.blue).name)
-            this.data.addColumn('number', this.getWorldById(this.match.worlds.red).name)
-
-            for (var i = 0; i < this.raw.length; i++) {
-            	var date = new Date(this.raw[i].snapshot_time)
-              var red = this.raw[i].ppt.red
-              var blue = this.raw[i].ppt.blue
-              var green = this.raw[i].ppt.green
-            	this.data.addRow([date, green, blue, red])
-            }
-
-            var chart = new window.google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(this.data, this.options);
-          })
       }
     },
 
@@ -213,6 +144,13 @@
           }
         }
         return ret
+      },
+
+      dataReady () {
+        console.log(this.worldlist)
+        return (this.worldlist !== [] && this.matches !== []
+          && this.worldlist[1] !== null && this.worldlist[1] !== undefined
+          && this.matches[1] !== null && this.matches[1] !== undefined)
       }
     },
 
@@ -232,7 +170,8 @@
       Matchheading,
       Matchkd,
       Matchpoints,
-      Matchmapskd
+      Matchmapskd,
+      Chart
     }
 
   }
