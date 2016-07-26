@@ -32,14 +32,19 @@ const matcharchiveUrl = 'http://www.wvwstats.com/api/v1/matcharchive'
 /**
  * Local Cache variables
  */
-let selectedWorld = 0
-let matchesCache = []
-let worldsCache = []
-let glickoCache = {}
-let predictedGlickoCache = {}
-let objectiveCache = []
-let guildCache = {}
-let weekleaderboardCache = {}
+var selectedWorld = 0
+var matchesCache = []
+var worldsCache = []
+var glickoCache = {}
+var predictedGlickoCache = {}
+var objectiveCache = []
+var guildCache = {}
+var weekleaderboardCache = {}
+var googleChartsLoaded = false
+var grapherQuery = {
+  server: null,
+  data: null
+}
 
 // ------- BEGIN STORE.
 export default store
@@ -54,7 +59,13 @@ var initialUpdate = setTimeout(function () {
   store.updateObjectives()
   store.updateWeekleaderboard()
 }, 1)
-
+/**
+ * Google Charts loader
+ */
+window.google.charts.setOnLoadCallback(() => {
+  googleChartsLoaded = true
+  store.emit('charts-loaded')
+});
 /**
  * Update timers
  */
@@ -132,6 +143,11 @@ var weekleaderboardUpdateTimer =  setInterval(function () {
    store.emit('selectedWorld-updated')
  }
 
+ store.updateGrapherQuery = gq => {
+   grapherQuery = gq
+   store.emit('grapherQuery-updated')
+ }
+
  store.updatePredictedGlicko = (id, glicko) => {
    predictedGlickoCache[id] = glicko
    store.emit('predictedGlicko-updated')
@@ -162,6 +178,10 @@ store.fetchObjectiveIds = () => {
 
 store.fetchSelectedWorld = () => {
   return selectedWorld
+}
+
+store.fetchGrapherQuery = () => {
+  return grapherQuery
 }
 
 store.fetchPredictedGlicko = () => {
@@ -201,4 +221,8 @@ store.fetchGuildById = (id) => {
       })
     }
   })
+}
+
+store.fetchGoogleChartsLoaded = () => {
+  return googleChartsLoaded
 }
