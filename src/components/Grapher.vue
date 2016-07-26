@@ -35,7 +35,7 @@
         worldlist: [],
         selectedWorld: null,
         selectedData: null,
-        queryServer: null,
+        queryWorld: null,
         queryData: null,
         // chartHeight: 500,
         availableXAxis: [
@@ -53,21 +53,15 @@
       }
     },
 
-    ready () {
-      this.setInput()
-    },
-
     route: {
       data({ to }) {
         const server = to.query.server
         const data = to.query.data
 
-        setTimeout(this.setInput, 30)
-
         return {
           matches: store.fetchMatches(),
           worldlist: store.fetchWorlds(),
-          queryServer: server,
+          queryWorld: server,
           queryData: data
         }
       }
@@ -86,27 +80,16 @@
     methods: {
       updateMatches() {
         this.matches = store.fetchMatches()
+        this.selectedWorld = this.queryWorld
+        this.selectedData = this.queryData
         store.removeListener('matches-updated', this.updateMatches)
       },
 
       updateWorlds() {
         this.worldlist = store.fetchWorlds()
-        this.setInput()
+        this.selectedWorld = this.queryWorld
+        this.selectedData = this.queryData
         store.removeListener('worlds-updated', this.updateWorlds)
-      },
-
-      setInput() {
-        if (this.worldlist === null || this.worldlist[1] === undefined) {
-          return
-        } else {
-          if (this.queryServer !== null) {
-            this.selectedWorld = this.getWorldById(this.queryServer).name
-          }
-
-          if( this.queryData !== null) {
-            this.selectedData = this.queryData
-          }
-        }
       },
 
       getWorldByName (name) {
@@ -187,7 +170,7 @@
     watch: {
       'selectedWorld': function (val, oldVal) {
         var gq = {
-          'server': this.getWorldByName(val).id,
+          'server': this.selectedWorld,
           'data': this.selectedData
         }
 
@@ -201,7 +184,7 @@
 
       'selectedData': function (val, oldVal) {
         var gq = {
-          'server': this.selectedWorld !== null ? this.getWorldByName(this.selectedWorld).id : null,
+          'server': this.selectedWorld,
           'data': this.selectedData
         }
 
