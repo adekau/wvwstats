@@ -15,8 +15,8 @@
                                                  role="presentation">autorenew</i>Live</a>
       <a v-link="{ path: '/leaderboard' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">format_list_numbered</i>Leaderboard</a>
-      <!-- <a v-link="{ path: '/predictions' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">help_outline</i>Predictions</a> -->
+      <a v-link="{ path: '/grapher', query: grapherQuery }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">trending_up</i>Grapher</a>
       <div class="mdl-layout-spacer"></div>
       <a v-link="{ path: '/about' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">info</i>About</a>
@@ -30,17 +30,22 @@
   export default {
     data () {
       return {
-        selectedWorld: 0
+        selectedWorld: 0,
+        grapherQuery: {server: null, data: null}
       }
     },
 
     created () {
       this.selectedWorld = store.fetchSelectedWorld()
+      this.grapherQuery = store.fetchGrapherQuery()
+
       store.on('selectedWorld-updated', this.update)
+      store.on('grapherQuery-updated', this.updateGQ)
     },
 
     destroyed () {
       store.removeListener('selectedWorld-updated', this.update)
+      store.removeListener('grapherQuery-updated', this.updateGQ)
     },
 
     computed: {
@@ -56,6 +61,10 @@
     methods: {
       update () {
         this.selectedWorld = store.fetchSelectedWorld()
+      },
+
+      updateGQ () {
+        this.grapherQuery = store.fetchGrapherQuery()
       }
     }
   }
