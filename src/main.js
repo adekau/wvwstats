@@ -8,6 +8,12 @@ import EUMatches from './components/EUMatches.vue'
 import Map from './components/Map.vue'
 import Leaderboard from './components/Leaderboard.vue'
 import Match from './components/Match.vue'
+import Grapher from './components/Grapher.vue'
+
+// Google charts
+window.google.charts.load('current', {
+  'packages': ['corechart', 'line']
+});
 
 // install router
 Vue.use(Router)
@@ -62,6 +68,10 @@ router.map({
   '/match/:matchid': {
     component: Match,
     pageTitle: 'Match Details'
+  },
+  '/grapher': {
+    component: Grapher,
+    pageTitle: 'Grapher'
   }
 })
 
