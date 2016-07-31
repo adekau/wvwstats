@@ -27,7 +27,7 @@
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
       <chart v-if='dataReady'
         chartname="ppt" chartdata="ppt" :match='match' :worldlist='worldlist'
-        chartheight="360px" charttitle="PPT Evolution"></chart>
+        chartheight="360px" charttitle="PPT Evolution" redraw="false"></chart>
 
     </div>
 
@@ -35,7 +35,7 @@
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
       <chart v-if='dataReady'
         chartname="scores" chartdata="scores" :match='match' :worldlist='worldlist'
-        chartheight="360px" charttitle="Score Evolution"></chart>
+        chartheight="360px" charttitle="Score Evolution" redraw="false"></chart>
 
     </div>
   </div>
