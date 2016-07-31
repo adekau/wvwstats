@@ -41,14 +41,17 @@
         availableXAxis: [
           'kills',
           'deaths',
-          'scores',
+          'k/d',
+          'activity (k+d)',
           'ppt',
+          'scores',
+          'Score from PPK (as percent)',
+          'Score from PPT (as percent)',
+          'Score from PPT',
           'camps',
           'towers',
           'keeps',
           'castles',
-          'k/d',
-          'activity (k+d)'
         ]
       }
     },
