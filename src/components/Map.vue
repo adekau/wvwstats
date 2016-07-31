@@ -54,7 +54,7 @@
 
       this.map = window.L.map('map', {
         minZoom: 0,
-        maxZoom: 7,
+        maxZoom: 6,
         crs: window.L.CRS.Simple,
         maxBoundsViscosity: 1.0
       }).setView([0, 0], 0)
@@ -64,10 +64,11 @@
 
       this.map.setMaxBounds(new window.L.LatLngBounds(southWest, northEast))
 
-      window.L.tileLayer('https://tiles.guildwars2.com/2/1/{z}/{x}/{y}.jpg', {
+      window.L.tileLayer('https://tiles{s}.guildwars2.com/2/1/{z}/{x}/{y}.jpg', {
         minZoom: 0,
         maxZoom: 7,
-        continuousWorld: true
+        continuousWorld: true,
+        subdomains: [1, 2, 3, 4]
       }).addTo(this.map)
 
       if(this.objectives.length > 0) {
@@ -407,7 +408,7 @@
   }
 
   .leaflet-container {
-    background: #000;
+    background: #fff;
   }
 
   .map-select {
