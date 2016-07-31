@@ -13,7 +13,8 @@
       }
     },
 
-    props: ['match', 'worldlist', 'chartname', 'chartdata', 'chartheight', 'charttitle'],
+    props: ['match', 'worldlist', 'chartname', 'chartdata', 'chartheight',
+      'charttitle', 'redraw'],
 
     ready () {
       if (store.fetchGoogleChartsLoaded()) {
@@ -60,6 +61,42 @@
                 })
               }
               this.finishDrawChart(response, 'activity')
+            })
+        } else if (this.chartdata === 'Score from PPK (as percent)') {
+          store.fetchArchiveData(this.match.id, 'kills,scores', this.match.start_time, this.match.end_time)
+            .then((response)=> {
+              for (var i = 0; i < response.data.length; i++) {
+                var obj = response.data[i]
+                obj.pppk = {}
+                Object.keys(obj.kills).forEach((key) => {
+                  obj.pppk[key] = (obj.kills[key] * 2) / obj.scores[key]
+                })
+              }
+              this.finishDrawChart(response, 'pppk')
+            })
+        } else if (this.chartdata === 'Score from PPT (as percent)') {
+          store.fetchArchiveData(this.match.id, 'kills,scores', this.match.start_time, this.match.end_time)
+            .then((response)=> {
+              for (var i = 0; i < response.data.length; i++) {
+                var obj = response.data[i]
+                obj.pppt = {}
+                Object.keys(obj.kills).forEach((key) => {
+                  obj.pppt[key] = (obj.scores[key] - (obj.kills[key] * 2)) / obj.scores[key]
+                })
+              }
+              this.finishDrawChart(response, 'pppt')
+            })
+        } else if (this.chartdata === 'Score from PPT') {
+          store.fetchArchiveData(this.match.id, 'kills,scores', this.match.start_time, this.match.end_time)
+            .then((response)=> {
+              for (var i = 0; i < response.data.length; i++) {
+                var obj = response.data[i]
+                obj.sppt = {}
+                Object.keys(obj.kills).forEach((key) => {
+                  obj.sppt[key] = (obj.scores[key] - (obj.kills[key] * 2))
+                })
+              }
+              this.finishDrawChart(response, 'sppt')
             })
         } else {
           store.fetchArchiveData(this.match.id, this.chartdata, this.match.start_time, this.match.end_time)
@@ -137,7 +174,9 @@
 
     watch: {
       match () {
-        this.drawChart()
+        if (this.redraw === undefined) {
+          this.drawChart()
+        }
       },
 
       chartdata () {
