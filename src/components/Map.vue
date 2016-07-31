@@ -66,9 +66,9 @@
 
       window.L.tileLayer('https://tiles{s}.guildwars2.com/2/1/{z}/{x}/{y}.jpg', {
         minZoom: 0,
-        maxZoom: 7,
+        maxZoom: 6,
         continuousWorld: true,
-        subdomains: [1, 2, 3, 4]
+        subdomains: '1234'
       }).addTo(this.map)
 
       if(this.objectives.length > 0) {
