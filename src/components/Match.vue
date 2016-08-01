@@ -26,16 +26,16 @@
     <div v-if="isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
       <chart v-if='dataReady'
-        chartname="ppt" chartdata="ppt" :match='match' :worldlist='worldlist'
-        chartheight="360px" charttitle="PPT Evolution" redraw="false"></chart>
+        chartname="ppt" chartdata="ppt" :match='graphMatch' :worldlist='worldlist'
+        chartheight="360px" charttitle="PPT Evolution"></chart>
 
     </div>
 
     <div v-if="isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
       <chart v-if='dataReady'
-        chartname="scores" chartdata="scores" :match='match' :worldlist='worldlist'
-        chartheight="360px" charttitle="Score Evolution" redraw="false"></chart>
+        chartname="scores" chartdata="scores" :match='graphMatch' :worldlist='worldlist'
+        chartheight="360px" charttitle="Score Evolution"></chart>
 
     </div>
   </div>
@@ -74,6 +74,7 @@
         matchId: 0,
         matches: [],
         match: {},
+        graphMatch: null,
         officialglicko: {}
       }
     },
@@ -138,6 +139,13 @@
           for (var i = 0; i < this.matches.length; i++) {
             if (this.matches[i].id === this.matchId) {
               this.match = this.matches[i]
+              if (!this.graphMatch) {
+                this.graphMatch = this.matches[i]
+              } else {
+                if (this.graphMatch.id !== this.matches[i].id) {
+                  this.graphMatch = this.matches[i]
+                }
+              }
               ret = true
               return ret
             }
