@@ -52,6 +52,7 @@
           'towers',
           'keeps',
           'castles',
+          'glicko'
         ]
       }
     },

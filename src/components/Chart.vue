@@ -21,7 +21,6 @@
         this.drawChart()
       }
       window.addEventListener('resize', this.handleResize)
-      // window.onresize = this.resizeChart;
     },
 
     created () {
@@ -98,6 +97,19 @@
               }
               this.finishDrawChart(response, 'sppt')
             })
+        } else if (this.chartdata === 'glicko') {
+          store.fetchArchiveData(this.match.id, 'glicko', this.match.start_time, this.match.end_time)
+            .then((response)=> {
+              for (var i = 0; i < response.data.length; i++) {
+                var obj = response.data[i]
+                obj.rating = {}
+                Object.keys(obj.glicko).forEach((key) => {
+                  obj.rating[key] = obj.glicko[key].rating
+                })
+              }
+              console.log(response.data)
+              this.finishDrawChart(response, 'rating')
+            })
         } else {
           store.fetchArchiveData(this.match.id, this.chartdata, this.match.start_time, this.match.end_time)
             .then((response)=> {
@@ -132,9 +144,6 @@
             titleTextStyle: {
               color: '#333'
             }
-          },
-          vAxis: {
-            minValue: 0
           },
           explorer: {
             //axis: 'horizontal',
