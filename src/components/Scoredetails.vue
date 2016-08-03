@@ -155,12 +155,11 @@
 </template>
 
 <script>
-  import WvWGlicko from '../custom_modules/WvwGlicko'
   import store from '../store'
 
   export default {
 
-    props: ['matchinfo', 'worldlist', 'officialglicko'],
+    props: ['matchinfo', 'worldlist', 'predictedglicko'],
 
     data () {
       return {
@@ -306,51 +305,19 @@
 
        /**
         * glicko
-        * calculates the changes in glicko for each server.
+        * returns the glicko for this matchup
         */
         glicko () {
           var ret = {
-            green: 0, blue: 0, red: 0,
+            green: this.predictedglicko[this.matchinfo.worlds.green].rating,
+            blue: this.predictedglicko[this.matchinfo.worlds.blue].rating,
+            red: this.predictedglicko[this.matchinfo.worlds.red].rating,
             delta: {
-              green: 0, blue: 0, red: 0
+              green: this.predictedglicko[this.matchinfo.worlds.green].delta,
+              blue: this.predictedglicko[this.matchinfo.worlds.blue].delta,
+              red: this.predictedglicko[this.matchinfo.worlds.red].delta
             }
           }
-
-          var scores = this.matchinfo.scores
-          var worlds = this.matchinfo.worlds
-
-          if (!this.officialglicko[worlds.green]) {
-            return ret
-          }
-
-          var oldRatings = {
-            green: this.officialglicko[worlds.green].rating,
-            blue: this.officialglicko[worlds.blue].rating,
-            red: this.officialglicko[worlds.red].rating
-          }
-
-          var deviations = {
-            green: this.officialglicko[worlds.green].rd,
-            blue: this.officialglicko[worlds.blue].rd,
-            red: this.officialglicko[worlds.red].rd
-          }
-
-          var volatilities = {
-            green: this.officialglicko[worlds.green].volatility,
-            blue: this.officialglicko[worlds.blue].volatility,
-            red: this.officialglicko[worlds.red].volatility
-          }
-
-          var glickObj = new WvWGlicko(scores, deviations, volatilities, oldRatings)
-          ret.green = glickObj.newRatingG
-          ret.blue = glickObj.newRatingB
-          ret.red = glickObj.newRatingR
-          ret.delta.green = glickObj.newRatingG - oldRatings.green
-          ret.delta.blue = glickObj.newRatingB - oldRatings.blue
-          ret.delta.red = glickObj.newRatingR - oldRatings.red
-          store.updatePredictedGlicko(worlds.green, ret.green)
-          store.updatePredictedGlicko(worlds.blue, ret.blue)
-          store.updatePredictedGlicko(worlds.red, ret.red)
           return ret
         }
 
