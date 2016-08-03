@@ -26,9 +26,10 @@ const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
 const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
 const guildUrl = 'https://api.guildwars2.com/v1/guild_details.json?guild_id='
 const glickoUrl = 'http://www.wvwstats.com/api/v1/officialglicko'
+const predictedGlickoUrl = 'http://www.wvwstats.com/api/v1/predictedglicko'
 const weekleaderboardUrl = 'http://www.wvwstats.com/api/v1/weekleaderboard'
 const matcharchiveUrl = 'http://www.wvwstats.com/api/v1/matcharchive'
-// let api = new Firebase('http://project-4821868053848732451.firebaseio.com')
+
 /**
  * Local Cache variables
  */
@@ -58,6 +59,7 @@ var initialUpdate = setTimeout(function () {
   store.updateGlicko()
   store.updateObjectives()
   store.updateWeekleaderboard()
+  store.updatePredictedGlicko()
 }, 1)
 /**
  * Google Charts loader
@@ -75,6 +77,7 @@ var matchUpdateTimer = setInterval(function () {
 
 var weekleaderboardUpdateTimer =  setInterval(function () {
   store.updateWeekleaderboard()
+  store.updatePredictedGlicko()
 }, 60000)
 
 /**
@@ -99,11 +102,6 @@ var weekleaderboardUpdateTimer =  setInterval(function () {
  }
 
  store.updateGlicko = () => {
-  //  var ref = api.child('official_glicko')
-  //  ref.once('value', (snapshot) => {
-  //    glickoCache = snapshot.val()
-  //    store.emit('glicko-updated')
-  //  })
   Vue.http.get(glickoUrl).then((response) => {
     for (var i = 0; i < response.data.length; i++) {
       let curGlicko = response.data[i]
@@ -121,6 +119,15 @@ var weekleaderboardUpdateTimer =  setInterval(function () {
      store.emit('weekleaderboard-updated')
    }, (response) => {
      store.updateWeekleaderboard()
+   })
+ }
+
+ store.updatePredictedGlicko = () => {
+   Vue.http.get(predictedGlickoUrl).then( (response) => {
+     predictedGlickoCache = response.data
+     store.emit('predictedGlicko-updated')
+   }, (response) => {
+     store.updatePredictedGlicko()
    })
  }
 
@@ -146,11 +153,6 @@ var weekleaderboardUpdateTimer =  setInterval(function () {
  store.updateGrapherQuery = gq => {
    grapherQuery = gq
    store.emit('grapherQuery-updated')
- }
-
- store.updatePredictedGlicko = (id, glicko) => {
-   predictedGlickoCache[id] = glicko
-   store.emit('predictedGlicko-updated')
  }
 
 /**
