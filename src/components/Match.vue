@@ -14,7 +14,7 @@
     <matchheading v-if="isValidMatch && dataReady"></matchheading>
 
     <scoredetails v-if="isValidMatch && dataReady" :matchinfo="match" :worldlist="worldlist"
-      :officialglicko="officialglicko"></scoredetails>
+      :predictedglicko="formattedglicko"></scoredetails>
 
     <matchkd v-if="isValidMatch && dataReady" :match="match" :worldlist="worldlist"></matchkd>
 
@@ -75,7 +75,8 @@
         matches: [],
         match: {},
         graphMatch: null,
-        officialglicko: {}
+        officialglicko: {},
+        predictedglicko: {}
       }
     },
 
@@ -91,7 +92,8 @@
           worldlist: store.fetchWorlds(),
           matchId: this.$route.params.matchid,
           matches: store.fetchMatches(),
-          officialglicko: store.fetchGlicko()
+          officialglicko: store.fetchGlicko(),
+          predictedglicko: store.fetchPredictedGlicko()
         }
       }
     },
@@ -100,12 +102,14 @@
       store.on('matches-updated', this.updateMatches)
       store.on('matches-updated', this.updateWorlds)
       store.on('glicko-updated', this.updateGlicko)
+      store.on('predictedGlicko-updated', this.updatePredictedGlicko)
     },
 
     destroyed () {
-      store.destroyed('matches-updated', this.updateMatches)
-      store.destroyed('matches-updated', this.updateWorlds)
-      store.destroyed('glicko-updated', this.updateGlicko)
+      store.removeListener('matches-updated', this.updateMatches)
+      store.removeListener('matches-updated', this.updateWorlds)
+      store.removeListener('glicko-updated', this.updateGlicko)
+      store.removeListener('predictedGlicko-updated', this.updatePredictedGlicko)
     },
 
     methods: {
@@ -119,6 +123,10 @@
 
       updateGlicko () {
         this.officialglicko = store.fetchGlicko()
+      },
+
+      updatePredictedGlicko () {
+        this.predictedglicko = store.fetchPredictedGlicko()
       },
 
       getWorldById (id) {
@@ -159,6 +167,22 @@
         return (this.worldlist !== [] && this.matches !== []
           && this.worldlist[1] !== null && this.worldlist[1] !== undefined
           && this.matches[1] !== null && this.matches[1] !== undefined)
+      },
+
+      formattedglicko () {
+        var glicko = this.predictedglicko
+        var ret = {}
+
+        if (glicko === null || glicko === undefined) {
+          return
+        }
+
+        for (var i = 0; i < this.predictedglicko.length; i++) {
+          var cg = this.predictedglicko[i]
+          ret[cg.id] = cg.glicko
+        }
+
+        return ret
       }
     },
 
