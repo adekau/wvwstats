@@ -8,7 +8,7 @@
       | filterBy region in 'id'
       | orderBy 'id'"
       :matchinfo="match"
-      :worldlist="worldlist" :officialglicko="officialglicko"></scoredetails>
+      :worldlist="worldlist" :predictedglicko="formattedglicko"></scoredetails>
 
       <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
@@ -30,7 +30,10 @@
           <tr v-for="server in servers
             | orderBy 'predicted' -1">
             <td data-label="Rank">
-              {{$index + 1}}
+              {{$index + 1}}&nbsp;
+              <span class="{{positionChange[server.name].textclass}}">
+                {{positionChange[server.name].change | absolute}}
+              </span>
             </td>
             <td class="mdl-data-table__cell--non-numeric" data-label="Server">
               {{server.name}}
@@ -62,8 +65,7 @@
         matches: [],
         worldlist: [],
         officialglicko: {},
-        predictedglicko: {},
-        servers: []
+        predictedglicko: {}
       }
     },
 
@@ -102,7 +104,89 @@
           ret[id] = this.worldlist[i]
         }
         return ret
+      },
+
+      formattedglicko () {
+        var glicko = this.predictedglicko
+        var ret = {}
+
+        if (glicko === null || glicko === undefined) {
+          return
+        }
+
+        for (var i = 0; i < this.predictedglicko.length; i++) {
+          var cg = this.predictedglicko[i]
+          ret[cg.id] = cg.glicko
+        }
+
+        return ret
+      },
+
+      servers () {
+        let glicko = this.officialglicko
+        let pglicko = this.formattedglicko
+        let ret = []
+
+        Object.keys(glicko).forEach( (key) => {
+          if (key >= 2000 && pglicko[key]) {
+            let startGlicko = glicko[key].rating
+            let curGlicko = pglicko[key].rating
+            let textclass = (curGlicko - startGlicko) >= 0 ?
+              'glicko-up' : 'glicko-down'
+            ret.push({
+              name: this.worldsById[key].name,
+              official: startGlicko,
+              predicted: curGlicko,
+              textclass: textclass
+            })
+          }
+        })
+
+        return ret
+      },
+
+      positionChange () {
+        var ret = {}
+        var posInOfficial = {}
+        var posInPredicted = {}
+        var servers = this.servers
+
+        var sortedByOfficial = servers.slice().sort((a,b) => {
+          return parseFloat(b.official) - parseFloat(a.official)
+        })
+
+        var sortedByPredicted = servers.slice().sort((a,b) => {
+          return parseFloat(b.predicted) - parseFloat(a.predicted)
+        })
+
+        for (var i = 0; i < sortedByOfficial.length; i++) {
+          posInOfficial[sortedByOfficial[i].name] = i
+        }
+
+        for (var i = 0; i < sortedByPredicted.length; i++) {
+          posInPredicted[sortedByPredicted[i].name] = i
+        }
+
+        Object.keys(posInOfficial).forEach((key) => {
+          var change = posInOfficial[key] - posInPredicted[key]
+          ret[key] = {
+            change: change,
+            textclass: ''
+          }
+
+          if (change > 0) {
+            ret[key].textclass = 'pos-up'
+          } else if (change < 0) {
+            ret[key].textclass = 'pos-down'
+          } else {
+            ret[key].textclass = 'pos-same'
+          }
+
+        })
+
+        return ret
       }
+
     },
 
     methods: {
@@ -120,29 +204,6 @@
 
       updatePredictedGlicko () {
         this.predictedglicko = store.fetchPredictedGlicko()
-        this.updateTableData()
-      },
-
-      updateTableData () {
-        let glicko = this.officialglicko
-        let pglicko = this.predictedglicko
-        let ret = []
-
-        Object.keys(glicko).forEach( (key) => {
-          if (key >= 2000 && pglicko[key]) {
-            let startGlicko = glicko[key].rating
-            let curGlicko = pglicko[key]
-            let textclass = (curGlicko - startGlicko) >= 0 ?
-              'glicko-up' : 'glicko-down'
-            ret.push({
-              name: this.worldsById[key].name,
-              official: startGlicko,
-              predicted: curGlicko,
-              textclass: textclass
-            })
-          }
-        })
-        this.servers = ret
       }
     },
 
@@ -153,6 +214,10 @@
         var fixed = value.toFixed(accuracy)
 
         return keep ? fixed : +fixed
+      },
+
+      absolute: function (value) {
+        return value < 0 ? value * -1 : value === 0 ? '' : value
       }
     },
 
@@ -183,6 +248,41 @@
   .glicko-down {
     color: rgb(182, 89, 91);
     font-weight: bold;
+  }
+
+  .pos-up, .pos-down, .pos-same {
+    width: 25px;
+    margin-left: 0px;
+  }
+
+  .pos-up {
+    display:inline-block;
+    color: rgb(89,170,91);
+    font-weight: bold;
+  }
+
+  .pos-up:before {
+    content: '⬆';
+  }
+
+  .pos-down {
+    display:inline-block;
+    color: rgb(182, 89, 91);
+    font-weight: bold;
+  }
+
+  .pos-down:before {
+    content: '⬇';
+  }
+
+  .pos-same {
+    display: inline-block;
+    color: rgb(182,182,182);
+    font-weight: bold;
+  }
+
+  .pos-same:before {
+    content: '–';
   }
 
   tbody tr:nth-child(even) {
