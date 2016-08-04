@@ -29,6 +29,7 @@ const glickoUrl = 'http://www.wvwstats.com/api/v1/officialglicko'
 const predictedGlickoUrl = 'http://www.wvwstats.com/api/v1/predictedglicko'
 const weekleaderboardUrl = 'http://www.wvwstats.com/api/v1/weekleaderboard'
 const matcharchiveUrl = 'http://www.wvwstats.com/api/v1/matcharchive'
+const timezonesUrl = 'http://www.wvwstats.com/api/v1/timezones'
 
 /**
  * Local Cache variables
@@ -41,6 +42,7 @@ var predictedGlickoCache = {}
 var objectiveCache = []
 var guildCache = {}
 var weekleaderboardCache = {}
+var timezoneCache = []
 var googleChartsLoaded = false
 var grapherQuery = {
   server: null,
@@ -60,6 +62,7 @@ var initialUpdate = setTimeout(function () {
   store.updateObjectives()
   store.updateWeekleaderboard()
   store.updatePredictedGlicko()
+  store.updateTimezones()
 }, 1)
 /**
  * Google Charts loader
@@ -145,6 +148,15 @@ var weekleaderboardUpdateTimer =  setInterval(function () {
    })
  }
 
+ store.updateTimezones = () => {
+   Vue.http.get(timezonesUrl).then( (response) => {
+     timezoneCache = response.data
+     store.emit('timezones-updated')
+   }, (response) => {
+     store.updateTimezones()
+   })
+ }
+
  store.updateSelectedWorld = id => {
    selectedWorld = id
    store.emit('selectedWorld-updated')
@@ -172,6 +184,10 @@ store.fetchGlicko = () => {
 
 store.fetchObjectives = () => {
   return objectiveCache
+}
+
+store.fetchTimezones = () => {
+  return timezoneCache
 }
 
 store.fetchObjectiveIds = () => {
