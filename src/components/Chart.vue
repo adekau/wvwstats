@@ -110,6 +110,19 @@
               console.log(response.data)
               this.finishDrawChart(response, 'rating')
             })
+        } else if (this.chartdata === 'glicko change') {
+          store.fetchArchiveData(this.match.id, 'glicko', this.match.start_time, this.match.end_time)
+            .then((response)=> {
+              for (var i = 0; i < response.data.length; i++) {
+                var obj = response.data[i]
+                obj.delta = {}
+                Object.keys(obj.glicko).forEach((key) => {
+                  obj.delta[key] = obj.glicko[key].delta
+                })
+              }
+              console.log(response.data)
+              this.finishDrawChart(response, 'delta')
+            })
         } else {
           store.fetchArchiveData(this.match.id, this.chartdata, this.match.start_time, this.match.end_time)
             .then((response)=> {

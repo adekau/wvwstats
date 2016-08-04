@@ -52,7 +52,8 @@
           'towers',
           'keeps',
           'castles',
-          'glicko'
+          'glicko',
+          'glicko change'
         ]
       }
     },
