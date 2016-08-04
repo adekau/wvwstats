@@ -9,6 +9,7 @@ import Map from './components/Map.vue'
 import Leaderboard from './components/Leaderboard.vue'
 import Match from './components/Match.vue'
 import Grapher from './components/Grapher.vue'
+import Timezones from './components/Timezones.vue'
 
 // Google charts
 window.google.charts.load('current', {
@@ -72,6 +73,10 @@ router.map({
   '/grapher': {
     component: Grapher,
     pageTitle: 'Grapher'
+  },
+  '/timezones': {
+    component: Timezones,
+    pageTitle: 'Timezone Stats'
   }
 })
 
