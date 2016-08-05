@@ -180,7 +180,8 @@ store.fetchTimezones = (timezone, start_time, callback) => {
   if (timezoneCache.length > 0) {
     callback(timezoneCache)
   } else {
-    Vue.http.get(timezonesUrl + '?start_time=' + start_time + '&timezone=' + timezone)
+    var url = timezonesUrl + '?start_time=' + start_time + '&timezone=' + timezone
+    Vue.http.get(url)
     .then( (response) => {
       timezoneCache = response.data
       callback(timezoneCache)
