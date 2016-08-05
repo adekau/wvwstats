@@ -76,7 +76,7 @@ router.map({
   },
   '/timezones': {
     component: Timezones,
-    pageTitle: 'Timezone Stats'
+    pageTitle: 'Timezone Ranks'
   }
 })
 
