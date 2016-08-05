@@ -62,7 +62,6 @@ var initialUpdate = setTimeout(function () {
   store.updateObjectives()
   store.updateWeekleaderboard()
   store.updatePredictedGlicko()
-  store.updateTimezones()
 }, 1)
 /**
  * Google Charts loader
@@ -148,15 +147,6 @@ var weekleaderboardUpdateTimer =  setInterval(function () {
    })
  }
 
- store.updateTimezones = () => {
-   Vue.http.get(timezonesUrl).then( (response) => {
-     timezoneCache = response.data
-     store.emit('timezones-updated')
-   }, (response) => {
-     store.updateTimezones()
-   })
- }
-
  store.updateSelectedWorld = id => {
    selectedWorld = id
    store.emit('selectedWorld-updated')
@@ -186,8 +176,16 @@ store.fetchObjectives = () => {
   return objectiveCache
 }
 
-store.fetchTimezones = () => {
-  return timezoneCache
+store.fetchTimezones = (timezone, start_time, callback) => {
+  if (timezoneCache.length > 0) {
+    callback(timezoneCache)
+  } else {
+    Vue.http.get(timezonesUrl + '?start_time=' + start_time + '&timezone=' + timezone)
+    .then( (response) => {
+      timezoneCache = response.data
+      callback(timezoneCache)
+    })
+  }
 }
 
 store.fetchObjectiveIds = () => {
