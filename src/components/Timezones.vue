@@ -21,11 +21,11 @@
               {{getWorldById(server.server).name}}
             </a>
           </td>
-          <td data-label="NA EST">{{server['na_est']}}</td>
-          <td data-label="NA PST">{{server['na_pst']}}</td>
-          <td data-label="EU">{{server['eu']}}</td>
-          <td data-label="OCX">{{server['ocx']}}</td>
-          <td data-label="SEA">{{server['sea']}}</td>
+          <td data-label="NA EST">{{server['na_est'] | rank}}</td>
+          <td data-label="NA PST">{{server['na_pst'] | rank}}</td>
+          <td data-label="EU">{{server['eu'] | rank}}</td>
+          <td data-label="OCX">{{server['ocx'] | rank}}</td>
+          <td data-label="SEA">{{server['sea'] | rank}}</td>
         </tr>
         <tr v-if="noData">
           <td colspan="6"
@@ -55,11 +55,11 @@
               {{getWorldById(server.server).name}}
             </a>
           </td>
-          <td data-label="NA EST">{{server['na_est']}}</td>
-          <td data-label="NA PST">{{server['na_pst']}}</td>
-          <td data-label="EU">{{server['eu']}}</td>
-          <td data-label="OCX">{{server['ocx']}}</td>
-          <td data-label="SEA">{{server['sea']}}</td>
+          <td data-label="NA EST">{{server['na_est'] | rank}}</td>
+          <td data-label="NA PST">{{server['na_pst'] | rank}}</td>
+          <td data-label="EU">{{server['eu'] | rank}}</td>
+          <td data-label="OCX">{{server['ocx'] | rank}}</td>
+          <td data-label="SEA">{{server['sea'] | rank}}</td>
         </tr>
         <tr v-if="noData">
           <td colspan="6"
@@ -259,7 +259,22 @@
     filters: {
       format (value) {
         return value.replace('_', ' ').toUpperCase()
-      }
+      },
+
+      rank (value) {
+        var j = value % 10,
+        k = value % 100;
+        if (j == 1 && k != 11) {
+          return value + "st";
+        }
+        if (j == 2 && k != 12) {
+          return value + "nd";
+        }
+        if (j == 3 && k != 13) {
+          return value + "rd";
+        }
+        return value + "th";
+      },
     }
   }
 
