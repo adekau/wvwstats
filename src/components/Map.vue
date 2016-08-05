@@ -16,7 +16,6 @@
 
 <script>
   import store from '../store'
-  import moment from 'moment'
 
   export default {
     data () {
@@ -218,6 +217,46 @@
           setTimeout(this.setServer, 30)
         }
       },
+
+      timeDifference (current, previous) {
+        var msPerMinute = 60 * 1000;
+        var msPerHour = msPerMinute * 60;
+        var msPerDay = msPerHour * 24;
+        var msPerMonth = msPerDay * 30;
+        var msPerYear = msPerDay * 365;
+
+        var elapsed = current - previous;
+
+        if (elapsed < msPerMinute) {
+          return (elapsed/1000) > 1 ? Math.round(elapsed/1000) + ' seconds ago'
+            : Math.round(elapsed/1000) + ' seconds ago'
+        }
+
+        else if (elapsed < msPerHour) {
+          return (elapsed/msPerMinute) > 1 ? Math.round(elapsed/msPerMinute) + ' minutes ago'
+            : Math.round(elapsed/msPerMinute) + ' minute ago'
+        }
+
+        else if (elapsed < msPerDay ) {
+          return (elapsed/msPerHour) > 1 ? Math.round(elapsed/msPerHour) + ' hours ago'
+            : Math.round(elapsed/msPerHour) + ' hour ago'
+        }
+
+        else if (elapsed < msPerMonth) {
+          return (elapsed/msPerDay) > 1 ? 'approximately ' + Math.round(elapsed/msPerDay) + ' days ago'
+            : 'approximately ' + Math.round(elapsed/msPerDay) + ' day ago'
+        }
+
+        else if (elapsed < msPerYear) {
+          return (elapsed/msPerMonth) > 1 ? 'approximately ' + Math.round(elapsed/msPerMonth) + ' months ago'
+            : 'approximately ' + Math.round(elapsed/msPerMonth) + ' month ago'
+        }
+
+        else {
+          return (elapsed/msPerYear) > 1 ? 'approximately ' + Math.round(elapsed/msPerYear) + ' years ago'
+            : 'approximately ' + Math.round(elapsed/msPerYear) + ' year ago'
+        }
+      },
       /**
        * getWorldByName
        * name: world's string name
@@ -325,8 +364,8 @@
        * tooltip with the correct information.
        */
       handleObjective (curObjective, item) {
-        var unclaimedLastFlippedTime = moment(curObjective.last_flipped)
-        var unclaimedLastFlippedFmt = unclaimedLastFlippedTime.fromNow()
+        var unclaimedLastFlippedTime = new Date(curObjective.last_flipped)
+        var unclaimedLastFlippedFmt = this.timeDifference(new Date(), unclaimedLastFlippedTime)
 
         if(curObjective.claimed_by) {
           let guildId = curObjective.claimed_by
@@ -353,8 +392,8 @@
           var item = this.objectiveIds[i]
           var curObjective = this.objectivesById[item]
           // Variables
-          var lastFlippedTime = moment(curObjective.last_flipped)
-          var timeOwned = moment(new Date()).unix() - lastFlippedTime.unix()
+          var lastFlippedTime = new Date(curObjective.last_flipped)
+          var timeOwned = Math.floor((new Date() - lastFlippedTime) / 1000)
           // Label Configuration
           if (timeOwned < 300) {
             var riTime = 300 - timeOwned
