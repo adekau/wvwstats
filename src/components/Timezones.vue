@@ -2,6 +2,15 @@
   <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-grid">
     <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
       style="margin-left: 6px; border-bottom: 1px solid grey;">
+      Timezone Ranks
+    </h4>
+    <p style="margin-left: 8px; margin-bottom: 0;">
+      NA-EST and EU timezones do not generate on Fridays. Data resets with the North American WvW Reset.
+      After reset, the first timezone that will generate is NA-PST at 2:00 am Eastern Standard Time.
+      Click on a server name to view kill, death, and score totals for each timezone.
+    </p>
+    <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
+      style="margin-left: 6px; border-bottom: 1px solid grey;">
       North America
     </h4>
     <table class="ratings mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -10,7 +19,7 @@
         <tr>
           <th class="mdl-data-table__cell--non-numeric">Server</th>
           <th v-for="column in columns">
-            <a v-on:click="sortBy(column)">{{column | format}}</a>
+            <a v-on:click="sortBy(column, 'na')">{{column | format}}</a>
           </th>
         </tr>
       </thead>
@@ -29,7 +38,9 @@
         </tr>
         <tr v-if="noData">
           <td colspan="6"
-            class="mdl-data-table__cell--non-numeric"> Data not available yet.</td>
+            class="mdl-data-table__cell--non-numeric">
+            Data not available yet. EU and NA-EST timezones do not generate on Fridays.
+          </td>
         </tr>
       </tbody>
     </table>
@@ -44,12 +55,12 @@
         <tr>
           <th class="mdl-data-table__cell--non-numeric">Server</th>
           <th v-for="column in columns">
-            <a v-on:click="sortBy(column)">{{column | format}}</a>
+            <a v-on:click="sortBy(column, 'eu')">{{column | format}}</a>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="server in euRanksByServer | orderBy sortKey reverse">
+        <tr v-for="server in euRanksByServer | orderBy sortKeyEU reverseEU">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
             <a :href="'#/timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
@@ -63,7 +74,9 @@
         </tr>
         <tr v-if="noData">
           <td colspan="6"
-            class="mdl-data-table__cell--non-numeric"> Data not available yet.</td>
+            class="mdl-data-table__cell--non-numeric">
+            Data not available yet. EU and NA-EST timezones do not generate on Fridays.
+          </td>
         </tr>
       </tbody>
     </table>
@@ -77,7 +90,9 @@
     data () {
       return {
         sortKey: 'na_est',
+        sortKeyEU: 'eu',
         reverse: 1,
+        reverseEU: 1,
         columns: ['na_est', 'na_pst', 'eu', 'ocx', 'sea'],
         matches: [],
         timezones: [],
@@ -88,7 +103,15 @@
     ready () {
       if (this.matches.length > 0) {
         store.removeListener('matches-updated', this.updateMatches)
-        store.fetchTimezones('all', this.matches[0].start_time, (tz) => {
+
+        var oldest_date = this.matches[0].start_time
+        for (var i = 1; i < this.matches.length; i++) {
+          var st = this.matches[i].start_time
+          if (st < oldest_date) {
+            oldest_date = st
+          }
+        }
+        store.fetchTimezones('all', oldest_date , (tz) => {
           this.timezones = tz
         })
       }
@@ -117,7 +140,14 @@
       updateMatches () {
         this.matches = store.fetchMatches()
         store.removeListener('matches-updated', this.updateMatches)
-        store.fetchTimezones('all', this.matches[0].start_time, (tz) => {
+        var oldest_date = this.matches[0].start_time
+        for (var i = 1; i < this.matches.length; i++) {
+          var st = this.matches[i].start_time
+          if (st < oldest_date) {
+            oldest_date = st
+          }
+        }
+        store.fetchTimezones('all', oldest_date , (tz) => {
           this.timezones = tz
         })
       },
@@ -165,9 +195,14 @@
         return ret
       },
 
-      sortBy (sortKey) {
-        this.reverse = (this.sortKey == sortKey) ? -1 * this.reverse : 1;
-        this.sortKey = sortKey;
+      sortBy (sortKey, region) {
+        if (region === 'na') {
+          this.reverse = (this.sortKey == sortKey) ? -1 * this.reverse : 1;
+          this.sortKey = sortKey;
+        } else {
+          this.reverseEU = (this.sortKeyEU == sortKey) ? -1 * this.reverse : 1;
+          this.sortKeyEU = sortKey;
+        }
       }
     },
 
@@ -176,6 +211,7 @@
       byTimezone() {
         // Alias to force this to be computed.
         var tz = this.timezones
+        console.log(tz)
         var tmp = {}
         var ret = {}
 

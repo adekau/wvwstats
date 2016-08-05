@@ -1,41 +1,44 @@
 <template>
-  <div v-if="isValidWorld && serverByTimezone['na_est'].data.length > 0"
-    class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-grid">
-
-    <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
-      style="margin-left: 6px; border-bottom: 1px solid grey;">
-      {{getWorldById($route.params.server).name}}
-    </h4>
-    <div style="width: 100%;" v-for="timezone in serverByTimezone">
-      <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
+  <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-grid">
+    <div style="width:100%" v-if="isValidWorld && serverByTimezone['na_est'].data.length > 0">
+      <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
-        {{timezone.name | format}}
-      </h6>
+        {{getWorldById($route.params.server).name}}
+      </h4>
+      <div style="width: 100%;" v-for="timezone in serverByTimezone">
+        <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
+          style="margin-left: 6px; border-bottom: 1px solid grey;">
+          {{timezone.name | format}}
+        </h6>
 
-      <table class="ratings mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
-        mdl-cell--4-col-phone mdl-cell--8-col-tablet">
-        <thead>
-          <tr>
-            <th class="mdl-data-table__cell--non-numeric">Date</th>
-            <th>Kills</th>
-            <th>Deaths</th>
-            <th>Scores</th>
-            <th>Rating Metric</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in timezone.data">
-            <td data-label="Date" class="mdl-data-table__cell--non-numeric">
-              {{item.time | date}}
-            </td>
-            <td data-label="Kills">{{item.kills}}</td>
-            <td data-label="Deaths">{{item.deaths}}</td>
-            <td data-label="Scores">{{item.scores}}</td>
-            <td data-label="Rating Metric">{{item.metric | round 3 true}}</td>
-          </tr>
+        <table class="ratings mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
+          mdl-cell--4-col-phone mdl-cell--8-col-tablet">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Date</th>
+              <th>Kills</th>
+              <th>Deaths</th>
+              <th>Scores</th>
+              <th>Rating Metric</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in timezone.data">
+              <td data-label="Date" class="mdl-data-table__cell--non-numeric">
+                {{item.time | date}}
+              </td>
+              <td data-label="Kills">{{item.kills}}</td>
+              <td data-label="Deaths">{{item.deaths}}</td>
+              <td data-label="Scores">{{item.scores}}</td>
+              <td data-label="Rating Metric">{{item.metric | round 3 true}}</td>
+            </tr>
 
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="width:100%;" v-else>
+      Invalid server ID or the server is not the primary server of the match-up (it is linked to a higher rated server).
     </div>
   </div>
 </template>
@@ -55,7 +58,14 @@
     ready () {
       if (this.matches.length > 0) {
         store.removeListener('matches-updated', this.updateMatches)
-        store.fetchTimezones('all', this.matches[0].start_time, (tz) => {
+        var oldest_date = this.matches[0].start_time
+        for (var i = 1; i < this.matches.length; i++) {
+          var st = this.matches[i].start_time
+          if (st < oldest_date) {
+            oldest_date = st
+          }
+        }
+        store.fetchTimezones('all', oldest_date , (tz) => {
           this.timezones = tz
         })
       }
@@ -84,7 +94,14 @@
       updateMatches () {
         this.matches = store.fetchMatches()
         store.removeListener('matches-updated', this.updateMatches)
-        store.fetchTimezones('all', this.matches[0].start_time, (tz) => {
+        var oldest_date = this.matches[0].start_time
+        for (var i = 1; i < this.matches.length; i++) {
+          var st = this.matches[i].start_time
+          if (st < oldest_date) {
+            oldest_date = st
+          }
+        }
+        store.fetchTimezones('all', oldest_date , (tz) => {
           this.timezones = tz
         })
       },
