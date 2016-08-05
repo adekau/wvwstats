@@ -162,6 +162,8 @@
         var d = new Date(value)
         if (this.$route.params.server < 2000) {
           return `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`
+        } else {
+          return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
         }
 
       },
