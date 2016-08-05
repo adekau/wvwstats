@@ -17,7 +17,9 @@
       <tbody>
         <tr v-for="server in naRanksByServer | orderBy sortKey reverse">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
-            {{getWorldById(server.server).name}}
+            <a :href="'#/timezones/' + server.server" class="tzlink">
+              {{getWorldById(server.server).name}}
+            </a>
           </td>
           <td data-label="NA EST">{{server['na_est']}}</td>
           <td data-label="NA PST">{{server['na_pst']}}</td>
@@ -49,7 +51,9 @@
       <tbody>
         <tr v-for="server in euRanksByServer | orderBy sortKey reverse">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
-            {{getWorldById(server.server).name}}
+            <a :href="'#/timezones/' + server.server" class="tzlink">
+              {{getWorldById(server.server).name}}
+            </a>
           </td>
           <td data-label="NA EST">{{server['na_est']}}</td>
           <td data-label="NA PST">{{server['na_pst']}}</td>
@@ -260,3 +264,9 @@
   }
 
 </script>
+
+<style>
+  .tzlink {
+    color: black;
+  }
+</style>
