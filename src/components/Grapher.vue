@@ -27,7 +27,7 @@
       Grapher Information
     </h4>
     <p style="margin-left: 8px; margin-bottom: 0;">
-      Click and drag over an area of the chart data to zoom in. 
+      Click and drag over an area of the chart data to zoom in.
       Right click on the chart to reset to the full view.
     </p>
   </div>
@@ -161,6 +161,9 @@
        */
       currentMatchId () {
         var server = this.selectedWorld
+        if (server === undefined || server === null) {
+          return
+        }
         var id = this.getWorldByName(server).id
         return this.worldMatchIds[id]
       },
@@ -183,6 +186,10 @@
 
     watch: {
       'selectedWorld': function (val, oldVal) {
+        if (val === undefined || val === null) {
+          return
+        }
+
         var gq = {
           'server': this.selectedWorld,
           'data': this.selectedData
@@ -197,6 +204,10 @@
       },
 
       'selectedData': function (val, oldVal) {
+        if (val === undefined || val === null) {
+          return
+        }
+
         var gq = {
           'server': this.selectedWorld,
           'data': this.selectedData
