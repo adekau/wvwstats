@@ -107,7 +107,6 @@
                   obj.rating[key] = obj.glicko[key].rating
                 })
               }
-              console.log(response.data)
               this.finishDrawChart(response, 'rating')
             })
         } else if (this.chartdata === 'glicko change') {
@@ -120,7 +119,6 @@
                   obj.delta[key] = obj.glicko[key].delta
                 })
               }
-              console.log(response.data)
               this.finishDrawChart(response, 'delta')
             })
         } else {

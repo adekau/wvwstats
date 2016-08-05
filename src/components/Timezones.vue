@@ -211,7 +211,6 @@
       byTimezone() {
         // Alias to force this to be computed.
         var tz = this.timezones
-        console.log(tz)
         var tmp = {}
         var ret = {}
 
@@ -246,7 +245,6 @@
           }
         }
 
-        console.log(ret)
         return ret
       },
 

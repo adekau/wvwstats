@@ -163,7 +163,6 @@
       },
 
       dataReady () {
-        console.log(this.worldlist)
         return (this.worldlist !== [] && this.matches !== []
           && this.worldlist[1] !== null && this.worldlist[1] !== undefined
           && this.matches[1] !== null && this.matches[1] !== undefined)

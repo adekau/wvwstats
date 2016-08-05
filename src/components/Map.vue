@@ -148,7 +148,6 @@
         var ret = Object.create(null)
 
         if (!this.matchArr[0]) {
-          console.log('No match arr')
           return curMatch
         }
 
