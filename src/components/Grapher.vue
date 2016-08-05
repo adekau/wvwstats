@@ -21,6 +21,15 @@
 
     <chart chartname='grapher' chartheight='500px' :chartdata='selectedData'
       :match='currentMatch', :worldlist='worldlist'></chart>
+
+    <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
+      style="margin-left: 6px; border-bottom: 1px solid grey;">
+      Grapher Information
+    </h4>
+    <p style="margin-left: 8px; margin-bottom: 0;">
+      Click and drag over an area of the chart data to zoom in. 
+      Right click on the chart to reset to the full view.
+    </p>
   </div>
 </template>
 
