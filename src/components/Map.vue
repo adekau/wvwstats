@@ -232,27 +232,27 @@
         }
 
         else if (elapsed < msPerHour) {
-          return (elapsed/msPerMinute) > 1 ? Math.round(elapsed/msPerMinute) + ' minutes ago'
+          return Math.round(elapsed/msPerMinute) > 1 ? Math.round(elapsed/msPerMinute) + ' minutes ago'
             : Math.round(elapsed/msPerMinute) + ' minute ago'
         }
 
         else if (elapsed < msPerDay ) {
-          return (elapsed/msPerHour) > 1 ? Math.round(elapsed/msPerHour) + ' hours ago'
+          return Math.round(elapsed/msPerHour) > 1 ? Math.round(elapsed/msPerHour) + ' hours ago'
             : Math.round(elapsed/msPerHour) + ' hour ago'
         }
 
         else if (elapsed < msPerMonth) {
-          return (elapsed/msPerDay) > 1 ? 'approximately ' + Math.round(elapsed/msPerDay) + ' days ago'
+          return Math.round(elapsed/msPerDay) > 1 ? 'approximately ' + Math.round(elapsed/msPerDay) + ' days ago'
             : 'approximately ' + Math.round(elapsed/msPerDay) + ' day ago'
         }
 
         else if (elapsed < msPerYear) {
-          return (elapsed/msPerMonth) > 1 ? 'approximately ' + Math.round(elapsed/msPerMonth) + ' months ago'
+          return Math.round(elapsed/msPerMonth) > 1 ? 'approximately ' + Math.round(elapsed/msPerMonth) + ' months ago'
             : 'approximately ' + Math.round(elapsed/msPerMonth) + ' month ago'
         }
 
         else {
-          return (elapsed/msPerYear) > 1 ? 'approximately ' + Math.round(elapsed/msPerYear) + ' years ago'
+          return Math.round(elapsed/msPerYear) > 1 ? 'approximately ' + Math.round(elapsed/msPerYear) + ' years ago'
             : 'approximately ' + Math.round(elapsed/msPerYear) + ' year ago'
         }
       },
