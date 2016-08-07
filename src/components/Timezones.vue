@@ -200,7 +200,7 @@
           this.reverse = (this.sortKey == sortKey) ? -1 * this.reverse : 1;
           this.sortKey = sortKey;
         } else {
-          this.reverseEU = (this.sortKeyEU == sortKey) ? -1 * this.reverse : 1;
+          this.reverseEU = (this.sortKeyEU == sortKey) ? -1 * this.reverseEU : 1;
           this.sortKeyEU = sortKey;
         }
       }
@@ -296,6 +296,9 @@
       },
 
       rank (value) {
+        if (value === undefined || value === null) {
+          return '-'
+        }
         var j = value % 10,
         k = value % 100;
         if (j == 1 && k != 11) {
