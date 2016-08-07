@@ -1,6 +1,6 @@
 <template>
   <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-grid">
-    <div style="width:100%" v-if="isValidWorld && serverByTimezone['na_est'].data.length > 0">
+    <div style="width:100%" v-if="isValidWorld && serverByTimezone !== {}">
       <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
         {{getWorldById($route.params.server).name}}
