@@ -192,6 +192,7 @@
           var cur = arr[i]
           ret[cur.world] = i + 1
         }
+
         return ret
       },
 
@@ -230,13 +231,13 @@
               tmp[c_tz][cur.world] = []
               ret[c_tz][cur.world] = 0
               tmp[c_tz][cur.world].push(cur)
-              ret[c_tz][cur.world] += tmp[c_tz][cur.world]
+              ret[c_tz][cur.world] = tmp[c_tz][cur.world]
                 .reduce((acc, obj) => {
                   return acc + obj.metric
                 }, 0)
             } else {
               tmp[c_tz][cur.world].push(cur)
-              ret[c_tz][cur.world] += tmp[c_tz][cur.world]
+              ret[c_tz][cur.world] = tmp[c_tz][cur.world]
                 .reduce((acc, obj) => {
                   return acc + obj.metric
                 }, 0)
