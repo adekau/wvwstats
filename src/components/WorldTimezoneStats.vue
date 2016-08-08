@@ -32,7 +32,15 @@
               <td data-label="Scores">{{item.scores}}</td>
               <td data-label="Rating Metric">{{item.metric | round 3 true}}</td>
             </tr>
-
+            <tr>
+              <td data-label="Date" class="mdl-data-table__cell--non-numeric">
+                Totals
+              </td>
+              <td data-label="Kills">{{getTotals(timezone).kills}}</td>
+              <td data-label="Deaths">{{getTotals(timezone).deaths}}</td>
+              <td data-label="Scores">{{getTotals(timezone).scores}}</td>
+              <td data-label="Rating Metric">{{getTotals(timezone).metric | round 3 true}}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -122,6 +130,35 @@
           }
         }
         return
+      },
+
+      // Timezone is an array of all the timezone objects.
+      // [{kills: _, deaths: _, scores:_, metric:_, etc}, ...]
+      getTotals (timezone) {
+        if (timezone === undefined || timezone == null) {
+          return {
+            kills: '-',
+            deaths: '-',
+            scores: '-',
+            metric: '-'
+          }
+        }
+        var killsTotal = 0
+        var deathsTotal = 0
+        var scoresTotal = 0
+        var metricTotal = 0
+        for (var i = 0; i < timezone.data.length; i++) {
+          killsTotal += timezone.data[i].kills
+          deathsTotal += timezone.data[i].deaths
+          scoresTotal += timezone.data[i].scores
+          metricTotal += timezone.data[i].metric
+        }
+        return {
+          kills: killsTotal,
+          deaths: deathsTotal,
+          scores: scoresTotal,
+          metric: metricTotal
+        }
       }
     },
 
