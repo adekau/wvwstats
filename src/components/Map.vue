@@ -317,8 +317,12 @@
        * create neutral icons on the map and register the map markers.
        */
       prepareMap () {
+        console.log(this.objectives)
         for (var bit in this.objectives) {
           let obj = this.objectives[bit]
+          if (!obj.coord) {
+            continue
+          }
           let name = obj.name
           let id = obj.id
           delete obj.id
