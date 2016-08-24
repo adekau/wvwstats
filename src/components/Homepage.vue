@@ -202,7 +202,6 @@
 
       updatePredictedGlicko () {
         this.predictedglicko = store.fetchPredictedGlicko()
-        this.updateTableData()
       }
     },
 
