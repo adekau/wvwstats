@@ -123,8 +123,16 @@
             })
         } else {
           store.fetchArchiveData(this.match.id, this.chartdata, this.match.start_time, this.match.end_time)
-            .then((response)=> {
-              this.finishDrawChart(response, this.chartdata)
+            .then((response) => {
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, this.chartdata)
+              }, function () {
+                console.err('Unable to find element', this.chartname + '_chart')
+              })
+            }, (response) => {
+              console.err(response)
             })
         }
       },
@@ -176,8 +184,10 @@
       },
 
       handleResize () {
-        var chart = new window.google.visualization.LineChart(document.getElementById(this.chartname + '_chart'));
-        chart.draw(this.data, this.options);
+        if (this.chartdata && this.match) {
+          var chart = new window.google.visualization.LineChart(document.getElementById(this.chartname + '_chart'));
+          chart.draw(this.data, this.options);
+        }
       },
 
       getWorldById (id) {
@@ -188,12 +198,37 @@
           }
         }
         return
+      },
+
+      waitForDiv (isready, success, error, count, interval) {
+        if (count === undefined) {
+                count = 300;
+            }
+            if (interval === undefined) {
+                interval = 20;
+            }
+            if (isready()) {
+                success();
+                return;
+            }
+            // The call back isn't ready. We need to wait for it
+            setTimeout(() => {
+                if (!count) {
+                    // We have run out of retries
+                    if (error !== undefined) {
+                        error();
+                    }
+                } else {
+                    // Try again
+                    this.waitForDiv(isready, success, error, count -1, interval);
+                }
+            }, interval);
       }
 
     },
 
     watch: {
-      match () {
+      match (val, oldVal) {
         if (this.redraw === undefined) {
           this.drawChart()
         }
