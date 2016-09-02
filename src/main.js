@@ -12,6 +12,7 @@ import Grapher from './components/Grapher.vue'
 import Timezones from './components/Timezones.vue'
 import WorldTimezoneStats from './components/WorldTimezoneStats.vue'
 import About from './components/About.vue'
+import Embed from './components/Embed.vue'
 
 // Google charts
 window.google.charts.load('current', {
@@ -87,6 +88,10 @@ router.map({
   '/about': {
     component: About,
     pageTitle: 'About WvWStats'
+  },
+  '/embed': {
+    component: Embed,
+    pageTitle: 'Embed WvWStats'
   }
 })
 

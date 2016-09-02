@@ -19,6 +19,12 @@
                                                  role="presentation">trending_up</i>Grapher</a>
       <a v-link="{ path: '/timezones' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">schedule</i>Timezones</a>
+      <a v-link="{ path: '/embed' }" class="mdl-navigation__link">
+        <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">
+          web
+        </i>
+        Embed
+      </a>
       <div class="mdl-layout-spacer"></div>
       <a v-link="{ path: '/about' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">info</i>About</a>
