@@ -80,6 +80,12 @@
       }
     },
 
+    ready () {
+      if (!this.matches) {
+        store.updateMatches()
+      }
+    },
+
     route: {
       data ({ to }) {
         // TODO change this when updating the store...

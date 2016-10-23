@@ -82,6 +82,16 @@
       }
     },
 
+    ready () {
+      if (!this.officialglicko) {
+        store.updateGlicko()
+      }
+
+      if (!this.predictedglicko) {
+        store.updatePredictedGlicko()
+      }
+    },
+
     created () {
       store.on('matches-updated', this.update)
       store.on('worlds-updated', this.updateWorlds)
