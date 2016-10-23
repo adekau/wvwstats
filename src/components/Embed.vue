@@ -49,8 +49,8 @@
       <legend><b>Background Color</b></legend>
     </p>
     <br>
-    <p id="cpicker" class="form_holder">
-      <!--<input class="jscolor" value="CFD8DC" v-model="color">-->
+    <p class="form_holder">
+      <input id="cpicker" value="CFD8DC" v-model="color">
 
     </p>
     <br>
@@ -78,7 +78,15 @@
 <style>
   .form_holder {
     width: 100%;
+    margin-bottom: 11px;
     display: inline-block;
+  }
+
+  .form_holder legend {
+    margin-left: 0px;
+    font-weight: bolder;
+    font-size: 15px;
+    text-decoration: underline;
   }
 </style>
 
@@ -97,10 +105,9 @@
     },
 
     ready () {
-      var input = document.createElement('INPUT')
+      var input = document.getElementById('cpicker')
       var picker = new jscolor(input)
       picker.fromString('CFD8DC')
-      document.getElementById('cpicker').appendChild(input)
     },
 
     route: {
@@ -120,6 +127,11 @@
     },
 
     methods: {
+      cpickerChange (picker) {
+        console.log(picker)
+        this.color = picker
+      },
+
       updateWorldlist () {
         this.worldlist = store.fetchWorlds()
       },
