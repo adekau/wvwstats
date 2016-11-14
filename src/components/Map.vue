@@ -4,7 +4,7 @@
       <div class="server-select-container">
         <strong>Server: &nbsp;</strong>
         <select class="map-select" v-model="selectedWorld" :disabled="!mapPrepared">
-          <option v-for="world in worldlist | orderBy 'name'">
+          <option v-for="world in sorted_worldlist">
             {{world.name}}
           </option>
         </select>
@@ -48,7 +48,7 @@
       }
     },
 
-    ready () {
+    mounted () {
       var southWest, northEast
 
       this.map = window.L.map('map', {
@@ -180,6 +180,12 @@
         var server = this.selectedWorld
         var id = this.getWorldByName(server).id
         return this.worldMatchIds[id]
+      },
+
+      sorted_worldlist () {
+        return worldlist.sort((a, b) => {
+          return (a.name.localCompare(b.name))
+        })
       }
     },
 
@@ -422,7 +428,7 @@
 
     watch: {
       'selectedWorld': function (val, oldVal) {
-        this.$router.go('/map/' + this.getWorldByName(val).id)
+        this.$router.push('/map/' + this.getWorldByName(val).id)
         store.updateSelectedWorld(this.getWorldByName(val).id)
         this.updateMap()
       }

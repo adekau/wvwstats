@@ -7,6 +7,11 @@ module.exports = {
     path: './build',
     filename: '[name].[hash].js'
   },
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.js'
+    }
+  },
   module: {
     // avoid webpack trying to shim process
     noParse: /es6-promise\.js$/,

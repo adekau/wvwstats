@@ -89,13 +89,13 @@
           K/D
         </li>
         <li>
-          {{ mapid.kills.green / mapid.deaths.green | round 3 false }}
+          {{ mapid.kills.green / mapid.deaths.green | round(3, false) }}
         </li>
         <li>
-          {{ mapid.kills.blue / mapid.deaths.blue | round 3 false }}
+          {{ mapid.kills.blue / mapid.deaths.blue | round(3, false) }}
         </li>
         <li>
-          {{ mapid.kills.red / mapid.deaths.red | round 3 false }}
+          {{ mapid.kills.red / mapid.deaths.red | round(3, false) }}
         </li>
       </ul>
     </div>

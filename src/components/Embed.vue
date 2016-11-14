@@ -12,7 +12,7 @@
     <p class="form_holder">
       <label for='worldSelect'>Server: &nbsp;</label>
       <select id='worldSelect' v-model="selectedWorld" :disabled="worldlist.length === 0">
-        <option v-for="world in worldlist | orderBy 'name'">
+        <option v-for="world in sorted_worldlist">
           {{world.name}}
         </option>
       </select>
@@ -50,7 +50,7 @@
     </p>
     <br>
     <p class="form_holder">
-      <input id="cpicker" value="CFD8DC" v-model="color">
+      <input id="cpicker" v-model="color">
 
     </p>
     <br>
@@ -104,7 +104,7 @@
       }
     },
 
-    ready () {
+    mounted () {
       var input = document.getElementById('cpicker')
       var picker = new jscolor(input)
       picker.fromString('CFD8DC')
@@ -167,6 +167,12 @@
         ret += "' style='width: 100%; min-width: 243px; height: " + height + "px;'>"
 
         return ret
+      },
+
+      sorted_worldlist () {
+        return worldlist.sort((a, b) => {
+          return (a.name.localCompare(b.name))
+        })
       }
     }
   }

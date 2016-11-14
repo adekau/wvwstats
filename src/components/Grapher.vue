@@ -3,7 +3,7 @@
     <div style='margin-bottom: 5px; display: block;'>
       <label for='worldSelect'>Server: &nbsp;</label>
       <select id='worldSelect' v-model="selectedWorld" :disabled="worldlist.length === 0">
-        <option v-for="world in worldlist | orderBy 'name'">
+        <option v-for="world in sorted_worldlist">
           {{world.name}}
         </option>
       </select>
@@ -181,6 +181,12 @@
            }
          }
          return
+       },
+
+       sorted_worldlist () {
+         return worldlist.sort((a, b) => {
+           return (a.name.localCompare(b.name))
+         })
        }
     },
 
@@ -197,7 +203,7 @@
 
         store.updateGrapherQuery(gq)
 
-        this.$router.go({
+        this.$router.push({
           path: '/grapher',
           query: gq
         })
@@ -215,7 +221,7 @@
 
         store.updateGrapherQuery(gq)
 
-        this.$router.go({
+        this.$router.push({
           path: '/grapher',
           query: gq
         })

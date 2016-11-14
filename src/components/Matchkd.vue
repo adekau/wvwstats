@@ -82,13 +82,13 @@
           K/D
         </li>
         <li>
-          {{ match.kills.green / match.deaths.green | round 3 false }}
+          {{ match.kills.green / match.deaths.green | round(3, false) }}
         </li>
         <li>
-          {{ match.kills.blue / match.deaths.blue | round 3 false }}
+          {{ match.kills.blue / match.deaths.blue | round(3, false) }}
         </li>
         <li>
-          {{ match.kills.red / match.deaths.red | round 3 false }}
+          {{ match.kills.red / match.deaths.red | round(3, false) }}
         </li>
       </ul>
     </div>

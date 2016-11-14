@@ -3,25 +3,25 @@
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="worldname">
-          <span class="worldname_link"
-            v-link="{ path: '/match/' + matchinfo.id }"
-            data-tooltip="{{ serverTooltip.green }}">
+          <router-link v-bind:to="'/match/' + matchinfo.id"
+            class="worldname_link"
+            v-bind:data-tooltip="serverTooltip.green">
             {{worldinfo.green}}
-          </span>
+          </router-link>
         </li>
         <li class="worldname">
-          <span class="worldname_link"
-            v-link="{ path: '/match/' + matchinfo.id }"
-            data-tooltip="{{ serverTooltip.blue }}">
+          <router-link v-bind:to="'/match/' + matchinfo.id"
+            class="worldname_link"
+            v-bind:data-tooltip="serverTooltip.blue">
             {{worldinfo.blue}}
-          </span>
+          </router-link>
         </li>
         <li class="worldname">
-          <span class="worldname_link"
-            v-link="{ path: '/match/' + matchinfo.id }"
-            data-tooltip="{{ serverTooltip.red }}">
+          <router-link v-bind:to="'/match/' + matchinfo.id"
+            class="worldname_link"
+            v-bind:data-tooltip="serverTooltip.red">
             {{worldinfo.red}}
-          </span>
+          </router-link>
         </li>
       </ul>
       <!-- Tooltips for world names -->
@@ -31,8 +31,8 @@
       <ul class="mdl-list" style="width: 100%;">
         <li>
           <div class="first-place" style="padding: 10px;">
-            <div data-longtooltip=
-              "{{worldinfo.blue}}: {{ scoreDiff.green.blue }} &#xa; {{worldinfo.red}}: {{ scoreDiff.green.red}}"
+            <div v-bind:data-longtooltip =
+              "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
               v-progress="percentage.green" class="mdl-progress mdl-js-progress">
             </div>
 
@@ -41,8 +41,8 @@
         <li>
           <div class="second-place" style="padding: 10px;">
 
-            <div data-longtooltip=
-              "{{worldinfo.green}}: {{ scoreDiff.blue.green }} &#xa; {{worldinfo.red}}: {{ scoreDiff.blue.red}}"
+            <div v-bind:data-longtooltip=
+              "worldinfo.green + ':' + scoreDiff.blue.green + '\n' + worldinfo.red + ':' + scoreDiff.blue.red"
               v-progress="percentage.blue" class="mdl-progress mdl-js-progress">
             </div>
 
@@ -51,8 +51,8 @@
         <li>
           <div class="third-place" style="padding: 10px;">
 
-            <div data-longtooltip=
-              "{{worldinfo.green}}: {{ scoreDiff.red.green }} &#xa; {{worldinfo.blue}}: {{ scoreDiff.red.blue}}"
+            <div v-bind:data-longtooltip=
+              "worldinfo.green + ':' + scoreDiff.red.green + '\n' + worldinfo.blue + ':' + scoreDiff.red.blue"
               v-progress="percentage.red" class="mdl-progress mdl-js-progress">
             </div>
 
@@ -107,13 +107,13 @@
       <div class="mdl-cell--1-col mdl-grid no-padding-left mdl-cell--hide-phone mdl-cell--hide-tablet">
         <ul class="mdl-list">
           <li>
-            {{glicko.green | round 3 true}}
+            {{glicko.green | round(3, true)}}
           </li>
           <li>
-            {{glicko.blue | round 3 true}}
+            {{glicko.blue | round(3, true)}}
           </li>
           <li>
-            {{glicko.red | round 3 true}}
+            {{glicko.red | round(3, true)}}
           </li>
         </ul>
       </div>
@@ -122,31 +122,31 @@
           <li>
             <span v-show="isPositive(glicko.delta.green)" class="glicko glicko-up">
               <!-- <img src="../assets/uparrow.png" width="10" height="10"> -->
-              {{glicko.delta.green | round 3 true}}
+              {{glicko.delta.green | round(3, true)}}
             </span>
             <span v-show="!isPositive(glicko.delta.green)" class="glicko glicko-down">
               <!-- <img src="../assets/downarrow.png" width="10" height="10"> -->
-              {{glicko.delta.green | round 3 true}}
+              {{glicko.delta.green | round(3, true)}}
             </span>
           </li>
           <li>
             <span v-show="isPositive(glicko.delta.blue)" class="glicko glicko-up">
               <!-- <img src="../assets/uparrow.png" width="10" height="10"> -->
-              {{glicko.delta.blue | round 3 true}}
+              {{glicko.delta.blue | round(3, true)}}
             </span>
             <span v-show="!isPositive(glicko.delta.blue)" class="glicko glicko-down">
               <!-- <img src="../assets/downarrow.png" width="10" height="10"> -->
-              {{glicko.delta.blue | round 3 true}}
+              {{glicko.delta.blue | round(3, true)}}
             </span>
           </li>
           <li>
             <span v-show="isPositive(glicko.delta.red)" class="glicko glicko-up">
               <!-- <img src="../assets/uparrow.png" width="10" height="10"> -->
-              {{glicko.delta.red | round 3 true}}
+              {{glicko.delta.red | round(3, true)}}
             </span>
             <span v-show="!isPositive(glicko.delta.red)" class="glicko glicko-down">
               <!-- <img src="../assets/downarrow.png" width="10" height="10"> -->
-              {{glicko.delta.red | round 3 true}}
+              {{glicko.delta.red | round(3, true)}}
             </span>
           </li>
         </ul>
@@ -308,15 +308,19 @@
         * returns the glicko for this matchup
         */
         glicko () {
-          var ret = {
-            green: this.predictedglicko[this.matchinfo.worlds.green].rating,
-            blue: this.predictedglicko[this.matchinfo.worlds.blue].rating,
-            red: this.predictedglicko[this.matchinfo.worlds.red].rating,
-            delta: {
-              green: this.predictedglicko[this.matchinfo.worlds.green].delta,
-              blue: this.predictedglicko[this.matchinfo.worlds.blue].delta,
-              red: this.predictedglicko[this.matchinfo.worlds.red].delta
+          if (this.predictedglicko[this.matchinfo.worlds.green].rating) {
+            var ret = {
+              green: this.predictedglicko[this.matchinfo.worlds.green].rating,
+              blue: this.predictedglicko[this.matchinfo.worlds.blue].rating,
+              red: this.predictedglicko[this.matchinfo.worlds.red].rating,
+              delta: {
+                green: this.predictedglicko[this.matchinfo.worlds.green].delta,
+                blue: this.predictedglicko[this.matchinfo.worlds.blue].delta,
+                red: this.predictedglicko[this.matchinfo.worlds.red].delta
+              }
             }
+          } else {
+            ret = {}
           }
           return ret
         }
@@ -529,7 +533,13 @@
     background-color: rgb(182,89,91);
   }
 
-  span.worldname_link:hover {
+  .worldname_link {
+    color: inherit;
+    text-decoration: none;
+    font-weight: normal;
+  }
+
+  .worldname_link:hover {
     color: rgb(89,91,182);
     text-decoration: underline;
   }

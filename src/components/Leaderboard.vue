@@ -69,15 +69,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.kd">
+          <tr v-for="(item, index) in weekleaderboard.kd">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.kd | round 3 false}}
+              {{ item.kd | round(3, false)}}
             </td>
           </tr>
         </tbody>
@@ -110,15 +110,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.kills">
+          <tr v-for="(item, index) in weekleaderboard.kills">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.kills | round 3 false}}
+              {{ item.kills | round(3, false)}}
             </td>
           </tr>
         </tbody>
@@ -151,15 +151,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.deaths">
+          <tr v-for="(item, index) in weekleaderboard.deaths">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding"  style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.deaths | round 3 false}}
+              {{ item.deaths | round(3, false)}}
             </td>
           </tr>
         </tbody>
@@ -192,15 +192,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.activity">
+          <tr v-for="(item, index) in weekleaderboard.activity">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.activity | round 3 false}}
+              {{ item.activity | round(3, false)}}
             </td>
           </tr>
         </tbody>
@@ -233,15 +233,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.scores">
+          <tr v-for="(item, index) in weekleaderboard.scores">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.score | round 3 false}}
+              {{ item.score | round(3, false)}}
             </td>
           </tr>
         </tbody>
@@ -274,15 +274,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.pointsFromPPT">
+          <tr v-for="(item, index) in weekleaderboard.pointsFromPPT">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.points | round 3 false}}
+              {{ item.points | round(3, false)}}
             </td>
           </tr>
         </tbody>
@@ -315,15 +315,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.percentPointsFromPPT">
+          <tr v-for="(item, index) in weekleaderboard.percentPointsFromPPT">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.percent * 100 | round 2 true}}%
+              {{ item.percent * 100 | round(2, true)}}%
             </td>
           </tr>
         </tbody>
@@ -356,15 +356,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in weekleaderboard.percentPointsFromPPK">
+          <tr v-for="(item, index) in weekleaderboard.percentPointsFromPPK">
             <td>
-              {{$index + 1}}
+              {{index + 1}}
             </td>
             <td class="reducedPadding" style="text-align: left;">
               {{ getWorldById(item.server).name }}
             </td>
             <td>
-              {{ item.percent * 100 | round 2 true}}%
+              {{ item.percent * 100 | round(2, true)}}%
             </td>
           </tr>
         </tbody>
@@ -375,7 +375,6 @@
 
 
 <script>
-  import Leaderboarditems from './Leaderboarditems.vue'
   import store from '../store'
 
   export default {

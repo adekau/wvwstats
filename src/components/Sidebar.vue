@@ -7,27 +7,33 @@
     </header>
     </header>
     <nav v-mdl class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-      <a v-link="{ path: '/na' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">list</i>NA Matches</a>
-      <a v-link="{ path: '/eu' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">list</i>EU Matches</a>
-      <a href="{{mapUrl}}" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+      <router-link to='/na' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">list</i>NA Matches</router-link>
+      <router-link to='/eu' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">list</i>EU Matches</router-link>
+      <a v-bind:href="mapUrl" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">autorenew</i>Live</a>
-      <a v-link="{ path: '/leaderboard' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">format_list_numbered</i>Leaderboard</a>
-      <a v-link="{ path: '/grapher', query: grapherQuery }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">trending_up</i>Grapher</a>
-      <a v-link="{ path: '/timezones' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">schedule</i>Timezones</a>
-      <a v-link="{ path: '/embed' }" class="mdl-navigation__link">
+      <router-link to='/leaderboard' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">format_list_numbered</i>Leaderboard</router-link>
+      <router-link to='/grapher' query="grapherQueryclass" class="mdl-navigation__link">
+        <i class="mdl-color-text--blue-grey-400 material-icons"
+          role="presentation">
+          trending_up
+        </i>
+          Grapher
+      </router-link>
+
+      <router-link to='/timezones' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">schedule</i>Timezones</router-link>
+      <router-link to='/embed' class="mdl-navigation__link">
         <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">
           web
         </i>
         Embed
-      </a>
+      </router-link>
       <div class="mdl-layout-spacer"></div>
-      <a v-link="{ path: '/about' }" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">info</i>About</a>
+      <router-link to='/about' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">info</i>About</router-link>
     </nav>
   </div>
 </template>

@@ -80,7 +80,7 @@
       }
     },
 
-    ready () {
+    mounted () {
       if (!this.matches) {
         store.updateMatches()
       }

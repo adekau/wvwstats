@@ -27,11 +27,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="server in servers
+          <tr v-for="(server, index) in servers
             | orderBy 'predicted' -1">
             <td data-label="Rank">
-              {{$index + 1}}&nbsp;
-              <span class="{{positionChange[server.name].textclass}}">
+              {{index + 1}}&nbsp;
+              <span v-bind:class="positionChange[server.name].textclass">
                 {{positionChange[server.name].change | absolute}}
               </span>
             </td>
@@ -39,13 +39,13 @@
               {{server.name}}
             </td>
             <td data-label="Old Rating">
-              {{server.official | round 3 true}}
+              {{server.official | round(3, true)}}
             </td>
             <td data-label="New Rating">
-              {{server.predicted | round 3 true}}
+              {{server.predicted | round(3, true)}}
             </td>
-            <td data-label="Change" class="{{server.textclass}}">
-              {{server.predicted - server.official | round 3 true}}
+            <td data-label="Change" v-bind:class="server.textclass">
+              {{server.predicted - server.official | round(3, true)}}
             </td>
           </tr>
         </tbody>
@@ -82,7 +82,7 @@
       }
     },
 
-    ready () {
+    mounted () {
       if (!this.officialglicko) {
         store.updateGlicko()
       }

@@ -1,5 +1,6 @@
 <template>
-  <div id="{{chartname}}_chart" style="width:100%; height: {{chartheight}};"></div>
+  <div v-bind:id="chartname + '_chart'"
+    v-bind:style="'width:100%; height: ' + chartheight + ';'"></div>
 </template>
 
 <script>
@@ -16,7 +17,7 @@
     props: ['match', 'worldlist', 'chartname', 'chartdata', 'chartheight',
       'charttitle', 'redraw'],
 
-    ready () {
+    mounted () {
       if (store.fetchGoogleChartsLoaded()) {
         this.drawChart()
       }

@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="server in naRanksByServer | orderBy sortKey reverse">
+        <tr v-for="server in naRanksByServer">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
             <a :href="'#/timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
@@ -60,7 +60,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="server in euRanksByServer | orderBy sortKeyEU reverseEU">
+        <!-- TODO: ADD THE orderBy ...EU reverseEU-->
+        <tr v-for="server in euRanksByServer">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
             <a :href="'#/timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
@@ -100,7 +101,7 @@
       }
     },
 
-    ready () {
+    mounted () {
       if (this.matches.length > 0) {
         store.removeListener('matches-updated', this.updateMatches)
 

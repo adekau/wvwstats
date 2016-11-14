@@ -44,56 +44,86 @@ Vue.directive('mdl', {
 })
 
 // routing
-var router = new Router({hashbang: false})
+var router = new Router({
+  routes: [{
+      path: '/na',
+      component: Homepage,
+      meta: {
+        pageTitle: 'North American Matches',
+        region: '1-'
+      }
+    }, {
+      path: '/eu',
+      component: EUMatches,
+      meta: {
+        pageTitle: 'European Matches',
+        region: '2-'
+      }
+    }, {
+      path: '/map',
+      component: Map,
+      meta: {
+        pageTitle: 'Live Map'
+      }
+    }, {
+      path: '/map/:server',
+      component: Map,
+      meta: {
+        pageTitle: 'Live Map'
+      }
+    }, {
+      path: '/leaderboard',
+      component: Leaderboard,
+      meta: {
+        pageTitle: 'Leaderboard'
+      }
+    }, {
+      path: '/match/:matchid',
+      component: Match,
+      meta: {
+        pageTitle: 'Match Details'
+      }
+    }, {
+      path: '/grapher',
+      component: Grapher,
+      meta: {
+        pageTitle: 'Grapher'
+      }
+    }, {
+      path: '/timezones',
+      component: Timezones,
+      meta: {
+        pageTitle: 'Timezone Ranks'
+      }
+    }, {
+      path: '/timezones/:server',
+      component: WorldTimezoneStats,
+      meta: {
+        pageTitle: 'Server Timezone Stats'
+      }
+    }, {
+      path: '/about',
+      component: About,
+      meta: {
+        pageTitle: 'About WvWStats'
+      }
+    }, {
+      path: '/embed',
+      component: Embed,
+      meta: {
+        pageTitle: 'Embed WvWStats'
+      }
+    }, {
+      path: '*',
+      redirect: '/na'
+    }
+  ]})
 
-router.map({
-  '/na': {
-    component: Homepage,
-    pageTitle: 'North American Matches',
-    region: '1-'
-  },
-  '/eu': {
-    component: EUMatches,
-    pageTitle: 'European Matches',
-    region: '2-'
-  },
-  '/map': {
-    component: Map,
-    pageTitle: 'Live Map'
-  },
-  '/map/:server': {
-    component: Map,
-    pageTitle: 'Live Map'
-  },
-  '/leaderboard': {
-    component: Leaderboard,
-    pageTitle: 'Leaderboard'
-  },
-  '/match/:matchid': {
-    component: Match,
-    pageTitle: 'Match Details'
-  },
-  '/grapher': {
-    component: Grapher,
-    pageTitle: 'Grapher'
-  },
-  '/timezones': {
-    component: Timezones,
-    pageTitle: 'Timezone Ranks'
-  },
-  '/timezones/:server': {
-    component: WorldTimezoneStats,
-    pageTitle: 'Server Timezone Stats'
-  },
-  '/about': {
-    component: About,
-    pageTitle: 'About WvWStats'
-  },
-  '/embed': {
-    component: Embed,
-    pageTitle: 'Embed WvWStats'
-  }
-})
+  var app = new Vue({
+    el: '#app',
+    router: router,
+    render: h => h('router-view')
+  })
 
 /**
  * uncomment if want page to go back to top..
@@ -105,9 +135,3 @@ router.map({
   var _router_el = document.getElementById('router_view')
   _router_el.scrollTop = 0
 })*/
-
-router.redirect({
-  '*': '/na'
-})
-
-router.start(App, '#app')
