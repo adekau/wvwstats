@@ -15,7 +15,7 @@
                                                  role="presentation">autorenew</i>Live</a>
       <router-link to='/leaderboard' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">format_list_numbered</i>Leaderboard</router-link>
-      <router-link to='/grapher' query="grapherQueryclass" class="mdl-navigation__link">
+      <router-link to="{ path: '/grapher' }" class="mdl-navigation__link">
         <i class="mdl-color-text--blue-grey-400 material-icons"
           role="presentation">
           trending_up
@@ -44,12 +44,12 @@
   export default {
     data () {
       return {
-        selectedWorld: 0,
-        grapherQuery: {server: null, data: null}
+        //selectedWorld: 0,
+        //grapherQuery: {server: null, data: null}
       }
     },
 
-    created () {
+    /*created () {
       this.selectedWorld = store.fetchSelectedWorld()
       this.grapherQuery = store.fetchGrapherQuery()
 
@@ -60,7 +60,7 @@
     destroyed () {
       store.removeListener('selectedWorld-updated', this.update)
       store.removeListener('grapherQuery-updated', this.updateGQ)
-    },
+    },*/
 
     computed: {
       mapUrl () {
@@ -70,9 +70,9 @@
           return '#/map/' + this.selectedWorld
         }
       }
-    },
+    }//,
 
-    methods: {
+    /*methods: {
       update () {
         this.selectedWorld = store.fetchSelectedWorld()
       },
@@ -80,7 +80,7 @@
       updateGQ () {
         this.grapherQuery = store.fetchGrapherQuery()
       }
-    }
+    }*/
   }
 </script>
 

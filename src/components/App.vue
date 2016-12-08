@@ -5,7 +5,12 @@
       <sidebar></sidebar>
       <main class="mdl-layout__content mdl-color--grey-100" id="router_view">
         <div class="mdl-grid demo-content">
-
+          <router-view
+            class="view"
+            keep-alive
+            transition
+            transition-mode="out-in">
+          </router-view>
         </div>
       </main>
     </div>

@@ -4,9 +4,7 @@
     :class="{ loading: !matches.length }">
     <!-- <h3>NA Matches</h3> -->
     <matchheading></matchheading>
-    <scoredetails v-for="match in matches
-      | filterBy region in 'id'
-      | orderBy 'id'"
+    <scoredetails v-for="match in page_matches"
       :matchinfo="match"
       :worldlist="worldlist" :predictedglicko="formattedglicko"></scoredetails>
 
@@ -54,18 +52,13 @@
 </template>
 
 <script>
-  import store from '../store'
   import Scoredetails from './Scoredetails.vue'
   import Matchheading from './Matchheading.vue'
 
   export default {
     data() {
       return {
-        region: '2-',
-        matches: [],
-        worldlist: [],
-        officialglicko: {},
-        predictedglicko: {}
+        region: '2-'
       }
     },
 
@@ -74,39 +67,35 @@
         const region = to.region
         return {
           region: region,
-          matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds(),
-          officialglicko: store.fetchGlicko(),
-          predictedglicko: store.fetchPredictedGlicko()
         }
       }
     },
 
-    mounted () {
-      if (!this.officialglicko) {
-        store.updateGlicko()
-      }
-
-      if (!this.predictedglicko) {
-        store.updatePredictedGlicko()
-      }
-    },
-
-    created () {
-      store.on('matches-updated', this.update)
-      store.on('worlds-updated', this.updateWorlds)
-      store.on('glicko-updated', this.updateGlicko)
-      store.on('predictedGlicko-updated', this.updatePredictedGlicko)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.update)
-      store.removeListener('worlds-updated', this.updateWorlds)
-      store.removeListener('glicko-updated', this.updateGlicko)
-      store.removeListener('predictedGlicko-updated', this.updatePredictedGlicko)
-    },
-
     computed: {
+      matches () {
+        return this.$store.state.matches
+      },
+
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      officialglicko () {
+        return this.$store.state.glicko
+      },
+
+      predictedglicko () {
+        return this.$store.state.predictedglicko
+      },
+
+      page_matches () {
+        return this.matches
+          .filter(obj => obj.id.includes(this.region))
+          .sort((a, b) => {
+            return (a.id.split("-")[1] - b.id.split("-")[1])
+          })
+      },
+
       worldsById () {
         let ret = {}
         for (let i = 0; i < this.worldlist.length; i++) {
@@ -197,24 +186,6 @@
         return ret
       }
 
-    },
-
-    methods: {
-      update () {
-        this.matches = store.fetchMatches()
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-      },
-
-      updateGlicko () {
-        this.officialglicko = store.fetchGlicko()
-      },
-
-      updatePredictedGlicko () {
-        this.predictedglicko = store.fetchPredictedGlicko()
-      }
     },
 
     filters: {

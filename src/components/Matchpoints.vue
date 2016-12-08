@@ -43,13 +43,13 @@
           % PPT
         </li>
         <li>
-          {{ ((match.scores.green - 2 * match.kills.green) / match.scores.green) * 100 | round(3, true) }}%
+          {{ ((match.scores.green - 2 * match.kills.green) / match.scores.green) * 100 }}%
         </li>
         <li>
-          {{ ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue) * 100 | round(3, true) }}%
+          {{ ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue) * 100 }}%
         </li>
         <li>
-          {{ ((match.scores.red - 2 * match.kills.red) / match.scores.red) * 100 | round(3, true) }}%
+          {{ ((match.scores.red - 2 * match.kills.red) / match.scores.red) * 100 }}%
         </li>
       </ul>
     </div>
@@ -60,13 +60,13 @@
           % PPK
         </li>
         <li>
-          {{ (1 - ((match.scores.green - 2 * match.kills.green) / match.scores.green)) * 100 | round(3, true) }}%
+          {{ (1 - ((match.scores.green - 2 * match.kills.green) / match.scores.green)) * 100 }}%
         </li>
         <li>
-          {{ (1 - ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue)) * 100 | round(3, true) }}%
+          {{ (1 - ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue)) * 100 }}%
         </li>
         <li>
-          {{ (1 - ((match.scores.red - 2 * match.kills.red) / match.scores.red)) * 100 | round(3, true) }}%
+          {{ (1 - ((match.scores.red - 2 * match.kills.red) / match.scores.red)) * 100 }}%
         </li>
       </ul>
     </div>

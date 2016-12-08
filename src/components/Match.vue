@@ -25,17 +25,17 @@
 
     <div v-if="isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
-      <chart v-if='dataReady'
+      <!-- <chart v-if='dataReady'
         chartname="ppt" chartdata="ppt" :match='graphMatch' :worldlist='worldlist'
-        chartheight="360px" charttitle="PPT Evolution"></chart>
+        chartheight="360px" charttitle="PPT Evolution"></chart> -->
 
     </div>
 
     <div v-if="isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
-      <chart v-if='dataReady'
+      <!-- <chart v-if='dataReady'
         chartname="scores" chartdata="scores" :match='graphMatch' :worldlist='worldlist'
-        chartheight="360px" charttitle="Score Evolution"></chart>
+        chartheight="360px" charttitle="Score Evolution"></chart> -->
 
     </div>
   </div>
@@ -59,7 +59,6 @@
 </style>
 
 <script>
-  import store from '../store'
   import Scoredetails from './Scoredetails.vue'
   import Matchheading from './Matchheading.vue'
   import Matchkd from './Matchkd.vue'
@@ -70,19 +69,9 @@
   export default {
     data () {
       return {
-        worldlist: [],
-        matchId: 0,
-        matches: [],
+        matchId: this.$route.params.matchid,
         match: {},
         graphMatch: null,
-        officialglicko: {},
-        predictedglicko: {}
-      }
-    },
-
-    mounted () {
-      if (!this.matches) {
-        store.updateMatches()
       }
     },
 
@@ -95,46 +84,12 @@
           }, 500)
         }
         return {
-          worldlist: store.fetchWorlds(),
-          matchId: this.$route.params.matchid,
-          matches: store.fetchMatches(),
-          officialglicko: store.fetchGlicko(),
-          predictedglicko: store.fetchPredictedGlicko()
+          matchId: this.$route.params.matchid
         }
       }
     },
 
-    created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('matches-updated', this.updateWorlds)
-      store.on('glicko-updated', this.updateGlicko)
-      store.on('predictedGlicko-updated', this.updatePredictedGlicko)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('matches-updated', this.updateWorlds)
-      store.removeListener('glicko-updated', this.updateGlicko)
-      store.removeListener('predictedGlicko-updated', this.updatePredictedGlicko)
-    },
-
     methods: {
-      updateMatches () {
-        this.matches = store.fetchMatches()
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-      },
-
-      updateGlicko () {
-        this.officialglicko = store.fetchGlicko()
-      },
-
-      updatePredictedGlicko () {
-        this.predictedglicko = store.fetchPredictedGlicko()
-      },
-
       getWorldById (id) {
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
@@ -147,6 +102,22 @@
     },
 
     computed: {
+      matches () {
+        return this.$store.state.matches
+      },
+
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      officialglicko () {
+        return this.$store.state.glicko
+      },
+
+      predictedglicko () {
+        return this.$store.state.predictedglicko
+      },
+
       isValidMatch () {
         var ret = false;
         if (this.matches !== [] && this.matches !== undefined) {

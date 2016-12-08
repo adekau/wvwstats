@@ -33,7 +33,7 @@
           <div class="first-place" style="padding: 10px;">
             <div v-bind:data-longtooltip =
               "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
-              v-progress="percentage.green" class="mdl-progress mdl-js-progress">
+              class="mdl-progress mdl-js-progress">
             </div>
 
           </div>
@@ -43,7 +43,7 @@
 
             <div v-bind:data-longtooltip=
               "worldinfo.green + ':' + scoreDiff.blue.green + '\n' + worldinfo.red + ':' + scoreDiff.blue.red"
-              v-progress="percentage.blue" class="mdl-progress mdl-js-progress">
+              class="mdl-progress mdl-js-progress">
             </div>
 
           </div>
@@ -53,7 +53,7 @@
 
             <div v-bind:data-longtooltip=
               "worldinfo.green + ':' + scoreDiff.red.green + '\n' + worldinfo.blue + ':' + scoreDiff.red.blue"
-              v-progress="percentage.red" class="mdl-progress mdl-js-progress">
+              class="mdl-progress mdl-js-progress">
             </div>
 
           </div>
