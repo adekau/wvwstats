@@ -25,8 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(server, index) in servers
-            | orderBy 'predicted' -1">
+          <tr v-for="(server, index) in servers_oPredicted">
             <td data-label="Rank">
               {{index + 1}}&nbsp;
               <span v-bind:class="positionChange[server.name].textclass">
@@ -142,6 +141,12 @@
         })
 
         return ret
+      },
+
+      servers_oPredicted () {
+        return this.servers.sort((a, b) => {
+          return b.predicted - a.predicted
+        })
       },
 
       positionChange () {
