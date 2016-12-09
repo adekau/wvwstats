@@ -82,13 +82,13 @@
           K/D
         </li>
         <li>
-          {{ match.kills.green / match.deaths.green }}
+          {{ round(match.kills.green / match.deaths.green, 3, false) }}
         </li>
         <li>
-          {{ match.kills.blue / match.deaths.blue }}
+          {{ round(match.kills.blue / match.deaths.blue, 3, false) }}
         </li>
         <li>
-          {{ match.kills.red / match.deaths.red }}
+          {{ round(match.kills.red / match.deaths.red, 3, false) }}
         </li>
       </ul>
     </div>
@@ -109,18 +109,15 @@
           }
         }
         return
-      }
-    },
+      },
 
-    filters: {
-      round: function (value, accuracy, keep) {
+      round (value, accuracy, keep) {
         if (typeof value !== 'number') return value
 
         var fixed = value.toFixed(accuracy)
 
         return keep ? fixed : +fixed
       }
-
     }
   }
 </script>

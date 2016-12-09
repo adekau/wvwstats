@@ -43,13 +43,13 @@
           % PPT
         </li>
         <li>
-          {{ ((match.scores.green - 2 * match.kills.green) / match.scores.green) * 100 }}%
+          {{ round(((match.scores.green - 2 * match.kills.green) / match.scores.green) * 100, 3, false) }}%
         </li>
         <li>
-          {{ ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue) * 100 }}%
+          {{ round(((match.scores.blue - 2 * match.kills.blue) / match.scores.blue) * 100, 3, false) }}%
         </li>
         <li>
-          {{ ((match.scores.red - 2 * match.kills.red) / match.scores.red) * 100 }}%
+          {{ round(((match.scores.red - 2 * match.kills.red) / match.scores.red) * 100, 3, false) }}%
         </li>
       </ul>
     </div>
@@ -60,13 +60,13 @@
           % PPK
         </li>
         <li>
-          {{ (1 - ((match.scores.green - 2 * match.kills.green) / match.scores.green)) * 100 }}%
+          {{ round((1 - ((match.scores.green - 2 * match.kills.green) / match.scores.green)) * 100, 3, false) }}%
         </li>
         <li>
-          {{ (1 - ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue)) * 100 }}%
+          {{ round((1 - ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue)) * 100, 3, false) }}%
         </li>
         <li>
-          {{ (1 - ((match.scores.red - 2 * match.kills.red) / match.scores.red)) * 100 }}%
+          {{ round((1 - ((match.scores.red - 2 * match.kills.red) / match.scores.red)) * 100, 3, false) }}%
         </li>
       </ul>
     </div>
@@ -87,18 +87,15 @@
           }
         }
         return
-      }
-    },
+      },
 
-    filters: {
-      round: function (value, accuracy, keep) {
+      round (value, accuracy, keep) {
         if (typeof value !== 'number') return value
 
         var fixed = value.toFixed(accuracy)
 
         return keep ? fixed : +fixed
       }
-
     }
   }
 </script>

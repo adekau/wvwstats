@@ -89,13 +89,13 @@
           K/D
         </li>
         <li>
-          {{ mapid.kills.green / mapid.deaths.green }}
+          {{ round(mapid.kills.green / mapid.deaths.green, 3, false) }}
         </li>
         <li>
-          {{ mapid.kills.blue / mapid.deaths.blue }}
+          {{ round(mapid.kills.blue / mapid.deaths.blue, 3, false) }}
         </li>
         <li>
-          {{ mapid.kills.red / mapid.deaths.red }}
+          {{ round(mapid.kills.red / mapid.deaths.red, 3, false) }}
         </li>
       </ul>
     </div>
@@ -119,6 +119,14 @@
         return
       },
 
+      round (value, accuracy, keep) {
+        if (typeof value !== 'number') return value
+
+        var fixed = value.toFixed(accuracy)
+
+        return keep ? fixed : +fixed
+      },
+
       getMapName () {
         if (this.mapid.type.toLowerCase() === 'redhome') {
           return this.getWorldById(this.match.worlds.red).name + ' Borderlands'
@@ -130,17 +138,6 @@
           return 'Eternal Battlegrounds'
         }
       }
-    },
-
-    filters: {
-      round: function (value, accuracy, keep) {
-        if (typeof value !== 'number') return value
-
-        var fixed = value.toFixed(accuracy)
-
-        return keep ? fixed : +fixed
-      }
-
     }
   }
 </script>
