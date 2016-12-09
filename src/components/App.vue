@@ -1,6 +1,6 @@
 <template>
-  <div v-mdl class="mdl-layout__container">
-    <div v-mdl class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+  <div class="mdl-layout__container">
+    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <searchbar></searchbar>
       <sidebar></sidebar>
       <main class="mdl-layout__content mdl-color--grey-100" id="router_view">

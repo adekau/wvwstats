@@ -1,12 +1,12 @@
 <template>
-  <div v-mdl class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+  <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
     <header class="demo-drawer-header">
     <header class="demo-drawer-header" style="text-align: center;">
       <img class="logo" src="/static/img/logo.png">
       <span>WvW Stats</span>
     </header>
     </header>
-    <nav v-mdl class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+    <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
       <router-link to='/na' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">list</i>NA Matches</router-link>
       <router-link to='/eu' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
