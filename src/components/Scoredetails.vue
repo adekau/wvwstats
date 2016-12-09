@@ -31,30 +31,34 @@
       <ul class="mdl-list" style="width: 100%;">
         <li>
           <div class="first-place" style="padding: 10px;">
-            <div v-bind:data-longtooltip =
+            <!--<div v-bind:data-longtooltip =
               "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
               class="mdl-progress mdl-js-progress">
-            </div>
+            </div>-->
+            <MdlProgress v-bind:data-longtooltip =
+              "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
+              v-bind:progress="percentage.green">
+            </MdlProgress>
 
           </div>
         </li>
         <li>
           <div class="second-place" style="padding: 10px;">
 
-            <div v-bind:data-longtooltip=
+            <MdlProgress v-bind:data-longtooltip=
               "worldinfo.green + ':' + scoreDiff.blue.green + '\n' + worldinfo.red + ':' + scoreDiff.blue.red"
-              class="mdl-progress mdl-js-progress">
-            </div>
+              v-bind:progress="percentage.blue">
+            </MdlProgress>
 
           </div>
         </li>
         <li>
           <div class="third-place" style="padding: 10px;">
 
-            <div v-bind:data-longtooltip=
+            <MdlProgress v-bind:data-longtooltip=
               "worldinfo.green + ':' + scoreDiff.red.green + '\n' + worldinfo.blue + ':' + scoreDiff.red.blue"
-              class="mdl-progress mdl-js-progress">
-            </div>
+              v-bind:progress="percentage.red">
+            </MdlProgress>
 
           </div>
         </li>
@@ -156,6 +160,7 @@
 
 <script>
   import store from '../store'
+  import MdlProgress from './MdlProgress'
 
   export default {
 
@@ -366,6 +371,10 @@
         return Math.abs(value)
       }
 
+    },
+
+    components: {
+      MdlProgress
     }
 
   }
