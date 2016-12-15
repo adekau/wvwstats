@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="server-select mdl-shadow--2dp">
+      <p style="display:none;">{{objectives}}{{matchArr}}</p>
       <div class="server-select-container">
         <strong>Server: &nbsp;</strong>
         <select class="map-select" v-model="selectedWorld" :disabled="!mapPrepared">
@@ -21,7 +22,6 @@
       return {
         map: false,
         selectedWorld: '',
-        objectiveIds: [],
         objectiveInfo: {},
         objectivesById: {},
         mapMarkers: {},
@@ -52,7 +52,7 @@
         maxZoom: 6,
         crs: window.L.CRS.Simple,
         maxBoundsViscosity: 1.0
-      }).setView([0, 0], 0)
+      }).setView([8192, 8192], 0)
 
       southWest = this.unproject([0, 16384])
       northEast = this.unproject([16384, 0])
@@ -71,36 +71,36 @@
       data ({ to }) {
         const server = to.params.server
         // Increase timeout if this not working.
-        setTimeout(this.setServer, 30)
+        // setTimeout(this.setServer, 30)
         return {
-          objectiveIds: this.$store.getters.objectiveIds(),
           paramServer: server
         }
       }
     },
 
     created () {
-     this.prepareIcons()
+      this.prepareIcons()
     },
 
     computed: {
       matchArr () {
-        console.log('matchArr')
-        // if (this.mapPrepared && this.worldlist.length > 0 && this.selectedWorld) {
-        //   setTimeout(this.updateMap(), 30)
-        // }
         return this.$store.state.matches
       },
 
       objectives () {
-        console.log('objectives')
-        this.prepareMap(this.$store.state.objectives)
-        return this.$store.state.objectives
+        const objectives = this.$store.state.objectives
+        if (objectives.length > 0 && !this.mapPrepared && this.map) {
+          this.prepareMap(objectives)
+        }
+        return objectives
       },
 
       worldlist () {
-        console.log('worldlist')
         return this.$store.state.worlds
+      },
+
+      objectiveIds () {
+        return this.$store.getters.objectiveIds
       },
 
       /**
@@ -297,9 +297,14 @@
        * create neutral icons on the map and register the map markers.
        */
       prepareMap (objectives) {
-        console.log('preparing map')
+        if (!this.map) {
+          return
+        }
         for (var bit in objectives) {
           let obj = objectives[bit]
+          if (!obj.coord) {
+            continue
+          }
           let name = obj.name
           let id = obj.id
           delete obj.id
@@ -309,8 +314,8 @@
             icon: this.mapIcons[obj.type.toLowerCase()].neutral
           }).addTo(this.map)
           .bindPopup(name)
-          this.mapPrepared = 1
         }
+        this.mapPrepared = 1
       },
 
       /**
@@ -352,12 +357,13 @@
           this.mapMarkers[item].setIcon(
             this.mapIcons.claimed[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
 
-          store.fetchGuildById(guildId).then((guild) => {
-            this.mapMarkers[item].unbindPopup()
-            this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
-              'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
-              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.guild_name)
-          })
+          // TODO: ADD THIS TO THE STORE AND RE-IMPLEMENT IT.
+          // store.fetchGuildById(guildId).then((guild) => {
+          //   this.mapMarkers[item].unbindPopup()
+          //   this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
+          //     'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
+          //     'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.guild_name)
+          // })
         } else {
           this.mapMarkers[item].setIcon(
             this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
@@ -399,9 +405,10 @@
 
     watch: {
       'selectedWorld': function (val, oldVal) {
-        this.$router.push('/map/' + this.getWorldByName(val).id)
-        store.updateSelectedWorld(this.getWorldByName(val).id)
-        this.updateMap()
+        if (this.mapPrepared) {
+          this.$router.push('/map/' + this.getWorldByName(val).id)
+          this.updateMap()
+        }
       }
     }
 
