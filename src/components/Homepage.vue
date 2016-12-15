@@ -126,6 +126,10 @@
         let pglicko = this.formattedglicko
         let ret = []
 
+        if (!this.worldlist[0]) {
+          return ret;
+        }
+
         Object.keys(glicko).forEach( (key) => {
           if (key < 2000 && pglicko[key]) {
             let startGlicko = glicko[key].rating
