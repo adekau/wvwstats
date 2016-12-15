@@ -11,8 +11,17 @@
                                                  role="presentation">list</i>NA Matches</router-link>
       <router-link to='/eu' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">list</i>EU Matches</router-link>
-      <a v-bind:href="mapUrl" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                 role="presentation">autorenew</i>Live</a>
+      <!--<a v-bind:href="mapUrl" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
+                                                 role="presentation">autorenew</i>Live</a>-->
+
+      <router-link to='/map' class="mdl-navigation__link">
+        <i class="mdl-color-text--blue-grey-400 material-icons"
+          role="presentation">
+          autorenew
+        </i>
+        Live
+      </router-link>
+
       <router-link to='/leaderboard' class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                  role="presentation">format_list_numbered</i>Leaderboard</router-link>
       <router-link to="{ path: '/grapher' }" class="mdl-navigation__link">
