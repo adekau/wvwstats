@@ -48,3 +48,19 @@ export function fetchPredictedGlicko () {
     })
   })
 }
+
+export function fetchObjectives () {
+  var requestIds = ''
+  for (var id in Const.objectiveIds) {
+    requestIds += Const.objectiveIds[id] + ','
+  }
+
+  return new Promise((resolve, reject) => {
+    Vue.http.get(Const.objectivesUrl + requestIds).then((response) => {
+      const objectives = response.data
+      resolve(objectives)
+    }, () => {
+      reject()
+    })
+  })
+}

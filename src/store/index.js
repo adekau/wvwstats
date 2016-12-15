@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as api from './api'
+import * as Const from './const'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ const store = new Vuex.Store({
     matches: [],
     worlds: [],
     glicko: {},
-    predictedglicko: {}
+    predictedglicko: {},
+    objectives: []
   },
 
   // Actions
@@ -34,6 +36,11 @@ const store = new Vuex.Store({
     FETCH_PREDICTEDGLICKO: ({ commit }) => {
       return api.fetchPredictedGlicko()
         .then(predictedglicko => commit('SET_PREDICTEDGLICKO', { predictedglicko }))
+    },
+
+    FETCH_OBJECTIVES: ({ commit }) => {
+      return api.fetchObjectives()
+        .then(objectives => commit('SET_OBJECTIVES', { objectives }))
     }
   },
 
@@ -53,9 +60,18 @@ const store = new Vuex.Store({
 
     SET_PREDICTEDGLICKO: (state, { predictedglicko }) => {
       state.predictedglicko = predictedglicko
+    },
+
+    SET_OBJECTIVES: (state, { objectives }) => {
+      state.objectives = objectives
+    }
+  },
+
+  getters: {
+    objectiveIds () {
+      return Const.objectiveIds
     }
   }
-  // getters can go here...
 })
 
 export default store
