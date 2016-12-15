@@ -15,17 +15,13 @@
 </template>
 
 <script>
-  import store from '../store'
-
   export default {
+    name: 'Map',
     data () {
       return {
         map: false,
-        worldlist: [],
         selectedWorld: '',
-        matchArr: [],
         objectiveIds: [],
-        objectives: [],
         objectiveInfo: {},
         objectivesById: {},
         mapMarkers: {},
@@ -69,18 +65,6 @@
         continuousWorld: true,
         subdomains: '1234'
       }).addTo(this.map)
-
-      if(this.objectives.length > 0) {
-        this.prepareMap()
-      } else {
-        store.updateObjectives()
-      }
-
-      if(this.worldlist.length > 0) {
-        this.setServer()
-      } else {
-        store.updateWorlds()
-      }
     },
 
     route: {
@@ -89,29 +73,36 @@
         // Increase timeout if this not working.
         setTimeout(this.setServer, 30)
         return {
-          worldlist: store.fetchWorlds(),
-          matchArr: store.fetchMatches(),
-          objectives: store.fetchObjectives(),
-          objectiveIds: store.fetchObjectiveIds(),
+          objectiveIds: this.$store.getters.objectiveIds(),
           paramServer: server
         }
       }
     },
 
     created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('worlds-updated', this.updateWorlds)
-      store.on('objectives-updated', this.updateObjectives)
-      this.prepareIcons()
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('worlds-updated', this.updateWorlds)
-      store.removeListener('objectives-updated', this.updateObjectives)
+     this.prepareIcons()
     },
 
     computed: {
+      matchArr () {
+        console.log('matchArr')
+        // if (this.mapPrepared && this.worldlist.length > 0 && this.selectedWorld) {
+        //   setTimeout(this.updateMap(), 30)
+        // }
+        return this.$store.state.matches
+      },
+
+      objectives () {
+        console.log('objectives')
+        this.prepareMap(this.$store.state.objectives)
+        return this.$store.state.objectives
+      },
+
+      worldlist () {
+        console.log('worldlist')
+        return this.$store.state.worlds
+      },
+
       /**
        * worldMatchIds
        * Loops through each match and assembles an object by world id with what
@@ -183,30 +174,13 @@
       },
 
       sorted_worldlist () {
-        return worldlist.sort((a, b) => {
-          return (a.name.localCompare(b.name))
+        return this.worldlist.sort((a, b) => {
+          return a.name - b.name
         })
       }
     },
 
     methods: {
-      updateMatches () {
-        this.matchArr = store.fetchMatches()
-        if (this.mapPrepared && this.worldlist.length > 0 && this.selectedWorld) {
-          this.updateMap()
-        }
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-        this.setServer()
-      },
-
-      updateObjectives () {
-        this.objectives = store.fetchObjectives()
-        this.prepareMap()
-      },
-
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
       },
@@ -322,13 +296,10 @@
        * prepareMap
        * create neutral icons on the map and register the map markers.
        */
-      prepareMap () {
-        console.log(this.objectives)
-        for (var bit in this.objectives) {
-          let obj = this.objectives[bit]
-          if (!obj.coord) {
-            continue
-          }
+      prepareMap (objectives) {
+        console.log('preparing map')
+        for (var bit in objectives) {
+          let obj = objectives[bit]
           let name = obj.name
           let id = obj.id
           delete obj.id
