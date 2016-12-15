@@ -25,5 +25,6 @@ app.$store.dispatch('FETCH_WORLDS');
 app.$store.dispatch('FETCH_MATCHES');
 app.$store.dispatch('FETCH_GLICKO');
 app.$store.dispatch('FETCH_PREDICTEDGLICKO');
+app.$store.dispatch('FETCH_OBJECTIVES');
 
 export { app, router, store }
