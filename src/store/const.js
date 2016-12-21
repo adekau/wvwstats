@@ -8,7 +8,7 @@
 export const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
 export const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
 export const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
-export const guildUrl = 'https://api.guildwars2.com/v1/guild_details.json?guild_id='
+export const guildUrl = 'https://api.guildwars2.com/v2/guild/'
 export const glickoUrl = 'http://www.wvwstats.com/api/v1/officialglicko'
 export const predictedGlickoUrl = 'http://www.wvwstats.com/api/v1/predictedglicko'
 export const weekleaderboardUrl = 'http://www.wvwstats.com/api/v1/weekleaderboard'
