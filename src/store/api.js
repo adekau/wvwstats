@@ -64,3 +64,41 @@ export function fetchObjectives () {
     })
   })
 }
+
+export function fetchGuild (id) {
+  return new Promise((resolve, reject) => {
+    Vue.http.get(Const.guildUrl + id).then((response) => {
+      const guild = response.data
+      resolve(guild)
+    }, () => {
+      reject()
+    })
+  })
+}
+
+export function fetchLeaderboard () {
+  return new Promise((resolve, reject) => {
+    Vue.http.get(Const.weekleaderboardUrl).then((response) => {
+      const leaderboard = response.data
+      resolve(leaderboard)
+    }, () => {
+      reject()
+    })
+  })
+}
+
+export function fetchArchiveData (matchid, data, start_time, end_time) {
+  var diff = 15 // difference in start_time. static variable to account for match start variability
+  var tmp = new Date(start_time)
+  var tmp2 = new Date(end_time)
+  var timeOffset = 4
+  start_time = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate(),
+    tmp.getHours() - timeOffset, tmp.getMinutes() + diff, tmp.getSeconds()).toISOString()
+    .replace('.000Z','Z')
+  end_time = new Date(tmp2.getFullYear(), tmp2.getMonth(), tmp2.getDate(),
+    tmp2.getHours() - timeOffset, tmp2.getMinutes(), tmp2.getSeconds()).toISOString()
+    .replace('.000Z','Z')
+
+  var url = `${Const.matcharchiveUrl}?data=${data}&match=${matchid}&start_time=${start_time}&end_time=${end_time}`
+  return Vue.http.get(url)
+}
