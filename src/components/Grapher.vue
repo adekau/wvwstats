@@ -20,7 +20,7 @@
     </div>
 
     <chart chartname='grapher' chartheight='500px' :chartdata='selectedData'
-      :match='currentMatch', :worldlist='worldlist'></chart>
+      :match='currentMatch' :worldlist='worldlist'></chart>
 
     <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
       style="margin-left: 6px; border-bottom: 1px solid grey;">
@@ -35,13 +35,11 @@
 
 <script>
   import Chart from './Chart.vue'
-  import store from '../store'
-
   export default {
+    name: 'Grapher',
+
     data () {
       return {
-        matches: [],
-        worldlist: [],
         selectedWorld: null,
         selectedData: null,
         queryWorld: null,
@@ -67,45 +65,32 @@
       }
     },
 
-    route: {
-      data({ to }) {
-        const server = to.query.server
-        const data = to.query.data
+    beforeRouteEnter (to, from, next) {
+      const server = to.query.server
+      const data = to.query.data
 
-        return {
-          matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds(),
-          queryWorld: server,
-          queryData: data
-        }
+      if (server === undefined || data === undefined) {
+        next(vm => {
+          vm.queryWorld = null
+          vm.queryData = null
+        })
+      } else {
+        next (vm => {
+          vm.queryWorld = server
+          vm.queryData = data
+        })
       }
     },
 
-    created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('worlds-updated', this.updateWorlds)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('worlds-updated', this.updateWorlds)
+    updated () {
+      if (this.selectedWorld === null && this.selectedData === null
+          && this.worldlist.length > 0) {
+        this.selectedWorld = this.queryWorld
+        this.selectedData = this.queryData
+      }
     },
 
     methods: {
-      updateMatches() {
-        this.matches = store.fetchMatches()
-        this.selectedWorld = this.queryWorld
-        this.selectedData = this.queryData
-        store.removeListener('matches-updated', this.updateMatches)
-      },
-
-      updateWorlds() {
-        this.worldlist = store.fetchWorlds()
-        this.selectedWorld = this.queryWorld
-        this.selectedData = this.queryData
-        store.removeListener('worlds-updated', this.updateWorlds)
-      },
-
       getWorldByName (name) {
         name = name.trim()
         for (var i = 0; i < this.worldlist.length; i++) {
@@ -129,6 +114,14 @@
     },
 
     computed: {
+      matches () {
+        return this.$store.state.matches
+      },
+
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
       /**
        * worldMatchIds
        * Loops through each match and assembles an object by world id with what
@@ -184,9 +177,7 @@
        },
 
        sorted_worldlist () {
-         return worldlist.sort((a, b) => {
-           return (a.name.localCompare(b.name))
-         })
+         return this.worldlist
        }
     },
 
@@ -201,7 +192,9 @@
           'data': this.selectedData
         }
 
-        store.updateGrapherQuery(gq)
+        this.$store.dispatch('UPDATE_GRAPHERQUERY', {
+          grapherQuery: gq
+        })
 
         this.$router.push({
           path: '/grapher',
@@ -219,7 +212,9 @@
           'data': this.selectedData
         }
 
-        store.updateGrapherQuery(gq)
+        this.$store.dispatch('UPDATE_GRAPHERQUERY', {
+          grapherQuery: gq
+        })
 
         this.$router.push({
           path: '/grapher',

@@ -41,7 +41,8 @@
       </router-link>
 
       <!--TODO: Get the grapher query thing back into this.-->
-      <router-link to="/grapher" class="mdl-navigation__link">
+      <router-link :to="{ path: '/grapher', query: grapherQuery }"
+        class="mdl-navigation__link">
         <i class="mdl-color-text--blue-grey-400 material-icons"
           role="presentation">
           trending_up
@@ -84,7 +85,12 @@
     computed: {
       selectedWorld () {
         return this.$store.state.selectedWorld
+      },
+
+      grapherQuery () {
+        return this.$store.state.grapherQuery
       }
+
     }
   }
 </script>
