@@ -25,17 +25,17 @@
 
     <div v-if="isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
-      <!-- <chart v-if='dataReady'
+      <chart v-if='dataReady'
         chartname="ppt" chartdata="ppt" :match='graphMatch' :worldlist='worldlist'
-        chartheight="360px" charttitle="PPT Evolution"></chart> -->
+        chartheight="360px" charttitle="PPT Evolution"></chart>
 
     </div>
 
     <div v-if="isValidMatch"
       class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
-      <!-- <chart v-if='dataReady'
+      <chart v-if='dataReady'
         chartname="scores" chartdata="scores" :match='graphMatch' :worldlist='worldlist'
-        chartheight="360px" charttitle="Score Evolution"></chart> -->
+        chartheight="360px" charttitle="Score Evolution"></chart>
 
     </div>
   </div>
@@ -67,6 +67,8 @@
   import Chart from './Chart.vue'
 
   export default {
+    name: 'MatchPage',
+
     data () {
       return {
         matchId: this.$route.params.matchid,
