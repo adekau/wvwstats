@@ -1,27 +1,36 @@
 <template>
-  <div>
-    <div class="server-select mdl-shadow--2dp">
-      <p style="display:none;">{{objectives}}{{matchArr}}</p>
-      <div class="server-select-container">
-        <strong>Server: &nbsp;</strong>
-        <select class="map-select" v-model="selectedWorld" :disabled="!mapPrepared">
-          <option v-for="world in sorted_worldlist">
-            {{world.name}}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div id="map"></div>
-  </div>
+  <div id="map"></div>
 </template>
 
 <script>
   export default {
-    name: 'Map',
+    name: 'GameMap',
+
+    props: {
+      matchArr: {
+        required: true,
+        type: Array
+      },
+
+      worldlist: {
+        required: true,
+        type: Array
+      },
+
+      objectives: {
+        required: true,
+        type: Array
+      },
+
+      selectedWorld: {
+        required: true,
+        type: String
+      }
+    },
+
     data () {
       return {
         map: false,
-        selectedWorld: '',
         objectiveInfo: {},
         objectivesById: {},
         mapMarkers: {},
@@ -65,16 +74,9 @@
         continuousWorld: true,
         subdomains: '1234'
       }).addTo(this.map)
-    },
 
-    route: {
-      data ({ to }) {
-        const server = to.params.server
-        // Increase timeout if this not working.
-        // setTimeout(this.setServer, 30)
-        return {
-          paramServer: server
-        }
+      if (this.objectives.length > 0 && !this.mapPrepared && this.map) {
+        this.prepareMap()
       }
     },
 
@@ -83,22 +85,6 @@
     },
 
     computed: {
-      matchArr () {
-        return this.$store.state.matches
-      },
-
-      objectives () {
-        const objectives = this.$store.state.objectives
-        if (objectives.length > 0 && !this.mapPrepared && this.map) {
-          this.prepareMap(objectives)
-        }
-        return objectives
-      },
-
-      worldlist () {
-        return this.$store.state.worlds
-      },
-
       objectiveIds () {
         return this.$store.getters.objectiveIds
       },
@@ -172,29 +158,11 @@
         var id = this.getWorldByName(server).id
         return this.worldMatchIds[id]
       },
-
-      sorted_worldlist () {
-        return this.worldlist.sort((a, b) => {
-          return a.name - b.name
-        })
-      }
     },
 
     methods: {
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
-      },
-
-      setServer () {
-        if (this.mapPrepared && this.matchArr[0]) {
-          var server = this.paramServer
-          if(server) {
-            this.selectedWorld = this.getWorldById(server).name
-            this.updateMap()
-          }
-        } else {
-          setTimeout(this.setServer, 30)
-        }
       },
 
       timeDifference (current, previous) {
@@ -251,22 +219,6 @@
         }
         return
       },
-
-      /**
-       * getWorldById
-       * id: world's id
-       * returns the world object of the form: {id: _, name: _, population: _}
-       */
-      getWorldById (id) {
-        for (var i = 0; i < this.worldlist.length; i++) {
-          let curWorld = this.worldlist[i]
-          if(curWorld.id == id) {
-            return curWorld
-          }
-        }
-        return
-      },
-
       /**
        * prepareIcons
        * Prepares the mapIcons object.
@@ -296,12 +248,12 @@
        * prepareMap
        * create neutral icons on the map and register the map markers.
        */
-      prepareMap (objectives) {
+      prepareMap () {
         if (!this.map) {
           return
         }
-        for (var bit in objectives) {
-          let obj = objectives[bit]
+        for (var bit in this.objectives) {
+          let obj = this.objectives[bit]
           if (!obj.coord) {
             continue
           }
@@ -357,13 +309,15 @@
           this.mapMarkers[item].setIcon(
             this.mapIcons.claimed[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
 
-          // TODO: ADD THIS TO THE STORE AND RE-IMPLEMENT IT.
-          // store.fetchGuildById(guildId).then((guild) => {
-          //   this.mapMarkers[item].unbindPopup()
-          //   this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
-          //     'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
-          //     'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.guild_name)
-          // })
+          this.$store.dispatch('FETCH_GUILD', {
+            id: guildId
+          }).then(() => {
+            let guild = this.$store.state.guilds[guildId]
+            this.mapMarkers[item].unbindPopup()
+            this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
+              'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
+              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.name)
+          })
         } else {
           this.mapMarkers[item].setIcon(
             this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
@@ -408,6 +362,21 @@
         if (this.mapPrepared) {
           this.$router.push('/map/' + this.getWorldByName(val).id)
           this.updateMap()
+          this.$store.dispatch('UPDATE_SELECTEDWORLD', {
+            selectedWorld: this.getWorldByName(val).id
+          })
+        }
+      },
+
+      'objectives': function (val, oldVal) {
+        if (this.objectives.length > 0 && !this.mapPrepared && this.map) {
+          this.prepareMap()
+        }
+      },
+
+      'matchArr': function (val, oldVal) {
+        if (this.map && this.mapPrepared && this.selectedWorld !== '') {
+          this.updateMap()
         }
       }
     }
@@ -416,29 +385,8 @@
 </script>
 
 <style>
-  .server-select {
-    position: absolute;
-    top: 20px;
-    left: calc(50% - 110px);
-    z-index: 9999;
-    height: 30px;
-    width: 220px;
-    background-color: rgba(230,230,230,.62);
-    border-radius: 8px;
-  }
-
-  .server-select div {
-    display: inline-block;
-    margin-top: 4px;
-    margin-left: 12px;
-  }
-
   .leaflet-container {
     background: #fff;
-  }
-
-  .map-select {
-    width: 140px;
   }
 
   #map {
