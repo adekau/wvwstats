@@ -2,45 +2,45 @@
   <div class="leaderboard-container">
     <div id="lb-nav" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--4-col-phone
       mdl-cell--12-col mdl-cell--8-col-tablet mdl-grid">
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('kd').scrollIntoView(true);">
-        KD Ratio
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('kd').scrollIntoView(true);"
+        text="KD Ratio">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('kills').scrollIntoView(true);">
-        Kills
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('kills').scrollIntoView(true);"
+        text="Kills">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('deaths').scrollIntoView(true);">
-        Deaths
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('deaths').scrollIntoView(true);"
+        text="Deaths">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('activity').scrollIntoView(true);">
-        Activity
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('activity').scrollIntoView(true);"
+        text="Activity">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('scores').scrollIntoView(true);">
-        Scores
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('scores').scrollIntoView(true);"
+        text="Scores">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('pointsppt').scrollIntoView(true);">
-        Points From PPT
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('pointsppt').scrollIntoView(true);"
+        text="Points From PPT">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('percentppt').scrollIntoView(true);">
-        % Points From PPT
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('percentppt').scrollIntoView(true);"
+        text="% Points From PPT">
+      </MdlButton>
 
-      <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-        onclick="document.getElementById('percentppk').scrollIntoView(true);">
-        % Points From PPK
-      </button>
+      <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+        onclick="document.getElementById('percentppk').scrollIntoView(true);"
+        text="% Points From PPK">
+      </MdlButton>
     </div>
 
     <!-- K/D RATIO -->
@@ -53,10 +53,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -94,10 +94,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -135,10 +135,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -176,10 +176,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -217,10 +217,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -258,10 +258,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -299,10 +299,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -340,10 +340,10 @@
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
-        <button v-mdl class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
-          onclick="document.getElementById('lb-nav').scrollIntoView(true);">
-          Back to Nav
-        </button>
+        <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
+          onclick="document.getElementById('lb-nav').scrollIntoView(true);"
+          text="Back to Nav">
+        </MdlButton>
       </div>
 
       <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-shadow--2dp
@@ -375,45 +375,29 @@
 
 
 <script>
-  import store from '../store'
-
+  import MdlButton from './MdlButton.vue'
   export default {
+    name: 'Leaderboard',
+
     data () {
-      return {
-        weekleaderboard: {kills: [], deaths: [], kd: [], scores: [],
-        pointsFromPPT: [], percentPointsFromPPK: [], percentPointsFromPPT: []},
-        worldlist: []
+      return {}
+    },
+
+    components: {
+      MdlButton
+    },
+
+    computed: {
+      weekleaderboard () {
+        return this.$store.state.leaderboard
+      },
+
+      worldlist () {
+        return this.$store.state.worlds
       }
-    },
-
-    route: {
-      data ({ to }) {
-        return {
-          weekleaderboard: store.fetchWeekleaderboard(),
-          worldlist: store.fetchWorlds()
-        }
-      }
-    },
-
-    created () {
-      store.on('worlds-updated', this.updateWorlds)
-      store.on('weekleaderboard-updated', this.updateWeekleaderboard)
-    },
-
-    destroyed () {
-      store.removeListener('worlds-updated', this.updateWorlds)
-      store.removeListener('weekleaderboard-updated', this.updateWeekleaderboard)
     },
 
     methods: {
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-      },
-
-      updateWeekleaderboard () {
-        this.weekleaderboard = store.fetchWeekleaderboard()
-      },
-
       getWorldById (id) {
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
