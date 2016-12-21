@@ -53,7 +53,13 @@
                   obj.kd[key] = obj.kills[key] / obj.deaths[key]
                 })
               }
-              this.finishDrawChart(response, 'kd')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'kd')
+              }, () => {
+                // Do nothing
+              })
             })
         } else if (this.chartdata === 'activity (k+d)') {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -69,7 +75,13 @@
                   obj.activity[key] = obj.kills[key] + obj.deaths[key]
                 })
               }
-              this.finishDrawChart(response, 'activity')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'activity')
+              }, () => {
+                // Do nothing
+              })
             })
         } else if (this.chartdata === 'Score from PPK (as percent)') {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -85,7 +97,13 @@
                   obj.pppk[key] = (obj.kills[key] * 2) / obj.scores[key]
                 })
               }
-              this.finishDrawChart(response, 'pppk')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'pppk')
+              }, () => {
+                // Do nothing
+              })
             })
         } else if (this.chartdata === 'Score from PPT (as percent)') {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -101,7 +119,13 @@
                   obj.pppt[key] = (obj.scores[key] - (obj.kills[key] * 2)) / obj.scores[key]
                 })
               }
-              this.finishDrawChart(response, 'pppt')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'pppt')
+              }, () => {
+                // Do nothing
+              })
             })
         } else if (this.chartdata === 'Score from PPT') {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -117,7 +141,13 @@
                   obj.sppt[key] = (obj.scores[key] - (obj.kills[key] * 2))
                 })
               }
-              this.finishDrawChart(response, 'sppt')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'sppt')
+              }, () => {
+                // Do nothing
+              })
             })
         } else if (this.chartdata === 'glicko') {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -133,7 +163,13 @@
                   obj.rating[key] = obj.glicko[key].rating
                 })
               }
-              this.finishDrawChart(response, 'rating')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'rating')
+              }, () => {
+                // Do nothing
+              })
             })
         } else if (this.chartdata === 'glicko change') {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -149,7 +185,13 @@
                   obj.delta[key] = obj.glicko[key].delta
                 })
               }
-              this.finishDrawChart(response, 'delta')
+              this.waitForDiv(() => {
+                return document.getElementById(this.chartname + '_chart') !== null
+              }, () => {
+                this.finishDrawChart(response, 'delta')
+              }, () => {
+                // Do nothing
+              })
             })
         } else {
           this.$store.dispatch('FETCH_ARCHIVEDATA', {
@@ -162,11 +204,11 @@
                 return document.getElementById(this.chartname + '_chart') !== null
               }, () => {
                 this.finishDrawChart(response, this.chartdata)
-              }, function () {
-                console.err('Unable to find element', this.chartname + '_chart')
+              }, () => {
+                // Do nothing
               })
             }, (response) => {
-              console.err(response)
+              console.error(response)
             })
         }
       },
