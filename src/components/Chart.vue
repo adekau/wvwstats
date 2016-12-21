@@ -1,10 +1,11 @@
 <template>
   <div v-bind:id="chartname + '_chart'"
-    v-bind:style="'width:100%; height: ' + chartheight + ';'"></div>
+    v-bind:style="'width:100%; height: ' + chartheight + ';'"
+    :data-chartloaded="chartsLoaded">
+  </div>
 </template>
 
 <script>
-  import store from '../store'
   export default {
     data () {
       return {
@@ -18,18 +19,16 @@
       'charttitle', 'redraw'],
 
     mounted () {
-      if (store.fetchGoogleChartsLoaded()) {
+      if (this.chartsLoaded) {
         this.drawChart()
       }
       window.addEventListener('resize', this.handleResize)
     },
 
-    created () {
-      store.on('charts-loaded', this.drawChart)
-    },
-
-    destroyed () {
-      store.removeListener('charts-loaded', this.drawChart)
+    computed: {
+      chartsLoaded () {
+        return this.$store.state.chartsLoaded
+      }
     },
 
     methods: {
@@ -39,8 +38,12 @@
         }
 
         if (this.chartdata === 'k/d') {
-          store.fetchArchiveData(this.match.id, 'kills,deaths', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'kills,deaths',
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.kd = {}
@@ -51,8 +54,12 @@
               this.finishDrawChart(response, 'kd')
             })
         } else if (this.chartdata === 'activity (k+d)') {
-          store.fetchArchiveData(this.match.id, 'kills,deaths', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'kills,deaths',
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.activity = {}
@@ -63,8 +70,12 @@
               this.finishDrawChart(response, 'activity')
             })
         } else if (this.chartdata === 'Score from PPK (as percent)') {
-          store.fetchArchiveData(this.match.id, 'kills,scores', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'kills,scores',
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.pppk = {}
@@ -75,8 +86,12 @@
               this.finishDrawChart(response, 'pppk')
             })
         } else if (this.chartdata === 'Score from PPT (as percent)') {
-          store.fetchArchiveData(this.match.id, 'kills,scores', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'kills,scores',
+            start_time: this.match.start_time,
+            end_tme: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.pppt = {}
@@ -87,8 +102,12 @@
               this.finishDrawChart(response, 'pppt')
             })
         } else if (this.chartdata === 'Score from PPT') {
-          store.fetchArchiveData(this.match.id, 'kills,scores', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'kills,scores',
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.sppt = {}
@@ -99,8 +118,12 @@
               this.finishDrawChart(response, 'sppt')
             })
         } else if (this.chartdata === 'glicko') {
-          store.fetchArchiveData(this.match.id, 'glicko', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'glicko',
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.rating = {}
@@ -111,8 +134,12 @@
               this.finishDrawChart(response, 'rating')
             })
         } else if (this.chartdata === 'glicko change') {
-          store.fetchArchiveData(this.match.id, 'glicko', this.match.start_time, this.match.end_time)
-            .then((response)=> {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: 'glicko',
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
                 obj.delta = {}
@@ -123,8 +150,12 @@
               this.finishDrawChart(response, 'delta')
             })
         } else {
-          store.fetchArchiveData(this.match.id, this.chartdata, this.match.start_time, this.match.end_time)
-            .then((response) => {
+          this.$store.dispatch('FETCH_ARCHIVEDATA', {
+            matchid: this.match.id,
+            data: this.chartdata,
+            start_time: this.match.start_time,
+            end_time: this.match.end_time
+          }).then((response) => {
               this.waitForDiv(() => {
                 return document.getElementById(this.chartname + '_chart') !== null
               }, () => {
@@ -237,6 +268,12 @@
 
       chartdata () {
         this.drawChart()
+      },
+
+      chartsLoaded (val, oldVal) {
+        if (val === true) {
+          this.drawChart()
+        }
       }
     }
   }
