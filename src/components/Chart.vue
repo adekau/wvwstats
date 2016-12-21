@@ -7,6 +7,8 @@
 
 <script>
   export default {
+    name: 'Chart',
+
     data () {
       return {
         raw: [],
@@ -90,7 +92,7 @@
             matchid: this.match.id,
             data: 'kills,scores',
             start_time: this.match.start_time,
-            end_tme: this.match.end_time
+            end_time: this.match.end_time
           }).then((response)=> {
               for (var i = 0; i < response.data.length; i++) {
                 var obj = response.data[i]
