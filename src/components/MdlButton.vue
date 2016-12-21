@@ -14,7 +14,7 @@
     },
 
     mounted () {
-      componentHandler.upgradeElement(this.$el, "MaterialButton")
+      componentHandler.upgradeElement(this.$el)
     }
   }
 </script>
