@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     guilds: {},
     leaderboard: {},
     chartsLoaded: false,
+    grapherQuery: {},
     selectedWorld: ''
   },
 
@@ -24,6 +25,10 @@ const store = new Vuex.Store({
   actions: {
     UPDATE_SELECTEDWORLD: ({ commit }, { selectedWorld }) => {
       commit('SET_SELECTEDWORLD', { selectedWorld })
+    },
+
+    UPDATE_GRAPHERQUERY: ({ commit }, { grapherQuery }) => {
+      commit('SET_GRAPHERQUERY', { grapherQuery })
     },
 
     FETCH_MATCHES: ({ commit }) => {
@@ -69,6 +74,14 @@ const store = new Vuex.Store({
 
   // Mutations
   mutations: {
+    SET_SELECTEDWORLD: (state, { selectedWorld }) => {
+      state.selectedWorld = selectedWorld
+    },
+
+    SET_GRAPHERQUERY: (state, { grapherQuery }) => {
+      state.grapherQuery = grapherQuery
+    },
+
     SET_MATCHES: (state, { matches }) => {
       state.matches = matches
     },
@@ -91,10 +104,6 @@ const store = new Vuex.Store({
 
     SET_GUILD: (state, { guild }) => {
       Vue.set(state.guilds, guild.id, guild)
-    },
-
-    SET_SELECTEDWORLD: (state, { selectedWorld }) => {
-      state.selectedWorld = selectedWorld
     },
 
     SET_LEADERBOARD: (state, { leaderboard }) => {
