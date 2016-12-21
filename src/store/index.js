@@ -13,11 +13,19 @@ const store = new Vuex.Store({
     worlds: [],
     glicko: {},
     predictedglicko: {},
-    objectives: []
+    objectives: [],
+    guilds: {},
+    leaderboard: {},
+    chartsLoaded: false,
+    selectedWorld: ''
   },
 
   // Actions
   actions: {
+    UPDATE_SELECTEDWORLD: ({ commit }, { selectedWorld }) => {
+      commit('SET_SELECTEDWORLD', { selectedWorld })
+    },
+
     FETCH_MATCHES: ({ commit }) => {
       return api.fetchMatches()
         .then(matches => commit('SET_MATCHES', { matches }))
@@ -41,6 +49,21 @@ const store = new Vuex.Store({
     FETCH_OBJECTIVES: ({ commit }) => {
       return api.fetchObjectives()
         .then(objectives => commit('SET_OBJECTIVES', { objectives }))
+    },
+
+    FETCH_GUILD: ({ commit, state }, { id }) => {
+      return state.guilds[id]
+        ? Promise.resolve(state.guilds[id])
+        : api.fetchGuild(id).then(guild => commit('SET_GUILD', { guild }))
+    },
+
+    FETCH_LEADERBOARD: ({ commit }) => {
+      return api.fetchLeaderboard()
+        .then(leaderboard => commit('SET_LEADERBOARD', { leaderboard }))
+    },
+
+    FETCH_ARCHIVEDATA: ({ }, { matchid, data, start_time, end_time}) => {
+      return api.fetchArchiveData(matchid, data, start_time, end_time)
     }
   },
 
@@ -64,6 +87,22 @@ const store = new Vuex.Store({
 
     SET_OBJECTIVES: (state, { objectives }) => {
       state.objectives = objectives
+    },
+
+    SET_GUILD: (state, { guild }) => {
+      Vue.set(state.guilds, guild.id, guild)
+    },
+
+    SET_SELECTEDWORLD: (state, { selectedWorld }) => {
+      state.selectedWorld = selectedWorld
+    },
+
+    SET_LEADERBOARD: (state, { leaderboard }) => {
+      state.leaderboard = leaderboard
+    },
+
+    SET_CHARTSLOADED: (state) => {
+      state.chartsLoaded = true
     }
   },
 
