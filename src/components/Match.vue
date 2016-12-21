@@ -71,23 +71,22 @@
 
     data () {
       return {
-        matchId: this.$route.params.matchid,
+        matchId: null,
         match: {},
         graphMatch: null,
       }
     },
 
-    route: {
-      data ({ to }) {
-        // TODO change this when updating the store...
-        if (this.data) {
-          setTimeout(() => {
-            this.redrawChartData()
-          }, 500)
-        }
-        return {
-          matchId: this.$route.params.matchid
-        }
+    beforeRouteEnter (to, from, next) {
+      const matchId = to.params.matchid
+      if (matchId === undefined) {
+        next(vm => {
+          vm.matchId = null
+        })
+      } else {
+        next(vm => {
+          vm.matchId = matchId
+        })
       }
     },
 
