@@ -4,7 +4,7 @@ import Router from 'vue-router'
 // components
 import Homepage from '../components/Homepage.vue'
 import EUMatches from '../components/EUMatches.vue'
-import Map from '../components/Map.vue'
+import MapPage from '../components/MapPage.vue'
 import Leaderboard from '../components/Leaderboard.vue'
 import Match from '../components/Match.vue'
 import Grapher from '../components/Grapher.vue'
@@ -34,13 +34,13 @@ export default new Router({
       }
     }, {
       path: '/map',
-      component: Map,
+      component: MapPage,
       meta: {
         pageTitle: 'Live Map'
       }
     }, {
       path: '/map/:server',
-      component: Map,
+      component: MapPage,
       meta: {
         pageTitle: 'Live Map'
       }
