@@ -50,7 +50,7 @@
     </p>
     <br>
     <p class="form_holder">
-      <input id="cpicker" v-model="color">
+      <input id="cpicker" @change="colorSwap">
 
     </p>
     <br>
@@ -91,11 +91,12 @@
 </style>
 
 <script>
-  import store from '../store'
   export default {
+    name: 'Embed',
+
     data () {
       return {
-        worldlist: [],
+        sorted_worldlist: [],
         orientation: 'Horizontal',
         color: 'CFD8DC',
         selectedWorld: '',
@@ -108,47 +109,35 @@
       var input = document.getElementById('cpicker')
       var picker = new jscolor(input)
       picker.fromString('CFD8DC')
-    },
-
-    route: {
-      data ({ to }) {
-        return {
-          worldlist: store.fetchWorlds()
-        }
+      if (!this.sorted_worldlist[0]) {
+        this.sortWorlds(this.worldlist)
       }
     },
 
-    created () {
-      store.on('worlds-updated', this.updateWorldlist)
-    },
-
-    destroyed () {
-      store.removeListener('worlds-updated', this.updateWorldlist)
+    updated () {
+      if (!this.sorted_worldlist[0]) {
+        this.sortWorlds(this.worldlist)
+      }
     },
 
     methods: {
-      cpickerChange (picker) {
-        console.log(picker)
-        this.color = picker
+      colorSwap () {
+        var el = document.getElementById('cpicker')
+        this.color = el.value
       },
 
-      updateWorldlist () {
-        this.worldlist = store.fetchWorlds()
-      },
-
-      getWorldByName (name) {
-        name = name.trim()
-        for (var i = 0; i < this.worldlist.length; i++) {
-          let curWorld = this.worldlist[i]
-          if(curWorld.name === name) {
-            return curWorld
-          }
-        }
-        return
+      sortWorlds (list) {
+        this.sorted_worldlist =  list.sort((a, b) => {
+          return a.name - b.name
+        })
       }
     },
 
     computed: {
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
       src () {
         if (this.selectedWorld === "") {
           return "Select a server."
@@ -156,7 +145,13 @@
         let orientation = this.orientation.toLowerCase()
         let color = this.color
         let header = this.header
-        let world = this.getWorldByName(this.selectedWorld).id
+        let world;
+        for (var i = 0; i < this.worldlist.length; i++) {
+          let curWorld = this.worldlist[i]
+          if(curWorld.name === this.selectedWorld) {
+            world = curWorld.id
+          }
+        }
         let height = this.height
 
         var ret = "<iframe frameborder=\"0\" src='http://wvwstats.com/embed#/?world="
@@ -167,13 +162,8 @@
         ret += "' style='width: 100%; min-width: 243px; height: " + height + "px;'>"
 
         return ret
-      },
-
-      sorted_worldlist () {
-        return worldlist.sort((a, b) => {
-          return (a.name.localCompare(b.name))
-        })
       }
+
     }
   }
 
