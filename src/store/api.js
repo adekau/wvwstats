@@ -102,3 +102,15 @@ export function fetchArchiveData (matchid, data, start_time, end_time) {
   var url = `${Const.matcharchiveUrl}?data=${data}&match=${matchid}&start_time=${start_time}&end_time=${end_time}`
   return Vue.http.get(url)
 }
+
+export function fetchTimezone (timezone, start_time) {
+  return new Promise((resolve, reject) => {
+    var url = Const.timezonesUrl + '?start_time=' + start_time + '&timezone=' + timezone
+    Vue.http.get(url).then( (response) => {
+      const timezone = response.data
+      resolve(timezone)
+    }, () => {
+      reject()
+    })
+  })
+}

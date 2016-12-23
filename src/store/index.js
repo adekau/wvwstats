@@ -16,6 +16,7 @@ const store = new Vuex.Store({
     objectives: [],
     guilds: {},
     leaderboard: {},
+    timezones: {},
     chartsLoaded: false,
     grapherQuery: {},
     selectedWorld: ''
@@ -69,6 +70,13 @@ const store = new Vuex.Store({
 
     FETCH_ARCHIVEDATA: ({ }, { matchid, data, start_time, end_time}) => {
       return api.fetchArchiveData(matchid, data, start_time, end_time)
+    },
+
+    FETCH_TIMEZONE: ({ commit, state }, { timezone_name, start_time }) => {
+      return state.timezones[timezone_name]
+        ? Promise.resolve(state.timezones[timezone_name])
+        : api.fetchTimezone(timezone_name, start_time)
+            .then(timezone => commit('SET_TIMEZONE', { timezone, timezone_name }))
     }
   },
 
@@ -112,6 +120,10 @@ const store = new Vuex.Store({
 
     SET_CHARTSLOADED: (state) => {
       state.chartsLoaded = true
+    },
+
+    SET_TIMEZONE: (state, { timezone, timezone_name }) => {
+      Vue.set(state.timezones, timezone_name, timezone)
     }
   },
 
