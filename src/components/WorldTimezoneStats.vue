@@ -3,7 +3,7 @@
     <div style="width:100%" v-if="isValidWorld && serverByTimezone !== {}">
       <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
-        {{getWorldById($route.params.server).name}}
+        {{getWorldById(paramServer).name}}
       </h4>
       <div style="width: 100%;" v-for="timezone in serverByTimezone">
         <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
@@ -25,12 +25,12 @@
           <tbody>
             <tr v-for="item in timezone.data">
               <td data-label="Date" class="mdl-data-table__cell--non-numeric">
-                {{item.time | date}}
+                {{date(item.time)}}
               </td>
               <td data-label="Kills">{{item.kills}}</td>
               <td data-label="Deaths">{{item.deaths}}</td>
               <td data-label="Scores">{{item.scores}}</td>
-              <td data-label="Rating Metric">{{item.metric | round 3 true}}</td>
+              <td data-label="Rating Metric">{{round(item.metric, 3, true)}}</td>
             </tr>
             <tr>
               <td data-label="Date" class="mdl-data-table__cell--non-numeric">
@@ -39,7 +39,7 @@
               <td data-label="Kills">{{getTotals(timezone).kills}}</td>
               <td data-label="Deaths">{{getTotals(timezone).deaths}}</td>
               <td data-label="Scores">{{getTotals(timezone).scores}}</td>
-              <td data-label="Rating Metric">{{getTotals(timezone).metric | round 3 true}}</td>
+              <td data-label="Rating Metric">{{round(getTotals(timezone).metric, 3, true)}}</td>
             </tr>
           </tbody>
         </table>
@@ -52,20 +52,18 @@
 </template>
 
 <script>
-  import store from '../store'
-
   export default {
+    name: 'WorldTimezoneStats',
+
     data () {
       return {
-        matches: [],
         timezones: [],
-        worldlist: []
+        paramServer: 0
       }
     },
 
-    ready () {
-      if (this.matches.length > 0) {
-        store.removeListener('matches-updated', this.updateMatches)
+    mounted () {
+      if (this.matches[0] && !this.timezones[0]) {
         var oldest_date = this.matches[0].start_time
         for (var i = 1; i < this.matches.length; i++) {
           var st = this.matches[i].start_time
@@ -73,50 +71,25 @@
             oldest_date = st
           }
         }
-        store.fetchTimezones('all', oldest_date , (tz) => {
-          this.timezones = tz
+        this.$store.dispatch('FETCH_TIMEZONE', {
+          timezone_name: 'all',
+          start_time: oldest_date
+        }).then(() => {
+          this.timezones = this.$store.state.timezones.all
         })
       }
     },
 
-    route: {
-      data ({ to }) {
-        return {
-          matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds()
-        }
+    beforeRouteEnter (to, from, next) {
+      const server = to.params.server
+      if (server === undefined) {
+        next(vm => vm.paramServer = null)
+      } else {
+        next(vm => vm.paramServer = server)
       }
-    },
-
-    created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('worlds-updated', this.updateWorlds)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('worlds-updated', this.updateWorlds)
     },
 
     methods: {
-      updateMatches () {
-        this.matches = store.fetchMatches()
-        store.removeListener('matches-updated', this.updateMatches)
-        var oldest_date = this.matches[0].start_time
-        for (var i = 1; i < this.matches.length; i++) {
-          var st = this.matches[i].start_time
-          if (st < oldest_date) {
-            oldest_date = st
-          }
-        }
-        store.fetchTimezones('all', oldest_date , (tz) => {
-          this.timezones = tz
-        })
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-      },
       /**
        * getWorldById
        * id: world's id
@@ -159,13 +132,39 @@
           scores: scoresTotal,
           metric: metricTotal
         }
+      },
+
+      date (value) {
+        var d = new Date(value)
+        if (this.paramServer < 2000) {
+          return `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`
+        } else {
+          return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
+        }
+      },
+
+      round (value, accuracy, keep) {
+        if (typeof value !== 'number') return value
+
+        var fixed = value.toFixed(accuracy)
+
+        return keep ? fixed : +fixed
       }
     },
 
     computed: {
+
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      matches () {
+        return this.$store.state.matches
+      },
+
       serverByTimezone () {
         var tz = this.timezones
-        var sid = this.$route.params.server
+        var sid = this.paramServer
         var ret = {}
 
         for (var i = 0; i < tz.length; i++) {
@@ -190,7 +189,7 @@
 
       isValidWorld () {
         var wl = this.worldlist
-        var sid = this.$route.params.server
+        var sid = this.paramServer
 
         if (!wl.length) {
           return
@@ -210,25 +209,29 @@
     filters: {
       format (value) {
         return value.replace('_', ' ').toUpperCase()
-      },
-
-      date (value) {
-        var d = new Date(value)
-        if (this.$route.params.server < 2000) {
-          return `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`
-        } else {
-          return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
-        }
-
-      },
-
-      round: function (value, accuracy, keep) {
-        if (typeof value !== 'number') return value
-
-        var fixed = value.toFixed(accuracy)
-
-        return keep ? fixed : +fixed
       }
-    }
+    },
+
+    watch: {
+      'matches': function (val, oldVal) {
+        if (val[0]) {
+          var oldest_date = val[0].start_time
+          for (var i = 1; i < val.length; i++) {
+            var st = val[i].start_time
+            if (st < oldest_date) {
+              oldest_date = st
+            }
+          }
+          this.$store.dispatch('FETCH_TIMEZONE', {
+            timezone_name: 'all',
+            start_time: oldest_date
+          }).then(() => {
+            this.timezones = this.$store.state.timezones.all
+          })
+        }
+      } // end matches watcher
+
+    } // end watchers
+
   }
 </script>

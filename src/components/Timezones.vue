@@ -24,11 +24,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="server in naRanksByServer">
+        <tr v-for="server in sortServers(naRanksByServer, 'na')">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
-            <a :href="'#/timezones/' + server.server" class="tzlink">
+            <router-link :to="'timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
-            </a>
+            </router-link>
           </td>
           <td data-label="NA EST">{{server['na_est'] | rank}}</td>
           <td data-label="NA PST">{{server['na_pst'] | rank}}</td>
@@ -61,7 +61,7 @@
       </thead>
       <tbody>
         <!-- TODO: ADD THE orderBy ...EU reverseEU-->
-        <tr v-for="server in euRanksByServer">
+        <tr v-for="server in sortServers(euRanksByServer, 'eu')">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
             <a :href="'#/timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
@@ -85,8 +85,6 @@
 </template>
 
 <script>
-  import store from '../store'
-
   export default {
     data () {
       return {
@@ -95,16 +93,12 @@
         reverse: 1,
         reverseEU: 1,
         columns: ['na_est', 'na_pst', 'eu', 'ocx', 'sea'],
-        matches: [],
-        timezones: [],
-        worldlist: []
+        timezones: []
       }
     },
 
     mounted () {
-      if (this.matches.length > 0) {
-        store.removeListener('matches-updated', this.updateMatches)
-
+      if (this.matches[0] && !this.timezones[0]) {
         var oldest_date = this.matches[0].start_time
         for (var i = 1; i < this.matches.length; i++) {
           var st = this.matches[i].start_time
@@ -112,50 +106,16 @@
             oldest_date = st
           }
         }
-        store.fetchTimezones('all', oldest_date , (tz) => {
-          this.timezones = tz
+        this.$store.dispatch('FETCH_TIMEZONE', {
+          timezone_name: 'all',
+          start_time: oldest_date
+        }).then(() => {
+          this.timezones = this.$store.state.timezones.all
         })
       }
-    },
-
-    route: {
-      data ({ to }) {
-        return {
-          matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds()
-        }
-      }
-    },
-
-    created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('worlds-updated', this.updateWorlds)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('worlds-updated', this.updateWorlds)
     },
 
     methods: {
-      updateMatches () {
-        this.matches = store.fetchMatches()
-        store.removeListener('matches-updated', this.updateMatches)
-        var oldest_date = this.matches[0].start_time
-        for (var i = 1; i < this.matches.length; i++) {
-          var st = this.matches[i].start_time
-          if (st < oldest_date) {
-            oldest_date = st
-          }
-        }
-        store.fetchTimezones('all', oldest_date , (tz) => {
-          this.timezones = tz
-        })
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-      },
       /**
        * getWorldById
        * id: world's id
@@ -205,10 +165,43 @@
           this.reverseEU = (this.sortKeyEU == sortKey) ? -1 * this.reverseEU : 1;
           this.sortKeyEU = sortKey;
         }
+      },
+
+      sortServers (servers, region) {
+        var sortkey, reverse
+        var serversArr = []
+        // Get the right variables depending on region
+        if (region === 'na') {
+          sortkey = this.sortKey
+          reverse = this.reverse
+        } else {
+          sortkey = this.sortKeyEU
+          reverse = this.reverseEU
+        }
+
+        Object.keys(servers).forEach((key) => {
+          serversArr.push(servers[key])
+        })
+
+        serversArr.sort((a, b) => {
+          return reverse === 1
+            ? a[sortkey] - b[sortkey]
+            : b[sortkey] - a[sortkey]
+        })
+
+        return serversArr
       }
     },
 
     computed: {
+
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      matches () {
+        return this.$store.state.matches
+      },
 
       byTimezone() {
         // Alias to force this to be computed.
@@ -314,7 +307,28 @@
         }
         return value + "th";
       },
-    }
+    },
+
+    watch: {
+      'matches': function (val, oldVal) {
+        if (val[0]) {
+          var oldest_date = val[0].start_time
+          for (var i = 1; i < val.length; i++) {
+            var st = val[i].start_time
+            if (st < oldest_date) {
+              oldest_date = st
+            }
+          }
+          this.$store.dispatch('FETCH_TIMEZONE', {
+            timezone_name: 'all',
+            start_time: oldest_date
+          }).then(() => {
+            this.timezones = this.$store.state.timezones.all
+          })
+        }
+      } // end matches watcher
+
+    } // end watchers
   }
 
 </script>
