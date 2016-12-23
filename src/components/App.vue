@@ -5,7 +5,7 @@
       <sidebar></sidebar>
       <main class="mdl-layout__content mdl-color--grey-100" id="router_view">
         <div class="mdl-grid demo-content">
-          <transition>
+          <transition name="fade" mode="out-in">
             <keep-alive>
               <router-view
                 class="view">
@@ -31,22 +31,23 @@
 </script>
 
 <style>
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-.view {
-  transition: opacity .2s ease;
-  box-sizing: border-box;
-}
-.view.v-enter, .view.v-leave {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .view {
+    box-sizing: border-box;
+  }
+
+  /*Fade Transition*/
+  .fade-enter-active, .fade-leave-active {
+    transition: all .2s ease;
+  }
+  .fade-enter, .fade-leave-active {
     opacity: 0;
-}
-</style>
-
-<style>
-
+  }
 
   html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
