@@ -13,70 +13,79 @@ import WorldTimezoneStats from '../components/WorldTimezoneStats.vue'
 import About from '../components/About.vue'
 import Embed from '../components/Embed.vue'
 
+const HomepageComponent = resolve => require(['../components/Homepage.vue'], resolve)
+const EUMatchesComponent = resolve => require(['../components/EUMatches.vue'], resolve)
+const MapPageComponent = resolve => require(['../components/MapPage.vue'], resolve)
+const LeaderboardComponent = resolve => require(['../components/Leaderboard.vue'], resolve)
+const TimezonesComponent = resolve => require(['../components/Timezones.vue'], resolve)
+const WorldTimezoneStatsComponent = resolve => require(['../components/WorldTimezoneStats.vue'], resolve)
+const MatchComponent = resolve => require(['../components/Match.vue'], resolve)
+const GrapherComponent = resolve => require(['../components/Grapher.vue'], resolve)
+const AboutComponent = resolve => require(['../components/About.vue'], resolve)
+
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
   routes: [{
       path: '/na',
-      component: Homepage,
+      component: HomepageComponent,
       meta: {
         pageTitle: 'North American Matches',
         region: '1-'
       }
     }, {
       path: '/eu',
-      component: EUMatches,
+      component: EUMatchesComponent,
       meta: {
         pageTitle: 'European Matches',
         region: '2-'
       }
     }, {
       path: '/map',
-      component: MapPage,
+      component: MapPageComponent,
       meta: {
         pageTitle: 'Live Map'
       }
     }, {
       path: '/map/:server',
-      component: MapPage,
+      component: MapPageComponent,
       meta: {
         pageTitle: 'Live Map'
       }
     }, {
       path: '/leaderboard',
-      component: Leaderboard,
+      component: LeaderboardComponent,
       meta: {
         pageTitle: 'Leaderboard'
       }
     }, {
       path: '/match/:matchid',
-      component: Match,
+      component: MatchComponent,
       meta: {
         pageTitle: 'Match Details'
       }
     }, {
       path: '/grapher',
-      component: Grapher,
+      component: GrapherComponent,
       meta: {
         pageTitle: 'Grapher'
       }
     }, {
       path: '/timezones',
-      component: Timezones,
+      component: TimezonesComponent,
       meta: {
         pageTitle: 'Timezone Ranks'
       }
     }, {
       path: '/timezones/:server',
-      component: WorldTimezoneStats,
+      component: WorldTimezoneStatsComponent,
       meta: {
         pageTitle: 'Server Timezone Stats'
       }
     }, {
       path: '/about',
-      component: About,
+      component: AboutComponent,
       meta: {
         pageTitle: 'About WvWStats'
       }
@@ -90,5 +99,18 @@ export default new Router({
       path: '*',
       redirect: '/na'
     }
-  ]
+  ],
+
+  scrollBehavior: () => {
+    return {x:0,y:0}
+  }
+  // scrollBehavior (to, from, savedPosition) {
+  //   console.log('is this even doing stuff')
+  //   console.log(savedPosition)
+  //   if (savedPosition) {
+  //     return savedPosition
+  //   } else {
+  //     return { x: 0, y: 0 }
+  //   }
+  // }
 })
