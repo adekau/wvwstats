@@ -29,7 +29,7 @@
           role="presentation">
           autorenew
         </i>
-        Live
+        Live Map
       </router-link>
 
       <router-link to='/leaderboard' class="mdl-navigation__link">
@@ -56,7 +56,17 @@
           schedule
         </i>
         Timezones
-        </router-link>
+      </router-link>
+
+
+      <router-link :to="'/history/' + server" class="mdl-navigation__link">
+        <i class="mdl-color-text--blue-grey-400 material-icons"
+          role="presentation">
+          history
+        </i>
+        Match History
+      </router-link>
+
       <router-link to='/embed' class="mdl-navigation__link">
         <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">
           web
@@ -89,8 +99,13 @@
 
       grapherQuery () {
         return this.$store.state.grapherQuery
-      }
+      },
 
+      server () {
+        return this.$store.state.activeServer === null
+          ? 'All'
+          : this.$store.state.activeServer
+      }
     }
   }
 </script>
