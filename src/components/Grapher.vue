@@ -44,6 +44,7 @@
         selectedData: null,
         queryWorld: null,
         queryData: null,
+        matches: [],
         // chartHeight: 500,
         availableXAxis: [
           'kills',
@@ -82,12 +83,10 @@
       }
     },
 
-    updated () {
-      if (this.selectedWorld === null && this.selectedData === null
-          && this.worldlist.length > 0) {
-        this.selectedWorld = this.queryWorld
-        this.selectedData = this.queryData
-      }
+    beforeMount () {
+      this.$store.dispatch('FETCH_MATCHES').then(() => {
+        this.matches = this.$store.state.matches
+      })
     },
 
     methods: {
@@ -114,12 +113,34 @@
     },
 
     computed: {
-      matches () {
-        return this.$store.state.matches
-      },
-
       worldlist () {
         return this.$store.state.worlds
+      },
+
+      cSelectedWorld () {
+        var squery = this.$route.query.server
+        var sdata = this.$route.query.data
+        // Do selected data here as well.
+        if (this.selectedData === null) {
+          if (sdata !== null && sdata !== undefined) {
+            this.selectedData = sdata
+          }
+        }
+        if (this.selectedWorld === null) {
+          if (squery !== null && squery !== undefined) {
+            this.selectedWorld = squery
+            return squery
+          } else {
+            return null
+          }
+        } else {
+          if (squery !== null && squery !== undefined) {
+            this.selectedWorld = squery
+            return squery
+          } else {
+            return this.selectedWorld
+          }
+        }
       },
 
       /**
@@ -153,8 +174,8 @@
        * using worldMatchIds, finds the current match id of the selected world.
        */
       currentMatchId () {
-        var server = this.selectedWorld
-        if (server === undefined || server === null) {
+        var server = this.cSelectedWorld
+        if (server === undefined || server === null || this.worldlist.length === 0) {
           return
         }
         var id = this.getWorldByName(server).id
@@ -177,7 +198,7 @@
        },
 
        sorted_worldlist () {
-         return this.worldlist
+         return _.sortBy(this.worldlist, ['name'])
        }
     },
 
