@@ -9,6 +9,12 @@ const store = new Vuex.Store({
 
   // State
   state: {
+    // Predefined state variables
+    itemsPerPage: 10,
+    chartsLoaded: false,
+    selectedWorld: '',
+    activeServer: null,
+    // To be defined variables
     matches: [],
     worlds: [],
     glicko: {},
@@ -17,9 +23,9 @@ const store = new Vuex.Store({
     guilds: {},
     leaderboard: {},
     timezones: {},
-    chartsLoaded: false,
-    grapherQuery: {},
-    selectedWorld: ''
+    matchHistoryIds: {/*all: [], ...*/},
+    matchHistory: {},
+    grapherQuery: {}
   },
 
   // Actions
@@ -77,6 +83,39 @@ const store = new Vuex.Store({
         ? Promise.resolve(state.timezones[timezone_name])
         : api.fetchTimezone(timezone_name, start_time)
             .then(timezone => commit('SET_TIMEZONE', { timezone, timezone_name }))
+    },
+
+    FETCH_MATCHHISTORY_IDS: ({ commit, dispatch, state }, { server }) => {
+      commit('SET_ACTIVE_SERVER', { server })
+      return state.matchHistoryIds[server]
+        ? Promise.resolve(state.matchHistoryIds[server])
+          .then(() => dispatch('ENSURE_ACTIVE_MATCHES'))
+        : api.fetchMatchHistoryIds(server)
+          .then(matchHistoryIds => commit('SET_MATCHHISTORY_IDS', { server, matchHistoryIds }))
+          .then(() => dispatch('ENSURE_ACTIVE_MATCHES'))
+    },
+
+    ENSURE_ACTIVE_MATCHES: ({ dispatch, getters }) => {
+      return dispatch('FETCH_HISTORICAL_MATCHES', {
+        ids: getters.activeIds
+      })
+    },
+
+    FETCH_HISTORICAL_MATCHES: ({ commit, state }, { ids }) => {
+      ids = ids.filter(id => {
+        const item = state.matchHistory[id]
+        return !item
+      })
+
+      if (ids.length) {
+        return api.fetchMultipleMatches(ids).then((matchHistory) => commit('SET_MATCHHISTORY', { matchHistory }))
+      } else {
+        return Promise.resolve()
+      }
+    },
+
+    FETCH_DATA_RANGE: ({ commit, state }, { start, end, match }) => {
+      return api.fetchDataRange(start, end, match)
     }
   },
 
@@ -124,12 +163,48 @@ const store = new Vuex.Store({
 
     SET_TIMEZONE: (state, { timezone, timezone_name }) => {
       Vue.set(state.timezones, timezone_name, timezone)
+    },
+
+    SET_MATCHHISTORY_IDS: (state, { server, matchHistoryIds }) => {
+      Vue.set(state.matchHistoryIds, server, matchHistoryIds)
+    },
+
+    SET_MATCHHISTORY: (state, { matchHistory }) => {
+      matchHistory.forEach(item => {
+        if (item) {
+          Vue.set(state.matchHistory, item.id, item.match)
+        }
+      })
+    },
+
+    SET_ACTIVE_SERVER: (state, { server }) => {
+      state.activeServer = server
     }
   },
 
   getters: {
     objectiveIds () {
       return Const.objectiveIds
+    },
+
+    activePage (state) {
+      return Number(state.route.params.page) || 1
+    },
+
+    activeIds (state, getters) {
+      const { activeServer, itemsPerPage, matchHistoryIds } = state
+      const page = getters.activePage
+      if (activeServer) {
+        const start = (page - 1) * itemsPerPage
+        const end = page * itemsPerPage
+        return matchHistoryIds[activeServer].slice(start, end)
+      } else {
+        return []
+      }
+    },
+
+    activeItems (state, getters) {
+      return getters.activeIds.map(id => state.matchHistory[id]).filter(_ => _)
     }
   }
 })
