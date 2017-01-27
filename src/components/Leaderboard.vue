@@ -4,42 +4,50 @@
       mdl-cell--12-col mdl-cell--8-col-tablet mdl-grid">
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('kd').scrollIntoView(true);"
-        text="KD Ratio">
+      >
+        KD Ratio
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('kills').scrollIntoView(true);"
-        text="Kills">
+      >
+        Kills
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('deaths').scrollIntoView(true);"
-        text="Deaths">
+      >
+        Deaths
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('activity').scrollIntoView(true);"
-        text="Activity">
+      >
+        Activity
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('scores').scrollIntoView(true);"
-        text="Scores">
+      >
+        Scores
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('pointsppt').scrollIntoView(true);"
-        text="Points From PPT">
+      >
+        Points From PPT
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('percentppt').scrollIntoView(true);"
-        text="% Points From PPT">
+      >
+        % Points From PPT
       </MdlButton>
 
       <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
         onclick="document.getElementById('percentppk').scrollIntoView(true);"
-        text="% Points From PPK">
+      >
+        % Points From PPK
       </MdlButton>
     </div>
 
@@ -55,7 +63,8 @@
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -71,10 +80,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.kd">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.kd | round(3, false)}}
@@ -96,7 +108,8 @@
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -112,10 +125,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.kills">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.kills | round(3, false)}}
@@ -137,7 +153,8 @@
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -153,10 +170,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.deaths">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding"  style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.deaths | round(3, false)}}
@@ -172,13 +192,17 @@
       mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-grid">
       <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
-        <span data-tooltip="Kills + Deaths">Activity</span>
+        <span id="lb-activity">Activity</span>
+        <MdlTooltip target="lb-activity">
+          Kills + Deaths
+        </MdlTooltip>
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -194,10 +218,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.activity">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.activity | round(3, false)}}
@@ -219,7 +246,8 @@
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -235,10 +263,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.scores">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.score | round(3, false)}}
@@ -260,7 +291,8 @@
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -276,10 +308,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.pointsFromPPT">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.points | round(3, false)}}
@@ -295,13 +330,17 @@
       mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-grid">
       <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
-        Percentage of Points from <span data-tooltip="Points per Tick">PPT</span>
+        Percentage of Points from <span id="lb-ppt">PPT</span>
+        <MdlTooltip target="lb-ppt">
+          Points per Tick
+        </MdlTooltip>
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -317,10 +356,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.percentPointsFromPPT">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.percent * 100 | round(2, true)}}%
@@ -336,13 +378,17 @@
       mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-grid">
       <h6 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">
-        Percentage of Points from <span data-tooltip="Points per Kill">PPK</span>
+        Percentage of Points from <span id="lb-ppk">PPK</span>
+        <MdlTooltip target="lb-ppk">
+          Points per Kill
+        </MdlTooltip>
       </h6>
       <div class="mdl-cell mdl-cell--4-col-phone
         mdl-cell--12-col mdl-cell--8-col-tablet" style="text-align: right;">
         <MdlButton class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
           onclick="document.getElementById('lb-nav').scrollIntoView(true);"
-          text="Back to Nav">
+        >
+          Back to Nav
         </MdlButton>
       </div>
 
@@ -358,10 +404,13 @@
         <tbody>
           <tr v-for="(item, index) in weekleaderboard.percentPointsFromPPK">
             <td>
-              {{index + 1}}
+              <b>{{index + 1}}</b>.
             </td>
             <td class="reducedPadding" style="text-align: left;">
-              {{ getWorldById(item.server).name }}
+              {{ getWorldById(item.server).name }} -
+              <span class="grey">
+                Tier {{ tier(item.server) }} {{ region(item.server) }}
+              </span>
             </td>
             <td>
               {{ item.percent * 100 | round(2, true)}}%
@@ -375,7 +424,8 @@
 
 
 <script>
-  import MdlButton from './MdlButton.vue'
+  import MdlButton from './MdlButton'
+  import MdlTooltip from './MdlTooltip'
   export default {
     name: 'Leaderboard',
 
@@ -384,7 +434,8 @@
     },
 
     components: {
-      MdlButton
+      MdlButton,
+      MdlTooltip
     },
 
     computed: {
@@ -394,7 +445,7 @@
 
       worldlist () {
         return this.$store.state.worlds
-      }
+      },
     },
 
     methods: {
@@ -406,6 +457,22 @@
           }
         }
         return
+      },
+
+      // TODO: to optimize store results..
+      tier (server) {
+        if (!this.$store.state.matches.length) {
+          return
+        }
+        return this.$store.state.matches.filter((match) => {
+          return match.all_worlds.green.includes(server)
+            || match.all_worlds.blue.includes(server)
+            || match.all_worlds.red.includes(server)
+        })[0].id.slice(2,3)
+      },
+
+      region (server) {
+        return server > 2000 ? 'EU' : 'NA'
       }
     },
 
@@ -448,5 +515,9 @@
   .reducedPadding {
     padding-left: 0px !important;
     padding-right: 0px !important;
+  }
+
+  .grey {
+    color: #757575;
   }
 </style>
