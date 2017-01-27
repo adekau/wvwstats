@@ -14,6 +14,9 @@ export const predictedGlickoUrl = 'http://www.wvwstats.com/api/v1/predictedglick
 export const weekleaderboardUrl = 'http://www.wvwstats.com/api/v1/weekleaderboard'
 export const matcharchiveUrl = 'http://www.wvwstats.com/api/v1/matcharchive'
 export const timezonesUrl = 'http://www.wvwstats.com/api/v1/timezones'
+export const matchHistoryUrl = 'http://wvwstats.com/api/v1/matchhistory'
+export const matchUrl = 'http://wvwstats.com/api/v1/match/'
+export const dataRangeUrl = 'http://wvwstats.com/api/v1/datarange'
 
 // All Alpine Borderlands..
 // const objectiveIds = [
