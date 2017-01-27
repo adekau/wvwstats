@@ -69,7 +69,10 @@
     <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
-          <span data-tooltip="Kills + Deaths">Activity</span>
+          <span :id="'mmkd-activity-' + getMapName()">Activity</span>
+          <MdlTooltip :target="'mmkd-activity-' + getMapName()">
+            Kills + Deaths
+          </MdlTooltip>
         </li>
         <li>
           {{ mapid.deaths.green + mapid.kills.green }}
@@ -105,6 +108,7 @@
 <style></style>
 
 <script>
+  import MdlTooltip from './MdlTooltip'
   export default {
     props: ['match', 'worldlist', 'mapid'],
 
@@ -138,6 +142,10 @@
           return 'Eternal Battlegrounds'
         }
       }
+    },
+
+    components: {
+      MdlTooltip
     }
   }
 </script>

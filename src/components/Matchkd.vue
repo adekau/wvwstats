@@ -62,7 +62,10 @@
     <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
-          <span data-tooltip="Kills + Deaths">Activity</span>
+          <span id="mkd-activity">Activity</span>
+          <MdlTooltip target="mkd-activity">
+            Kills + Deaths
+          </MdlTooltip>
         </li>
         <li>
           {{ match.deaths.green + match.kills.green }}
@@ -98,6 +101,7 @@
 <style></style>
 
 <script>
+  import MdlTooltip from './MdlTooltip'
   export default {
     props: ['match', 'worldlist'],
     methods: {
@@ -118,6 +122,10 @@
 
         return keep ? fixed : +fixed
       }
+    },
+
+    components: {
+      MdlTooltip
     }
   }
 </script>
