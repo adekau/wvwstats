@@ -32,7 +32,6 @@
       return {
         map: false,
         objectiveInfo: {},
-        objectivesById: {},
         mapMarkers: {},
         defaultIconSize: [26, 26],
         mapIcons: {
