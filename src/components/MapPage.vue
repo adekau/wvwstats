@@ -11,12 +11,13 @@
       </div>
     </div>
     <GameMap :matchArr='matchArr' :objectives='objectives' :worldlist='worldlist'
-      :selectedWorld='selectedWorld'></GameMap>
+      :selectedWorld='cSelectedWorld'></GameMap>
   </div>
 </template>
 
 <script>
   import GameMap from './GameMap.vue'
+  import _ from 'lodash'
 
   export default {
     name: 'MapPage',
@@ -51,10 +52,24 @@
         return this.$store.state.worlds
       },
 
+      cSelectedWorld () {
+        var pserver = this.paramServer
+        if (this.selectedWorld === '' || pserver !== null) {
+          var tmp = this.getWorldById(pserver)
+          if (tmp !== undefined) {
+            this.selectedWorld = tmp.name
+            this.paramServer = null
+            return tmp.name
+          } else {
+            return ''
+          }
+        } else {
+          return this.selectedWorld
+        }
+      },
+
       sorted_worldlist () {
-        return this.worldlist.sort((a, b) => {
-          return a.name - b.name
-        })
+        return _.sortBy(this.worldlist, ['name'])
       }
     },
 
@@ -67,20 +82,6 @@
           }
         }
         return
-      }
-    },
-
-    watch: {
-      'worldlist': function (val, oldVal) {
-        if (this.paramServer !== null) {
-          var tmp = this.getWorldById(this.paramServer)
-          if (tmp !== undefined) {
-            this.selectedWorld = tmp.name
-            this.paramServer = null
-          } else {
-            this.selectedWorld = ''
-          }
-        }
       }
     },
 
