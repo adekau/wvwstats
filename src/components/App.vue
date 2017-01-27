@@ -8,6 +8,7 @@
           <transition name="fade" mode="out-in">
             <keep-alive>
               <router-view
+                id="app_router"
                 class="view">
               </router-view>
             </keep-alive>
