@@ -18,7 +18,7 @@
       <thead>
         <tr>
           <th class="mdl-data-table__cell--non-numeric">Server</th>
-          <th v-for="column in columns">
+          <th class="mdl-data-table__cell--non-numeric" v-for="column in columns">
             <a v-on:click="sortBy(column, 'na')">{{column | format}}</a>
           </th>
         </tr>
@@ -29,12 +29,28 @@
             <router-link :to="'timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
             </router-link>
+            <span class="tierText">- Tier {{serverTier[server.server]}}</span>
           </td>
-          <td data-label="NA EST">{{server['na_est'] | rank}}</td>
-          <td data-label="NA PST">{{server['na_pst'] | rank}}</td>
-          <td data-label="EU">{{server['eu'] | rank}}</td>
-          <td data-label="OCX">{{server['ocx'] | rank}}</td>
-          <td data-label="SEA">{{server['sea'] | rank}}</td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="NA EST">
+            <b>{{server['na_est'] | rank}}</b>
+            <span v-if="byTimezone['na_est']" class="tierText">({{asInt(byTimezone['na_est'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="NA PST">
+            <b>{{server['na_pst'] | rank}}</b>
+            <span v-if="byTimezone['na_pst']" class="tierText">({{asInt(byTimezone['na_pst'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="EU">
+            <b>{{server['eu'] | rank}}</b>
+            <span v-if="byTimezone['eu']" class="tierText">({{asInt(byTimezone['eu'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="OCX">
+            <b>{{server['ocx'] | rank}}</b>
+            <span v-if="byTimezone['ocx']" class="tierText">({{asInt(byTimezone['ocx'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="SEA">
+            <b>{{server['sea'] | rank}}</b>
+            <span v-if="byTimezone['sea']" class="tierText">({{asInt(byTimezone['sea'][server.server])}})</span>
+          </td>
         </tr>
         <tr v-if="noData">
           <td colspan="6"
@@ -54,24 +70,39 @@
       <thead>
         <tr>
           <th class="mdl-data-table__cell--non-numeric">Server</th>
-          <th v-for="column in columns">
+          <th class="mdl-data-table__cell--non-numeric" v-for="column in columns">
             <a v-on:click="sortBy(column, 'eu')">{{column | format}}</a>
           </th>
         </tr>
       </thead>
       <tbody>
-        <!-- TODO: ADD THE orderBy ...EU reverseEU-->
         <tr v-for="server in sortServers(euRanksByServer, 'eu')">
           <td class="mdl-data-table__cell--non-numeric" data-label="Server">
-            <a :href="'#/timezones/' + server.server" class="tzlink">
+            <router-link :to="'timezones/' + server.server" class="tzlink">
               {{getWorldById(server.server).name}}
-            </a>
+            </router-link>
+            <span class="tierText">- Tier {{serverTier[server.server]}}</span>
           </td>
-          <td data-label="NA EST">{{server['na_est'] | rank}}</td>
-          <td data-label="NA PST">{{server['na_pst'] | rank}}</td>
-          <td data-label="EU">{{server['eu'] | rank}}</td>
-          <td data-label="OCX">{{server['ocx'] | rank}}</td>
-          <td data-label="SEA">{{server['sea'] | rank}}</td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="NA EST">
+            <b>{{server['na_est'] | rank}}</b>
+            <span v-if="byTimezone['na_est']" class="tierText">({{asInt(byTimezone['na_est'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="NA PST">
+            <b>{{server['na_pst'] | rank}}</b>
+            <span v-if="byTimezone['na_pst']" class="tierText">({{asInt(byTimezone['na_pst'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="EU">
+            <b>{{server['eu'] | rank}}</b>
+            <span v-if="byTimezone['eu']" class="tierText">({{asInt(byTimezone['eu'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="OCX">
+            <b>{{server['ocx'] | rank}}</b>
+            <span v-if="byTimezone['ocx']" class="tierText">({{asInt(byTimezone['ocx'][server.server])}})</span>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric" data-label="SEA">
+            <b>{{server['sea'] | rank}}</b>
+            <span v-if="byTimezone['sea']" class="tierText">({{asInt(byTimezone['sea'][server.server])}})</span>
+          </td>
         </tr>
         <tr v-if="noData">
           <td colspan="6"
@@ -110,12 +141,17 @@
           timezone_name: 'all',
           start_time: oldest_date
         }).then(() => {
+          console.log(this.$store.state.timezones.all)
           this.timezones = this.$store.state.timezones.all
         })
       }
     },
 
     methods: {
+      asInt (number) {
+        return parseInt(number)
+      },
+
       /**
        * getWorldById
        * id: world's id
@@ -240,6 +276,7 @@
           }
         }
 
+        console.log(ret)
         return ret
       },
 
@@ -281,6 +318,21 @@
 
       noData () {
         return this.timezones.length === 0
+      },
+
+      serverTier () {
+        var ret = {}
+        if (!this.worldlist.length || !this.matches.length) {
+          return
+        }
+
+        this.matches.forEach((match) => {
+          Object.keys(match.worlds).forEach((world) => {
+            ret[match.worlds[world]] = match.id.slice(match.id.length - 1, match.id.length)
+          })
+        })
+
+        return ret
       }
 
     },
@@ -336,5 +388,9 @@
 <style>
   .tzlink {
     color: black;
+  }
+
+  .tierText {
+    color: #757575;
   }
 </style>
