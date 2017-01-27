@@ -12,6 +12,7 @@ import Timezones from '../components/Timezones.vue'
 import WorldTimezoneStats from '../components/WorldTimezoneStats.vue'
 import About from '../components/About.vue'
 import Embed from '../components/Embed.vue'
+import History from '../components/History.vue'
 
 const HomepageComponent = resolve => require(['../components/Homepage.vue'], resolve)
 const EUMatchesComponent = resolve => require(['../components/EUMatches.vue'], resolve)
@@ -22,6 +23,7 @@ const WorldTimezoneStatsComponent = resolve => require(['../components/WorldTime
 const MatchComponent = resolve => require(['../components/Match.vue'], resolve)
 const GrapherComponent = resolve => require(['../components/Grapher.vue'], resolve)
 const AboutComponent = resolve => require(['../components/About.vue'], resolve)
+const HistoryComponent = resolve => require(['../components/History.vue'], resolve)
 
 Vue.use(Router)
 
@@ -94,6 +96,24 @@ export default new Router({
       component: Embed,
       meta: {
         pageTitle: 'Embed WvWStats'
+      }
+    }, {
+      path: '/history',
+      component: HistoryComponent,
+      meta: {
+        pageTitle: 'Match History'
+      }
+    }, {
+      path: '/history/:server',
+      component: HistoryComponent,
+      meta: {
+        pageTitle: 'Match History'
+      }
+    }, {
+      path: '/history/:server/:page',
+      component: HistoryComponent,
+      meta: {
+        pageTitle: 'Match History'
       }
     }, {
       path: '*',
