@@ -3,25 +3,31 @@
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="worldname">
-          <router-link v-bind:to="'/match/' + matchinfo.id"
-            class="worldname_link"
-            v-bind:data-tooltip="serverTooltip.green">
+          <router-link :id="'wnGreen' + matchinfo.id + matchinfo.kills.green" v-bind:to="'/match/' + matchinfo.id"
+            class="worldname_link">
             {{worldinfo.green}}
           </router-link>
+          <MdlTooltip :target="'wnGreen' + matchinfo.id + matchinfo.kills.green" class="pgTooltipName">
+            {{serverTooltip.green}}
+          </MdlTooltip>
         </li>
         <li class="worldname">
-          <router-link v-bind:to="'/match/' + matchinfo.id"
-            class="worldname_link"
-            v-bind:data-tooltip="serverTooltip.blue">
+          <router-link :id="'wnBlue' + matchinfo.id + matchinfo.kills.blue" v-bind:to="'/match/' + matchinfo.id"
+            class="worldname_link">
             {{worldinfo.blue}}
           </router-link>
+          <MdlTooltip :target="'wnBlue' + matchinfo.id + matchinfo.kills.blue" class="pgTooltipName">
+            {{serverTooltip.blue}}
+          </MdlTooltip>
         </li>
         <li class="worldname">
-          <router-link v-bind:to="'/match/' + matchinfo.id"
-            class="worldname_link"
-            v-bind:data-tooltip="serverTooltip.red">
+          <router-link :id="'wnRed' + matchinfo.id + matchinfo.kills.red" v-bind:to="'/match/' + matchinfo.id"
+            class="worldname_link">
             {{worldinfo.red}}
           </router-link>
+          <MdlTooltip :target="'wnRed' + matchinfo.id + matchinfo.kills.red" class="pgTooltipName">
+            {{serverTooltip.red}}
+          </MdlTooltip>
         </li>
       </ul>
       <!-- Tooltips for world names -->
@@ -35,30 +41,42 @@
               "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
               class="mdl-progress mdl-js-progress">
             </div>-->
-            <MdlProgress v-bind:data-longtooltip =
-              "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
+            <MdlProgress :id="'pgGreen' + matchinfo.id"
               v-bind:progress="percentage.green">
             </MdlProgress>
+
+            <MdlTooltip :target="'pgGreen' + matchinfo.id" class="pgTooltip">
+              <em>{{worldinfo.blue}}</em> : <span :class="scoreDiff.green.blue.class">{{scoreDiff.green.blue.diff}}</span><br />
+              <em>{{worldinfo.red}}</em> : <span :class="scoreDiff.green.red.class">{{scoreDiff.green.red.diff}}</span>
+            </MdlTooltip>
 
           </div>
         </li>
         <li>
           <div class="second-place" style="padding: 10px;">
 
-            <MdlProgress v-bind:data-longtooltip=
-              "worldinfo.green + ':' + scoreDiff.blue.green + '\n' + worldinfo.red + ':' + scoreDiff.blue.red"
+            <MdlProgress :id="'pgBlue' + matchinfo.id"
               v-bind:progress="percentage.blue">
             </MdlProgress>
+
+            <MdlTooltip :target="'pgBlue' + matchinfo.id" class="pgTooltip">
+              <em>{{worldinfo.green}}</em> : <span :class="scoreDiff.blue.green.class">{{scoreDiff.blue.green.diff}}</span><br />
+              <em>{{worldinfo.red}}</em> : <span :class="scoreDiff.blue.red.class">{{scoreDiff.blue.red.diff}}</span>
+            </MdlTooltip>
 
           </div>
         </li>
         <li>
           <div class="third-place" style="padding: 10px;">
 
-            <MdlProgress v-bind:data-longtooltip=
-              "worldinfo.green + ':' + scoreDiff.red.green + '\n' + worldinfo.blue + ':' + scoreDiff.red.blue"
+            <MdlProgress :id="'pgRed' + matchinfo.id"
               v-bind:progress="percentage.red">
             </MdlProgress>
+
+            <MdlTooltip :target="'pgRed' + matchinfo.id" class="pgTooltip">
+              <em>{{worldinfo.green}}</em> : <span :class="scoreDiff.red.green.class">{{scoreDiff.red.green.diff}}</span><br />
+              <em>{{worldinfo.blue}}</em> : <span :class="scoreDiff.red.blue.class">{{scoreDiff.red.blue.diff}}</span>
+            </MdlTooltip>
 
           </div>
         </li>
@@ -161,15 +179,11 @@
 <script>
   import store from '../store'
   import MdlProgress from './MdlProgress'
+  import MdlTooltip from './MdlTooltip'
 
   export default {
 
     props: ['matchinfo', 'worldlist', 'predictedglicko'],
-
-    data () {
-      return {
-      }
-    },
 
     computed: {
       /**
@@ -294,16 +308,34 @@
          let s = this.matchinfo.scores
          return {
            green: {
-             blue: this.isPositive(s.green - s.blue) ? '⬆ ' + (s.green - s.blue) : '⬇ ' + (s.green - s.blue),
-             red: this.isPositive(s.green - s.red) ? '⬆ ' + (s.green - s.red) : '⬇ ' + (s.green - s.red)
+             blue: {
+               diff: this.isPositive(s.green - s.blue) ? '⬆ ' + (s.green - s.blue) : '⬇ ' + (s.green - s.blue),
+               class: this.isPositive(s.green - s.blue) ? 'pbPos' : 'pbNeg'
+             },
+             red: {
+               diff: this.isPositive(s.green - s.red) ? '⬆ ' + (s.green - s.red) : '⬇ ' + (s.green - s.red),
+               class: this.isPositive(s.green - s.red) ? 'pbPos' : 'pbNeg'
+             }
            },
            blue: {
-             green: this.isPositive(s.blue - s.green) ? '⬆ ' + (s.blue - s.green) : '⬇ ' + (s.blue - s.green),
-             red: this.isPositive(s.blue - s.red) ? '⬆ ' + (s.blue - s.red) : '⬇ ' + (s.blue - s.red)
+             green: {
+               diff: this.isPositive(s.blue - s.green) ? '⬆ ' + (s.blue - s.green) : '⬇ ' + (s.blue - s.green),
+               class: this.isPositive(s.blue - s.green) ? 'pbPos' : 'pbNeg'
+             },
+             red: {
+               diff: this.isPositive(s.blue - s.red) ? '⬆ ' + (s.blue - s.red) : '⬇ ' + (s.blue - s.red),
+               class: this.isPositive(s.blue - s.red) ? 'pbPos' : 'pbNeg'
+             }
            },
            red: {
-             green: this.isPositive(s.red - s.green) ? '⬆ ' + (s.red - s.green) : '⬇ ' + (s.red - s.green),
-             blue: this.isPositive(s.red - s.blue) ? '⬆ ' + (s.red - s.blue) : '⬇ ' + (s.red - s.blue)
+             green: {
+               diff: this.isPositive(s.red - s.green) ? '⬆ ' + (s.red - s.green) : '⬇ ' + (s.red - s.green),
+               class: this.isPositive(s.red - s.green) ? 'pbPos' : 'pbNeg'
+             },
+             blue: {
+               diff: this.isPositive(s.red - s.blue) ? '⬆ ' + (s.red - s.blue) : '⬇ ' + (s.red - s.blue),
+               class: this.isPositive(s.red - s.blue) ? 'pbPos' : 'pbNeg'
+             }
            }
          }
        },
@@ -313,7 +345,7 @@
         * returns the glicko for this matchup
         */
         glicko () {
-          if (this.predictedglicko[this.matchinfo.worlds.green].rating) {
+          if (this.predictedglicko[this.matchinfo.worlds.green]) {
             var ret = {
               green: this.predictedglicko[this.matchinfo.worlds.green].rating,
               blue: this.predictedglicko[this.matchinfo.worlds.blue].rating,
@@ -374,143 +406,14 @@
     },
 
     components: {
-      MdlProgress
+      MdlProgress,
+      MdlTooltip
     }
 
   }
 </script>
 
 <style>
-
-  [data-tooltip] {
-    position: relative;
-    z-index: 2;
-    cursor: pointer;
-  }
-
-  /* Hide the tooltip content by default */
-  [data-tooltip]:before,
-  [data-tooltip]:after {
-    visibility: hidden;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Position tooltip above the element */
-  [data-tooltip]:before {
-    /*display: inline-block;*/
-    position: absolute;
-    bottom: 150%;
-    left: 50%;
-    margin-bottom: 5px;
-    margin-left: -51px;
-    padding: 7px;
-    width: 102px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background-color: #000;
-    background-color: hsla(0, 0%, 20%, 0.9);
-    color: #fff;
-    content: attr(data-tooltip);
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.2;
-  }
-
-  /* Triangle hack to make tooltip look like a speech bubble */
-  [data-tooltip]:after {
-    position: absolute;
-    bottom: 150%;
-    left: 50%;
-    margin-left: -5px;
-    width: 0;
-    border-top: 5px solid #000;
-    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-  }
-
-  /* Show tooltip content on hover */
-  [data-tooltip]:hover:before,
-  [data-tooltip]:hover:after {
-    visibility: visible;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-    opacity: 1;
-  }
-
-  /* Longer tooltip */
-  [data-longtooltip] {
-    position: relative;
-    z-index: 2;
-    cursor: pointer;
-  }
-
-  /* Hide the tooltip content by default */
-  [data-longtooltip]:before,
-  [data-longtooltip]:after {
-    visibility: hidden;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Position tooltip above the element */
-  [data-longtooltip]:before {
-    display: inline-block;
-    position: absolute;
-    bottom: 150%;
-    left: 50%;
-    margin-bottom: 5px;
-    margin-left: -100px;
-    padding: 7px;
-    /*width: 170px;*/
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background-color: #000;
-    background-color: hsla(0, 0%, 20%, 0.9);
-    color: #fff;
-    white-space:pre;
-    content: attr(data-longtooltip);
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.2;
-  }
-
-  /* Triangle hack to make tooltip look like a speech bubble */
-  [data-longtooltip]:after {
-    position: absolute;
-    bottom: 150%;
-    left: 50%;
-    margin-left: -5px;
-    width: 0;
-    border-top: 5px solid #000;
-    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-  }
-
-  /* Show tooltip content on hover */
-  [data-longtooltip]:hover:before,
-  [data-longtooltip]:hover:after {
-    visibility: visible;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-    opacity: 1;
-  }
-
-
   .no-padding-left {
     padding-left: 0px;
   }
@@ -542,6 +445,16 @@
     background-color: rgb(182,89,91);
   }
 
+  .serverColorGreen {
+    color: rgb(89,182,91);
+  }
+  .serverColorBlue {
+    color: rgb(89,91,182)
+  }
+  .serverColorRed {
+    color: rgb(182,89,91);
+  }
+
   .worldname_link {
     color: inherit;
     text-decoration: none;
@@ -551,6 +464,33 @@
   .worldname_link:hover {
     color: rgb(89,91,182);
     text-decoration: underline;
+  }
+
+  .pgTooltip {
+    font-size: 13px !important;
+    line-height: 19px !important;
+  }
+
+  .pgTooltipName {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    max-width: 155px !important;
+  }
+
+  .pbPos {
+    color: rgb(149,252,151);
+    /*text-shadow: -1px 0 rgb(89,182,91), 0 1px rgb(89,182,91), 1px 0 rgb(89,182,91), 0 -1px rgb(89,182,91);*/
+    letter-spacing: 0.062em;
+    font-weight:normal;
+    text-shadow: 0 0 3px rgba(0,0,0,.63);
+  }
+
+  .pbNeg {
+    color: rgb(255,152,154);
+    /*text-shadow: -1px 0 rgb(182,89,91), 0 1px rgb(182,89,91), 1px 0 rgb(182,89,91), 0 -1px rgb(182,89,91);*/
+    letter-spacing: 0.062em;
+    text-shadow: 0 0 3px rgba(0,0,0,.63);
+    font-weight: normal;
   }
 
   /*.worldname {
