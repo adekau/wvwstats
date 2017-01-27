@@ -91,7 +91,10 @@ export function fetchArchiveData (matchid, data, start_time, end_time) {
   var diff = 15 // difference in start_time. static variable to account for match start variability
   var tmp = new Date(start_time)
   var tmp2 = new Date(end_time)
-  var timeOffset = 4
+  // Fixed the timezone issue with the database ITSELF. The DB was discarding timezone info
+  // and the API was putting timezone info back into it resulting in everything being off
+  // by either 4 or 5 hours (depending on Daylight Savings status)
+  var timeOffset = 0 // SHOULD NOT NEED THIS ANYMORE. Keeping it in case.
   start_time = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate(),
     tmp.getHours() - timeOffset, tmp.getMinutes() + diff, tmp.getSeconds()).toISOString()
     .replace('.000Z','Z')
@@ -109,6 +112,50 @@ export function fetchTimezone (timezone, start_time) {
     Vue.http.get(url).then( (response) => {
       const timezone = response.data
       resolve(timezone)
+    }, () => {
+      reject()
+    })
+  })
+}
+
+// will need to be updated to handle pagination and caching.
+export function fetchMatchHistoryIds (server = 'All') {
+  const url = server === 'All'
+    ? Const.matchHistoryUrl
+    : Const.matchHistoryUrl + '?server=' + server
+
+  return new Promise((resolve, reject) => {
+    Vue.http.get(url).then( (response) => {
+      const matchHistory = response.data
+      resolve(matchHistory)
+    }, () => {
+      reject()
+    })
+  })
+}
+
+export function fetchMatch (id) {
+  return new Promise((resolve, reject) => {
+    Vue.http.get(Const.matchUrl + id).then( (response) => {
+      const match = response.data
+      resolve(match)
+    }, () => {
+      reject()
+    })
+  })
+}
+
+export function fetchMultipleMatches (ids) {
+  return Promise.all(ids.map(id => fetchMatch(id)))
+}
+
+export function fetchDataRange (start, end, match) {
+  const query = `?start_time=${start}&end_time=${end}&match=${match}`
+
+  return new Promise((resolve, reject) => {
+    Vue.http.get(Const.dataRangeUrl + query).then( (response) => {
+      const result = response.data
+      resolve(result)
     }, () => {
       reject()
     })
