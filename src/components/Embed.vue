@@ -91,12 +91,12 @@
 </style>
 
 <script>
+  import _ from 'lodash'
   export default {
     name: 'Embed',
 
     data () {
       return {
-        sorted_worldlist: [],
         orientation: 'Horizontal',
         color: 'CFD8DC',
         selectedWorld: '',
@@ -109,33 +109,22 @@
       var input = document.getElementById('cpicker')
       var picker = new jscolor(input)
       picker.fromString('CFD8DC')
-      if (!this.sorted_worldlist[0]) {
-        this.sortWorlds(this.worldlist)
-      }
-    },
-
-    updated () {
-      if (!this.sorted_worldlist[0]) {
-        this.sortWorlds(this.worldlist)
-      }
     },
 
     methods: {
       colorSwap () {
         var el = document.getElementById('cpicker')
         this.color = el.value
-      },
-
-      sortWorlds (list) {
-        this.sorted_worldlist =  list.sort((a, b) => {
-          return a.name - b.name
-        })
       }
     },
 
     computed: {
       worldlist () {
         return this.$store.state.worlds
+      },
+
+      sorted_worldlist () {
+        return _.sortBy(this.worldlist, ['name'])
       },
 
       src () {
