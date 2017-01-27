@@ -26,13 +26,13 @@
           <span>PPT Points</span>
         </li>
         <li>
-          {{ match.scores.green - 2 * match.kills.green }}
+          {{ Math.floor(match.scores.green - 2.3 * match.kills.green) }}
         </li>
         <li>
-          {{ match.scores.blue - 2 * match.kills.blue }}
+          {{ Math.floor(match.scores.blue - 2.3 * match.kills.blue) }}
         </li>
         <li>
-          {{ match.scores.red - 2 * match.kills.red }}
+          {{ Math.floor(match.scores.red - 2.3 * match.kills.red) }}
         </li>
       </ul>
     </div>
@@ -43,13 +43,13 @@
           % PPT
         </li>
         <li>
-          {{ round(((match.scores.green - 2 * match.kills.green) / match.scores.green) * 100, 3, false) }}%
+          {{ round(((match.scores.green - 2.3 * match.kills.green) / match.scores.green) * 100, 3, false) }}%
         </li>
         <li>
-          {{ round(((match.scores.blue - 2 * match.kills.blue) / match.scores.blue) * 100, 3, false) }}%
+          {{ round(((match.scores.blue - 2.3 * match.kills.blue) / match.scores.blue) * 100, 3, false) }}%
         </li>
         <li>
-          {{ round(((match.scores.red - 2 * match.kills.red) / match.scores.red) * 100, 3, false) }}%
+          {{ round(((match.scores.red - 2.3 * match.kills.red) / match.scores.red) * 100, 3, false) }}%
         </li>
       </ul>
     </div>
@@ -60,13 +60,13 @@
           % PPK
         </li>
         <li>
-          {{ round((1 - ((match.scores.green - 2 * match.kills.green) / match.scores.green)) * 100, 3, false) }}%
+          {{ round((1 - ((match.scores.green - 2.3 * match.kills.green) / match.scores.green)) * 100, 3, false) }}%
         </li>
         <li>
-          {{ round((1 - ((match.scores.blue - 2 * match.kills.blue) / match.scores.blue)) * 100, 3, false) }}%
+          {{ round((1 - ((match.scores.blue - 2.3 * match.kills.blue) / match.scores.blue)) * 100, 3, false) }}%
         </li>
         <li>
-          {{ round((1 - ((match.scores.red - 2 * match.kills.red) / match.scores.red)) * 100, 3, false) }}%
+          {{ round((1 - ((match.scores.red - 2.3 * match.kills.red) / match.scores.red)) * 100, 3, false) }}%
         </li>
       </ul>
     </div>
