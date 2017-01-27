@@ -207,8 +207,7 @@
               }, () => {
                 // Do nothing
               })
-            }, (response) => {
-              console.error(response)
+            }, () => {
             })
         }
       },
