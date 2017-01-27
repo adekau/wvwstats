@@ -3,6 +3,9 @@ import Resource from 'vue-resource'
 import store from './store'
 import router from './router'
 import App from './components/App.vue'
+import { sync } from 'vuex-router-sync'
+
+sync(store, router)
 
 // Google charts
 window.google.charts.load('current', {
@@ -20,12 +23,19 @@ const app = new Vue({
   components: { App }
 })
 
+router.beforeEach((to, from, next) => {
+  var tooltips = document.getElementsByClassName("is-active");
+  for (var i = 0; i < tooltips.length; i++) {
+    tooltips[i].className = "mdl-tooltip"
+  }
+  next()
+})
+
 window.google.charts.setOnLoadCallback(() => {
   app.$store.commit('SET_CHARTSLOADED')
 })
 
 function update_10s () {
-  app.$store.dispatch('FETCH_WORLDS')
   app.$store.dispatch('FETCH_MATCHES')
 }
 
@@ -35,6 +45,8 @@ function update_1m () {
   app.$store.dispatch('FETCH_LEADERBOARD')
 }
 
+// Get worlds only once. Shouldn't need to update every 10s.
+app.$store.dispatch('FETCH_WORLDS')
 update_10s()
 update_1m()
 app.$store.dispatch('FETCH_OBJECTIVES')
