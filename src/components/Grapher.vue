@@ -3,7 +3,7 @@
     <div style='margin-bottom: 5px; display: block;'>
       <label for='worldSelect'>Server: &nbsp;</label>
       <select id='worldSelect' v-model="selectedWorld" :disabled="worldlist.length === 0">
-        <option v-for="world in worldlist | orderBy 'name'">
+        <option v-for="world in sorted_worldlist">
           {{world.name}}
         </option>
       </select>
@@ -20,7 +20,7 @@
     </div>
 
     <chart chartname='grapher' chartheight='500px' :chartdata='selectedData'
-      :match='currentMatch', :worldlist='worldlist'></chart>
+      :match='currentMatch' :worldlist='worldlist'></chart>
 
     <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
       style="margin-left: 6px; border-bottom: 1px solid grey;">
@@ -35,17 +35,16 @@
 
 <script>
   import Chart from './Chart.vue'
-  import store from '../store'
-
   export default {
+    name: 'Grapher',
+
     data () {
       return {
-        matches: [],
-        worldlist: [],
         selectedWorld: null,
         selectedData: null,
         queryWorld: null,
         queryData: null,
+        matches: [],
         // chartHeight: 500,
         availableXAxis: [
           'kills',
@@ -67,45 +66,30 @@
       }
     },
 
-    route: {
-      data({ to }) {
-        const server = to.query.server
-        const data = to.query.data
+    beforeRouteEnter (to, from, next) {
+      const server = to.query.server
+      const data = to.query.data
 
-        return {
-          matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds(),
-          queryWorld: server,
-          queryData: data
-        }
+      if (server === undefined || data === undefined) {
+        next(vm => {
+          vm.queryWorld = null
+          vm.queryData = null
+        })
+      } else {
+        next (vm => {
+          vm.queryWorld = server
+          vm.queryData = data
+        })
       }
     },
 
-    created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('worlds-updated', this.updateWorlds)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('worlds-updated', this.updateWorlds)
+    beforeMount () {
+      this.$store.dispatch('FETCH_MATCHES').then(() => {
+        this.matches = this.$store.state.matches
+      })
     },
 
     methods: {
-      updateMatches() {
-        this.matches = store.fetchMatches()
-        this.selectedWorld = this.queryWorld
-        this.selectedData = this.queryData
-        store.removeListener('matches-updated', this.updateMatches)
-      },
-
-      updateWorlds() {
-        this.worldlist = store.fetchWorlds()
-        this.selectedWorld = this.queryWorld
-        this.selectedData = this.queryData
-        store.removeListener('worlds-updated', this.updateWorlds)
-      },
-
       getWorldByName (name) {
         name = name.trim()
         for (var i = 0; i < this.worldlist.length; i++) {
@@ -129,6 +113,36 @@
     },
 
     computed: {
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      cSelectedWorld () {
+        var squery = this.$route.query.server
+        var sdata = this.$route.query.data
+        // Do selected data here as well.
+        if (this.selectedData === null) {
+          if (sdata !== null && sdata !== undefined) {
+            this.selectedData = sdata
+          }
+        }
+        if (this.selectedWorld === null) {
+          if (squery !== null && squery !== undefined) {
+            this.selectedWorld = squery
+            return squery
+          } else {
+            return null
+          }
+        } else {
+          if (squery !== null && squery !== undefined) {
+            this.selectedWorld = squery
+            return squery
+          } else {
+            return this.selectedWorld
+          }
+        }
+      },
+
       /**
        * worldMatchIds
        * Loops through each match and assembles an object by world id with what
@@ -160,8 +174,8 @@
        * using worldMatchIds, finds the current match id of the selected world.
        */
       currentMatchId () {
-        var server = this.selectedWorld
-        if (server === undefined || server === null) {
+        var server = this.cSelectedWorld
+        if (server === undefined || server === null || this.worldlist.length === 0) {
           return
         }
         var id = this.getWorldByName(server).id
@@ -181,6 +195,10 @@
            }
          }
          return
+       },
+
+       sorted_worldlist () {
+         return _.sortBy(this.worldlist, ['name'])
        }
     },
 
@@ -195,9 +213,11 @@
           'data': this.selectedData
         }
 
-        store.updateGrapherQuery(gq)
+        this.$store.dispatch('UPDATE_GRAPHERQUERY', {
+          grapherQuery: gq
+        })
 
-        this.$router.go({
+        this.$router.push({
           path: '/grapher',
           query: gq
         })
@@ -213,9 +233,11 @@
           'data': this.selectedData
         }
 
-        store.updateGrapherQuery(gq)
+        this.$store.dispatch('UPDATE_GRAPHERQUERY', {
+          grapherQuery: gq
+        })
 
-        this.$router.go({
+        this.$router.push({
           path: '/grapher',
           query: gq
         })

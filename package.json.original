@@ -1,0 +1,39 @@
+{
+  "name": "WvWStats",
+  "version": "1.0.0",
+  "description": "GW2 WvW Stat and match tracking website",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --hot --no-info",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/potatofarms/wvwstats"
+  },
+  "author": "Alex Dekau",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-plugin-transform-runtime": "*",
+    "babel-preset-es2015": "*",
+    "babel-runtime": "*",
+    "cross-env": "*",
+    "css-loader": "*",
+    "stylus-loader": "*",
+    "vue-hot-reload-api": "*",
+    "vue-html-loader": "*",
+    "vue-loader": "*",
+    "vue-style-loader": "*",
+    "webpack": "*",
+    "webpack-dev-server": "*"
+  },
+  "dependencies": {
+    "es6-promise": "*",
+    "file-loader": "*",
+    "html-webpack-plugin": "*",
+    "vue": "*",
+    "vue-resource": "*",
+    "vue-router": "*"
+  }
+}

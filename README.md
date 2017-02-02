@@ -1,23 +1,10 @@
-# Vue.js HackerNews clone
+# Future
 
-[Live demo](http://vuejs.github.io/vue-hackernews/)
+### Finish Migrating to Vue 2.x
+Most important thing to finish here. All other development on the website is halted until this is finished.
 
-Built with [Vue.js](http://vuejs.org), [vue-router](https://github.com/vuejs/vue-router) and the official [HackerNews API](https://github.com/HackerNews/API), with routing, comments, comment folding, user profile & realtime updates.
+### History mode. 
+Potential drop down box at the top of a page where you select a week range from the past and it loads the last archive from the end of that week (9:45 est or 10:00 est). Then have a more detailed history page that you can go to for that match. In that page, have a graph like structure (like the ones in the match details pages) and when you click on a point on the graph (say it's a score one for example) it will display a thing at the bottom like "Selected date: ___ GO TO DATE" and when you click there it changes the match to that specific time.
 
-The build setup uses [Webpack](http://webpack.github.io/) and the [vue-loader](https://github.com/vuejs/vue-loader) plugin, which enables Vue components to be written in a format that encapsulates a component's style, template and logic in a single file.
-
-If you are using SublimeText you can get proper syntax highlighting for `*.vue` files with [vue-syntax-highlight](https://github.com/vuejs/vue-syntax-highlight).
-
-### Building
-
-``` bash
-npm install
-# watch:
-npm run dev
-# build:
-npm run build
-```
-
-### License
-
-[MIT](http://opensource.org/licenses/MIT)
+### Skirmish viewer
+Details on this are not ready. Still thinking about how I want to do this. Can say for sure the main match page will no longer display the complete match scores, rather the current skirmish scores.

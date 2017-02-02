@@ -1,33 +1,37 @@
 <template>
-  <div>
-    <div class="server-select mdl-shadow--2dp">
-      <div class="server-select-container">
-        <strong>Server: &nbsp;</strong>
-        <select class="map-select" v-model="selectedWorld" :disabled="!mapPrepared">
-          <option v-for="world in worldlist | orderBy 'name'">
-            {{world.name}}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div id="map"></div>
-  </div>
+  <div id="map"></div>
 </template>
 
 <script>
-  import store from '../store'
-
   export default {
+    name: 'GameMap',
+
+    props: {
+      matchArr: {
+        required: true,
+        type: Array
+      },
+
+      worldlist: {
+        required: true,
+        type: Array
+      },
+
+      objectives: {
+        required: true,
+        type: Array
+      },
+
+      selectedWorld: {
+        required: true,
+        type: String
+      }
+    },
+
     data () {
       return {
         map: false,
-        worldlist: [],
-        selectedWorld: '',
-        matchArr: [],
-        objectiveIds: [],
-        objectives: [],
         objectiveInfo: {},
-        objectivesById: {},
         mapMarkers: {},
         defaultIconSize: [26, 26],
         mapIcons: {
@@ -48,7 +52,7 @@
       }
     },
 
-    ready () {
+    mounted () {
       var southWest, northEast
 
       this.map = window.L.map('map', {
@@ -56,7 +60,7 @@
         maxZoom: 6,
         crs: window.L.CRS.Simple,
         maxBoundsViscosity: 1.0
-      }).setView([0, 0], 0)
+      }).setView([8192, 8192], 0)
 
       southWest = this.unproject([0, 16384])
       northEast = this.unproject([16384, 0])
@@ -70,48 +74,20 @@
         subdomains: '1234'
       }).addTo(this.map)
 
-      if(this.objectives.length > 0) {
+      if (this.objectives.length > 0 && !this.mapPrepared && this.map) {
         this.prepareMap()
-      } else {
-        store.updateObjectives()
-      }
-
-      if(this.worldlist.length > 0) {
-        this.setServer()
-      } else {
-        store.updateWorlds()
-      }
-    },
-
-    route: {
-      data ({ to }) {
-        const server = to.params.server
-        // Increase timeout if this not working.
-        setTimeout(this.setServer, 30)
-        return {
-          worldlist: store.fetchWorlds(),
-          matchArr: store.fetchMatches(),
-          objectives: store.fetchObjectives(),
-          objectiveIds: store.fetchObjectiveIds(),
-          paramServer: server
-        }
       }
     },
 
     created () {
-      store.on('matches-updated', this.updateMatches)
-      store.on('worlds-updated', this.updateWorlds)
-      store.on('objectives-updated', this.updateObjectives)
       this.prepareIcons()
     },
 
-    destroyed () {
-      store.removeListener('matches-updated', this.updateMatches)
-      store.removeListener('worlds-updated', this.updateWorlds)
-      store.removeListener('objectives-updated', this.updateObjectives)
-    },
-
     computed: {
+      objectiveIds () {
+        return this.$store.getters.objectiveIds
+      },
+
       /**
        * worldMatchIds
        * Loops through each match and assembles an object by world id with what
@@ -180,41 +156,12 @@
         var server = this.selectedWorld
         var id = this.getWorldByName(server).id
         return this.worldMatchIds[id]
-      }
+      },
     },
 
     methods: {
-      updateMatches () {
-        this.matchArr = store.fetchMatches()
-        if (this.mapPrepared && this.worldlist.length > 0 && this.selectedWorld) {
-          this.updateMap()
-        }
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-        this.setServer()
-      },
-
-      updateObjectives () {
-        this.objectives = store.fetchObjectives()
-        this.prepareMap()
-      },
-
       unproject: function (coord) {
         return this.map.unproject(coord, this.map.getMaxZoom())
-      },
-
-      setServer () {
-        if (this.mapPrepared && this.matchArr[0]) {
-          var server = this.paramServer
-          if(server) {
-            this.selectedWorld = this.getWorldById(server).name
-            this.updateMap()
-          }
-        } else {
-          setTimeout(this.setServer, 30)
-        }
       },
 
       timeDifference (current, previous) {
@@ -271,22 +218,6 @@
         }
         return
       },
-
-      /**
-       * getWorldById
-       * id: world's id
-       * returns the world object of the form: {id: _, name: _, population: _}
-       */
-      getWorldById (id) {
-        for (var i = 0; i < this.worldlist.length; i++) {
-          let curWorld = this.worldlist[i]
-          if(curWorld.id == id) {
-            return curWorld
-          }
-        }
-        return
-      },
-
       /**
        * prepareIcons
        * Prepares the mapIcons object.
@@ -317,7 +248,9 @@
        * create neutral icons on the map and register the map markers.
        */
       prepareMap () {
-        console.log(this.objectives)
+        if (!this.map) {
+          return
+        }
         for (var bit in this.objectives) {
           let obj = this.objectives[bit]
           if (!obj.coord) {
@@ -332,8 +265,8 @@
             icon: this.mapIcons[obj.type.toLowerCase()].neutral
           }).addTo(this.map)
           .bindPopup(name)
-          this.mapPrepared = 1
         }
+        this.mapPrepared = 1
       },
 
       /**
@@ -375,11 +308,14 @@
           this.mapMarkers[item].setIcon(
             this.mapIcons.claimed[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
 
-          store.fetchGuildById(guildId).then((guild) => {
+          this.$store.dispatch('FETCH_GUILD', {
+            id: guildId
+          }).then(() => {
+            let guild = this.$store.state.guilds[guildId]
             this.mapMarkers[item].unbindPopup()
             this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
               'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
-              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.guild_name)
+              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.name)
           })
         } else {
           this.mapMarkers[item].setIcon(
@@ -422,9 +358,25 @@
 
     watch: {
       'selectedWorld': function (val, oldVal) {
-        this.$router.go('/map/' + this.getWorldByName(val).id)
-        store.updateSelectedWorld(this.getWorldByName(val).id)
-        this.updateMap()
+        if (this.mapPrepared) {
+          this.$router.push('/map/' + this.getWorldByName(val).id)
+          this.updateMap()
+          this.$store.dispatch('UPDATE_SELECTEDWORLD', {
+            selectedWorld: this.getWorldByName(val).id
+          })
+        }
+      },
+
+      'objectives': function (val, oldVal) {
+        if (this.objectives.length > 0 && !this.mapPrepared && this.map) {
+          this.prepareMap()
+        }
+      },
+
+      'matchArr': function (val, oldVal) {
+        if (this.map && this.mapPrepared && this.selectedWorld !== '') {
+          this.updateMap()
+        }
       }
     }
 
@@ -432,29 +384,8 @@
 </script>
 
 <style>
-  .server-select {
-    position: absolute;
-    top: 20px;
-    left: calc(50% - 110px);
-    z-index: 9999;
-    height: 30px;
-    width: 220px;
-    background-color: rgba(230,230,230,.62);
-    border-radius: 8px;
-  }
-
-  .server-select div {
-    display: inline-block;
-    margin-top: 4px;
-    margin-left: 12px;
-  }
-
   .leaflet-container {
     background: #fff;
-  }
-
-  .map-select {
-    width: 140px;
   }
 
   #map {

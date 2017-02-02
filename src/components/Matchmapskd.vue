@@ -69,7 +69,10 @@
     <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
-          <span data-tooltip="Kills + Deaths">Activity</span>
+          <span :id="'mmkd-activity-' + getMapName()">Activity</span>
+          <MdlTooltip :target="'mmkd-activity-' + getMapName()">
+            Kills + Deaths
+          </MdlTooltip>
         </li>
         <li>
           {{ mapid.deaths.green + mapid.kills.green }}
@@ -89,13 +92,13 @@
           K/D
         </li>
         <li>
-          {{ mapid.kills.green / mapid.deaths.green | round 3 false }}
+          {{ round(mapid.kills.green / mapid.deaths.green, 3, false) }}
         </li>
         <li>
-          {{ mapid.kills.blue / mapid.deaths.blue | round 3 false }}
+          {{ round(mapid.kills.blue / mapid.deaths.blue, 3, false) }}
         </li>
         <li>
-          {{ mapid.kills.red / mapid.deaths.red | round 3 false }}
+          {{ round(mapid.kills.red / mapid.deaths.red, 3, false) }}
         </li>
       </ul>
     </div>
@@ -105,6 +108,7 @@
 <style></style>
 
 <script>
+  import MdlTooltip from './MdlTooltip'
   export default {
     props: ['match', 'worldlist', 'mapid'],
 
@@ -117,6 +121,14 @@
           }
         }
         return
+      },
+
+      round (value, accuracy, keep) {
+        if (typeof value !== 'number') return value
+
+        var fixed = value.toFixed(accuracy)
+
+        return keep ? fixed : +fixed
       },
 
       getMapName () {
@@ -132,15 +144,8 @@
       }
     },
 
-    filters: {
-      round: function (value, accuracy, keep) {
-        if (typeof value !== 'number') return value
-
-        var fixed = value.toFixed(accuracy)
-
-        return keep ? fixed : +fixed
-      }
-
+    components: {
+      MdlTooltip
     }
   }
 </script>

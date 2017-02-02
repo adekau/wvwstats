@@ -1,113 +1,56 @@
 import Vue from 'vue'
-import Router from 'vue-router'
 import Resource from 'vue-resource'
-// import { domain, fromNow } from './filters'
+import store from './store'
+import router from './router'
 import App from './components/App.vue'
-import Homepage from './components/Homepage.vue'
-import EUMatches from './components/EUMatches.vue'
-import Map from './components/Map.vue'
-import Leaderboard from './components/Leaderboard.vue'
-import Match from './components/Match.vue'
-import Grapher from './components/Grapher.vue'
-import Timezones from './components/Timezones.vue'
-import WorldTimezoneStats from './components/WorldTimezoneStats.vue'
-import About from './components/About.vue'
-import Embed from './components/Embed.vue'
+import { sync } from 'vuex-router-sync'
+
+sync(store, router)
 
 // Google charts
 window.google.charts.load('current', {
   'packages': ['corechart', 'line']
-});
+})
 
-// install router
-Vue.use(Router)
 // install resource, for http requests
 Vue.use(Resource)
 
-// register filters globally
-// Vue.filter('fromNow', fromNow)
-// Vue.filter('domain', domain)
+const app = new Vue({
+  router: router,
+  store: store,
+  el: "#app",
+  template: "<App/>",
+  components: { App }
+})
 
-Vue.directive('progress', {
-  bind: function () {},
-  update: function (value, old) {
-    // The directive may be called before the element have been upgraded
-    window.componentHandler.upgradeElement(this.el)
-    this.el.MaterialProgress.setProgress(value)
+router.beforeEach((to, from, next) => {
+  var tooltips = document.getElementsByClassName("is-active");
+  for (var i = 0; i < tooltips.length; i++) {
+    tooltips[i].className = "mdl-tooltip"
   }
+  next()
 })
 
-Vue.directive('mdl', {
-  bind: function () {
-    window.componentHandler.upgradeElement(this.el)
-  }
+window.google.charts.setOnLoadCallback(() => {
+  app.$store.commit('SET_CHARTSLOADED')
 })
 
-// routing
-var router = new Router({hashbang: false})
+function update_10s () {
+  app.$store.dispatch('FETCH_MATCHES')
+}
 
-router.map({
-  '/na': {
-    component: Homepage,
-    pageTitle: 'North American Matches',
-    region: '1-'
-  },
-  '/eu': {
-    component: EUMatches,
-    pageTitle: 'European Matches',
-    region: '2-'
-  },
-  '/map': {
-    component: Map,
-    pageTitle: 'Live Map'
-  },
-  '/map/:server': {
-    component: Map,
-    pageTitle: 'Live Map'
-  },
-  '/leaderboard': {
-    component: Leaderboard,
-    pageTitle: 'Leaderboard'
-  },
-  '/match/:matchid': {
-    component: Match,
-    pageTitle: 'Match Details'
-  },
-  '/grapher': {
-    component: Grapher,
-    pageTitle: 'Grapher'
-  },
-  '/timezones': {
-    component: Timezones,
-    pageTitle: 'Timezone Ranks'
-  },
-  '/timezones/:server': {
-    component: WorldTimezoneStats,
-    pageTitle: 'Server Timezone Stats'
-  },
-  '/about': {
-    component: About,
-    pageTitle: 'About WvWStats'
-  },
-  '/embed': {
-    component: Embed,
-    pageTitle: 'Embed WvWStats'
-  }
-})
+function update_1m () {
+  app.$store.dispatch('FETCH_GLICKO') // does this really need to be here? could be done once maybe.
+  app.$store.dispatch('FETCH_PREDICTEDGLICKO')
+  app.$store.dispatch('FETCH_LEADERBOARD')
+}
 
-/**
- * uncomment if want page to go back to top..
- * TODO: Maybe animate this?
- */
+// Get worlds only once. Shouldn't need to update every 10s.
+app.$store.dispatch('FETCH_WORLDS')
+update_10s()
+update_1m()
+app.$store.dispatch('FETCH_OBJECTIVES')
+setInterval(update_10s, 10000)
+setInterval(update_1m, 60000)
 
-/*router.afterEach(function () {
-  console.log('hi')
-  var _router_el = document.getElementById('router_view')
-  _router_el.scrollTop = 0
-})*/
-
-router.redirect({
-  '*': '/na'
-})
-
-router.start(App, '#app')
+export { app, router, store }

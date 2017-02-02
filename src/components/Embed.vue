@@ -12,7 +12,7 @@
     <p class="form_holder">
       <label for='worldSelect'>Server: &nbsp;</label>
       <select id='worldSelect' v-model="selectedWorld" :disabled="worldlist.length === 0">
-        <option v-for="world in worldlist | orderBy 'name'">
+        <option v-for="world in sorted_worldlist">
           {{world.name}}
         </option>
       </select>
@@ -50,7 +50,7 @@
     </p>
     <br>
     <p class="form_holder">
-      <input id="cpicker" value="CFD8DC" v-model="color">
+      <input id="cpicker" @change="colorSwap">
 
     </p>
     <br>
@@ -91,11 +91,12 @@
 </style>
 
 <script>
-  import store from '../store'
+  import _ from 'lodash'
   export default {
+    name: 'Embed',
+
     data () {
       return {
-        worldlist: [],
         orientation: 'Horizontal',
         color: 'CFD8DC',
         selectedWorld: '',
@@ -104,51 +105,28 @@
       }
     },
 
-    ready () {
+    mounted () {
       var input = document.getElementById('cpicker')
       var picker = new jscolor(input)
       picker.fromString('CFD8DC')
     },
 
-    route: {
-      data ({ to }) {
-        return {
-          worldlist: store.fetchWorlds()
-        }
-      }
-    },
-
-    created () {
-      store.on('worlds-updated', this.updateWorldlist)
-    },
-
-    destroyed () {
-      store.removeListener('worlds-updated', this.updateWorldlist)
-    },
-
     methods: {
-      cpickerChange (picker) {
-        console.log(picker)
-        this.color = picker
-      },
-
-      updateWorldlist () {
-        this.worldlist = store.fetchWorlds()
-      },
-
-      getWorldByName (name) {
-        name = name.trim()
-        for (var i = 0; i < this.worldlist.length; i++) {
-          let curWorld = this.worldlist[i]
-          if(curWorld.name === name) {
-            return curWorld
-          }
-        }
-        return
+      colorSwap () {
+        var el = document.getElementById('cpicker')
+        this.color = el.value
       }
     },
 
     computed: {
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      sorted_worldlist () {
+        return _.sortBy(this.worldlist, ['name'])
+      },
+
       src () {
         if (this.selectedWorld === "") {
           return "Select a server."
@@ -156,7 +134,13 @@
         let orientation = this.orientation.toLowerCase()
         let color = this.color
         let header = this.header
-        let world = this.getWorldByName(this.selectedWorld).id
+        let world;
+        for (var i = 0; i < this.worldlist.length; i++) {
+          let curWorld = this.worldlist[i]
+          if(curWorld.name === this.selectedWorld) {
+            world = curWorld.id
+          }
+        }
         let height = this.height
 
         var ret = "<iframe frameborder=\"0\" src='http://wvwstats.com/embed#/?world="
@@ -168,6 +152,7 @@
 
         return ret
       }
+
     }
   }
 

@@ -1,16 +1,18 @@
 <template>
-  <div v-mdl class="mdl-layout__container">
-    <div v-mdl class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+  <div class="mdl-layout__container">
+    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <searchbar></searchbar>
       <sidebar></sidebar>
       <main class="mdl-layout__content mdl-color--grey-100" id="router_view">
         <div class="mdl-grid demo-content">
-          <router-view
-            class="view"
-            keep-alive
-            transition
-            transition-mode="out-in">
-          </router-view>
+          <transition name="fade" mode="out-in">
+            <keep-alive>
+              <router-view
+                id="app_router"
+                class="view">
+              </router-view>
+            </keep-alive>
+          </transition>
         </div>
       </main>
     </div>
@@ -29,21 +31,24 @@
   }
 </script>
 
-<style lang="stylus">
-ul
-  list-style-type none
-  padding 0
-  margin 0
-
-.view
-  transition opacity .2s ease
-  box-sizing border-box
-  &.v-enter, &.v-leave
-    opacity 0
-</style>
-
 <style>
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
 
+  .view {
+    box-sizing: border-box;
+  }
+
+  /*Fade Transition*/
+  .fade-enter-active, .fade-leave-active {
+    transition: all .2s ease;
+  }
+  .fade-enter, .fade-leave-active {
+    opacity: 0;
+  }
 
   html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;

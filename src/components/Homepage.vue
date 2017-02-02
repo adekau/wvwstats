@@ -4,9 +4,7 @@
     :class="{ loading: !matches.length }">
     <!-- <h3>NA Matches</h3> -->
     <matchheading></matchheading>
-    <scoredetails v-for="match in matches
-      | filterBy region in 'id'
-      | orderBy 'id'"
+    <scoredetails v-for="match in page_matches"
       :matchinfo="match"
       :worldlist="worldlist" :predictedglicko="formattedglicko"></scoredetails>
 
@@ -27,11 +25,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="server in servers
-            | orderBy 'predicted' -1">
+          <tr v-for="(server, index) in servers_oPredicted">
             <td data-label="Rank">
-              {{$index + 1}}&nbsp;
-              <span class="{{positionChange[server.name].textclass}}">
+              {{index + 1}}&nbsp;
+              <span v-bind:class="positionChange[server.name].textclass">
                 {{positionChange[server.name].change | absolute}}
               </span>
             </td>
@@ -39,13 +36,13 @@
               {{server.name}}
             </td>
             <td data-label="Old Rating">
-              {{server.official | round 3 true}}
+              {{server.official | round(3, true)}}
             </td>
             <td data-label="New Rating">
-              {{server.predicted | round 3 true}}
+              {{server.predicted | round(3, true)}}
             </td>
-            <td data-label="Change" class="{{server.textclass}}">
-              {{server.predicted - server.official | round 3 true}}
+            <td data-label="Change" v-bind:class="server.textclass">
+              {{server.predicted - server.official | round(3, true)}}
             </td>
           </tr>
         </tbody>
@@ -54,18 +51,14 @@
 </template>
 
 <script>
-  import store from '../store'
   import Scoredetails from './Scoredetails.vue'
   import Matchheading from './Matchheading.vue'
 
   export default {
+    name: 'Homepage',
     data() {
       return {
-        region: '1-',
-        matches: [],
-        worldlist: [],
-        officialglicko: {},
-        predictedglicko: {}
+        region: '1-'
       }
     },
 
@@ -73,40 +66,36 @@
       data ({ to }) {
         const region = to.region
         return {
-          region: region,
-          matches: store.fetchMatches(),
-          worldlist: store.fetchWorlds(),
-          officialglicko: store.fetchGlicko(),
-          predictedglicko: store.fetchPredictedGlicko()
+          region: region
         }
       }
     },
 
-    ready () {
-      if (!this.officialglicko) {
-        store.updateGlicko()
-      }
-
-      if (!this.predictedglicko) {
-        store.updatePredictedGlicko()
-      }
-    },
-
-    created () {
-      store.on('matches-updated', this.update)
-      store.on('worlds-updated', this.updateWorlds)
-      store.on('glicko-updated', this.updateGlicko)
-      store.on('predictedGlicko-updated', this.updatePredictedGlicko)
-    },
-
-    destroyed () {
-      store.removeListener('matches-updated', this.update)
-      store.removeListener('worlds-updated', this.updateWorlds)
-      store.removeListener('glicko-updated', this.updateGlicko)
-      store.removeListener('predictedGlicko-updated', this.updatePredictedGlicko)
-    },
-
     computed: {
+      matches () {
+        return this.$store.state.matches
+      },
+
+      worldlist () {
+        return this.$store.state.worlds
+      },
+
+      officialglicko () {
+        return this.$store.state.glicko
+      },
+
+      predictedglicko () {
+        return this.$store.state.predictedglicko
+      },
+
+      page_matches () {
+        return this.matches
+          .filter(obj => obj.id.includes(this.region))
+          .sort((a, b) => {
+            return (a.id.split("-")[1] - b.id.split("-")[1])
+          })
+      },
+
       worldsById () {
         let ret = {}
         for (let i = 0; i < this.worldlist.length; i++) {
@@ -137,6 +126,10 @@
         let pglicko = this.formattedglicko
         let ret = []
 
+        if (!this.worldlist[0]) {
+          return ret;
+        }
+
         Object.keys(glicko).forEach( (key) => {
           if (key < 2000 && pglicko[key]) {
             let startGlicko = glicko[key].rating
@@ -152,6 +145,12 @@
           }
         })
         return ret
+      },
+
+      servers_oPredicted () {
+        return this.servers.sort((a, b) => {
+          return b.predicted - a.predicted
+        })
       },
 
       positionChange () {
@@ -194,24 +193,6 @@
         })
 
         return ret
-      }
-    },
-
-    methods: {
-      update () {
-        this.matches = store.fetchMatches()
-      },
-
-      updateWorlds () {
-        this.worldlist = store.fetchWorlds()
-      },
-
-      updateGlicko () {
-        this.officialglicko = store.fetchGlicko()
-      },
-
-      updatePredictedGlicko () {
-        this.predictedglicko = store.fetchPredictedGlicko()
       }
     },
 

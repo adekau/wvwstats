@@ -62,7 +62,10 @@
     <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="list_header">
-          <span data-tooltip="Kills + Deaths">Activity</span>
+          <span id="mkd-activity">Activity</span>
+          <MdlTooltip target="mkd-activity">
+            Kills + Deaths
+          </MdlTooltip>
         </li>
         <li>
           {{ match.deaths.green + match.kills.green }}
@@ -82,13 +85,13 @@
           K/D
         </li>
         <li>
-          {{ match.kills.green / match.deaths.green | round 3 false }}
+          {{ round(match.kills.green / match.deaths.green, 3, false) }}
         </li>
         <li>
-          {{ match.kills.blue / match.deaths.blue | round 3 false }}
+          {{ round(match.kills.blue / match.deaths.blue, 3, false) }}
         </li>
         <li>
-          {{ match.kills.red / match.deaths.red | round 3 false }}
+          {{ round(match.kills.red / match.deaths.red, 3, false) }}
         </li>
       </ul>
     </div>
@@ -98,6 +101,7 @@
 <style></style>
 
 <script>
+  import MdlTooltip from './MdlTooltip'
   export default {
     props: ['match', 'worldlist'],
     methods: {
@@ -109,18 +113,19 @@
           }
         }
         return
-      }
-    },
+      },
 
-    filters: {
-      round: function (value, accuracy, keep) {
+      round (value, accuracy, keep) {
         if (typeof value !== 'number') return value
 
         var fixed = value.toFixed(accuracy)
 
         return keep ? fixed : +fixed
       }
+    },
 
+    components: {
+      MdlTooltip
     }
   }
 </script>
