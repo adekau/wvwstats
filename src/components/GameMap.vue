@@ -229,13 +229,13 @@
         for (var type in types) {
           for (var color in colors) {
             this.mapIcons[types[type]][colors[color]] = window.L.icon({
-              iconUrl: 'http://www.wvwstats.com/static/img/' + types[type] + '_' + colors[color] + '.png',
+              iconUrl: 'https://www.wvwstats.com/static/img/' + types[type] + '_' + colors[color] + '.png',
               iconSize: this.defaultIconSize
             })
             this.mapIcons.claimed[types[type]][colors[color]] = window.L.icon({
-              iconUrl: 'http://www.wvwstats.com/static/img/' + types[type] + '_' + colors[color] + '.png',
+              iconUrl: 'https://www.wvwstats.com/static/img/' + types[type] + '_' + colors[color] + '.png',
               iconSize: this.defaultIconSize,
-              shadowUrl: 'http://www.wvwstats.com/static/img/claimed.svg',
+              shadowUrl: 'https://www.wvwstats.com/static/img/claimed.svg',
               shadowSize: [12, 12],
               shadowAnchor: [18, 18]
             })
@@ -315,15 +315,38 @@
             this.mapMarkers[item].unbindPopup()
             this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
               'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />' +
-              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.name)
+              'Claimed by: <b>[' + guild.tag + ']</b> ' + guild.name + '<br />'
+              + 'Points Per Tick: <b>' + curObjective.points_tick + '</b><br />'
+              + 'Points for Capture: <b>' + curObjective.points_capture + '</b><br />'
+              + 'Yaks: <b>' + curObjective.yaks_delivered + '</b><br />'
+              + 'Guild Upgrades: ' + `${this.getGuildUpgrades(curObjective.guild_upgrades)}` + '</b><br />'
+              + 'Chat Link: <b>' + this.objectiveInfo[item].chat_link + '</b>'
+            )
           })
         } else {
           this.mapMarkers[item].setIcon(
             this.mapIcons[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
           this.mapMarkers[item].unbindPopup()
-          this.mapMarkers[item].bindPopup('<center><b>' + this.objectiveInfo[item].name + '</b></center><br />' +
-            'Last flipped <b>' + unclaimedLastFlippedFmt + '</b>')
+          this.mapMarkers[item].bindPopup(
+            '<center><b>' + this.objectiveInfo[item].name + '</b></center><br />'
+            + 'Last flipped <b>' + unclaimedLastFlippedFmt + '</b><br />'
+            + 'Points Per Tick: <b>' + curObjective.points_tick + '</b><br />'
+            + 'Points for Capture: <b>' + curObjective.points_capture + '</b><br />'
+            + 'Yaks: <b>' + curObjective.yaks_delivered + '</b><br />'
+            + 'Chat Link: <b>' + this.objectiveInfo[item].chat_link + '</b>'
+          )
         }
+      },
+
+      getGuildUpgrades (list) {
+        let guildUpgrades = this.$store.getters.guildUpgrades
+        let ret = list.map(item => {
+          return `<img src='${guildUpgrades[item].static}'
+                  alt='${guildUpgrades[item].name}'
+                  title='${guildUpgrades[item].name}'
+                  width=26 height=26 />`
+        }).join("")
+        return list.length > 0 ? ret : "None"
       },
 
       timerUpdate: function () {

@@ -1,5 +1,5 @@
 <template>
-  <div class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
+  <div v-if="dataLoaded" class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li class="worldname">
@@ -186,6 +186,11 @@
     props: ['matchinfo', 'worldlist', 'predictedglicko'],
 
     computed: {
+      dataLoaded () {
+        return Object.keys(this.matchinfo).length
+          && this.worldlist.length
+          && Object.keys(this.predictedglicko).length
+      },
       /**
        * worldinfo
        * used to compute the name of the servers in the match.
@@ -244,14 +249,18 @@
        * Calculates the points per tick per server.
        */
       ppt () {
-        return {
-          green: (this.objectives.camps.green * 2) + (this.objectives.towers.green * 4) +
-              (this.objectives.keeps.green * 8) + (this.objectives.castles.green * 12),
-          blue: (this.objectives.camps.blue * 2) + (this.objectives.towers.blue * 4) +
-              (this.objectives.keeps.blue * 8) + (this.objectives.castles.blue * 12),
-          red: (this.objectives.camps.red * 2) + (this.objectives.towers.red * 4) +
-              (this.objectives.keeps.red * 8) + (this.objectives.castles.red * 12)
-        }
+        let ret = { green: 0, blue: 0, red: 0 }
+        let ref = this.matchinfo.maps
+        // Loop though the maps
+        Object.keys(ref).forEach((key) => {
+          // Loop through the map objectives.
+          let refSingleMap = ref[key].objectives
+          Object.keys(refSingleMap).forEach((key) => {
+            let objective = refSingleMap[key]
+            ret[objective.owner.toLowerCase()] += objective.points_tick
+          })
+        })
+        return ret
       },
 
       /**
