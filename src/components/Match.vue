@@ -13,8 +13,10 @@
 
     <matchheading v-if="isValidMatch && dataReady"></matchheading>
 
+    <!--<scoredetails v-if="isValidMatch && dataReady" :matchinfo="mtu" :worldlist="worldlist"
+      :predictedglicko="formattedglicko"></scoredetails>-->
     <scoredetails v-if="isValidMatch && dataReady" :matchinfo="mtu" :worldlist="worldlist"
-      :predictedglicko="formattedglicko"></scoredetails>
+      :predictedglicko="formattedglicko" useSkirmish="true"></scoredetails>
 
     <div v-if="dataReady && isValidMatch" class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col qlFlex">
       <div>
