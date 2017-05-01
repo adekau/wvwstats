@@ -6,7 +6,8 @@
     <matchheading></matchheading>
     <scoredetails v-for="match in page_matches"
       :matchinfo="match"
-      :worldlist="worldlist" :predictedglicko="formattedglicko"></scoredetails>
+      :worldlist="worldlist" :predictedglicko="formattedglicko"
+      useSkirmish="true"></scoredetails>
 
       <h4 class="mdl-color-text--blue-grey-600 mdl-cell--12-col"
         style="margin-left: 6px; border-bottom: 1px solid grey;">

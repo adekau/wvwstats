@@ -1,6 +1,7 @@
 /**
 * Constants
 */
+const image_static = 'https://www.wvwstats.com/static/img/'
 
 /**
 * URLs for API Requests
@@ -9,14 +10,14 @@ export const matchesUrl = 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
 export const worldsUrl = 'https://api.guildwars2.com/v2/worlds?ids=all'
 export const objectivesUrl = 'https://api.guildwars2.com/v2/wvw/objectives?ids='
 export const guildUrl = 'https://api.guildwars2.com/v2/guild/'
-export const glickoUrl = 'http://www.wvwstats.com/api/v1/officialglicko'
-export const predictedGlickoUrl = 'http://www.wvwstats.com/api/v1/predictedglicko'
-export const weekleaderboardUrl = 'http://www.wvwstats.com/api/v1/weekleaderboard'
-export const matcharchiveUrl = 'http://www.wvwstats.com/api/v1/matcharchive'
-export const timezonesUrl = 'http://www.wvwstats.com/api/v1/timezones'
-export const matchHistoryUrl = 'http://wvwstats.com/api/v1/matchhistory'
-export const matchUrl = 'http://wvwstats.com/api/v1/match/'
-export const dataRangeUrl = 'http://wvwstats.com/api/v1/datarange'
+export const glickoUrl = 'https://www.wvwstats.com/api/v1/officialglicko'
+export const predictedGlickoUrl = 'https://www.wvwstats.com/api/v1/predictedglicko'
+export const weekleaderboardUrl = 'https://www.wvwstats.com/api/v1/weekleaderboard'
+export const matcharchiveUrl = 'https://www.wvwstats.com/api/v1/matcharchive'
+export const timezonesUrl = 'https://www.wvwstats.com/api/v1/timezones'
+export const matchHistoryUrl = 'https://wvwstats.com/api/v1/matchhistory'
+export const matchUrl = 'https://wvwstats.com/api/v1/match/'
+export const dataRangeUrl = 'https://wvwstats.com/api/v1/datarange'
 
 // All Alpine Borderlands..
 // const objectiveIds = [
@@ -40,3 +41,90 @@ export const objectiveIds = [
   "1099-100", "1099-101", "1099-102", "1099-104", "1099-105", "1099-106",
   "1099-109", "1099-110", "1099-113", "1099-114", "1099-115", "1099-116"
 ]
+
+export const guildUpgrades = {
+  '147': {
+    'static': image_static + '147.png',
+    'name': 'Iron Guards'
+  },
+  '168': {
+    'static': image_static + '168.png',
+    'name': 'Cloaking Waters'
+  },
+  '178': {
+    'static': image_static + '178.png',
+    'name': 'Emergency Waypoint'
+  },
+  '183': {
+    'static': image_static + '183.png',
+    'name': 'Auto Turrets'
+  },
+  '222': {
+    'static': image_static + '222.png',
+    'name': 'Dune Roller'
+  },
+  '298': {
+    'static': image_static + '298.png',
+    'name': 'Airship Defense'
+  },
+  '306': {
+    'static': image_static + '306.png',
+    'name': 'Sabotage Depot'
+  },
+  '307': {
+    'static': image_static + '307.png',
+    'name': 'Armored Dolyaks'
+  },
+  '329': {
+    'static': image_static + '329.png',
+    'name': 'Hardened Siege'
+  },
+  '345': {
+    'static': image_static + '345.png',
+    'name': 'Centaur Banner'
+  },
+  '365': {
+    'static': image_static + '365.png',
+    'name': 'Packed Dolyaks'
+  },
+  '383': {
+    'static': image_static + '383.png',
+    'name': 'Invulnerable Dolyaks'
+  },
+  '389': {
+    'static': image_static + '389.png',
+    'name': 'Hardened Gates'
+  },
+  '399': {
+    'static': image_static + '399.png',
+    'name': 'Turtle Banner'
+  },
+  '418': {
+    'static': image_static + '418.png',
+    'name': 'Presence of the Keep'
+  },
+  '483': {
+    'static': image_static + '483.png',
+    'name': 'Minor Supply Trap'
+  },
+  '513': {
+    'static': image_static + '513.png',
+    'name': 'Invulnerable Fortifications'
+  },
+  '559': {
+    'static': image_static + '559.png',
+    'name': 'Chilling Fog'
+  },
+  '562': {
+    'static': image_static + '562.png',
+    'name': 'Speedy Dolyaks'
+  },
+  '583': {
+    'static': image_static + '583.png',
+    'name': 'Watchtower'
+  },
+  '590': {
+    'static': image_static + '590.png',
+    'name': 'Dragon Banner'
+  }
+}

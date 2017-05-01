@@ -3,11 +3,20 @@
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
       <div class="mdl-cell wvw-mh"> Server </div>
     </div>
-    <div class="mdl-cell--3-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
-      <div class="mdl-cell wvw-mh" style="width: auto;"> Score Percent </div>
+    <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
+      <div class="mdl-cell wvw-mh" style="width: auto;"> Percent </div>
     </div>
     <div class="mdl-cell--1-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
-      <div class="mdl-grid wvw-mh"> Score </div>
+      <div id="mh-score" class="mdl-grid wvw-mh"> Score </div>
+      <MdlTooltip target="mh-score">
+        Hover for total score.
+      </MdlTooltip>
+    </div>
+    <div class="mdl-cell--1-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
+      <div id="mh-vp" class="mdl-grid wvw-mh"> V.P. </div>
+      <MdlTooltip target="mh-vp">
+        Victory Points
+      </MdlTooltip>
     </div>
     <div class="mdl-cell--1-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <div class="mdl-grid wvw-mh"> <span id="mh-ppt">PPT</span> </div>
@@ -71,6 +80,7 @@
       MdlTooltip
     }
   }
+
 </script>
 
 <style>

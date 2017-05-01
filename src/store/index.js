@@ -187,6 +187,10 @@ const store = new Vuex.Store({
       return Const.objectiveIds
     },
 
+    guildUpgrades () {
+      return Const.guildUpgrades
+    },
+
     activePage (state) {
       return Number(state.route.params.page) || 1
     },
