@@ -103,10 +103,24 @@
       </ul>
     </div>
     <div class="mdl-cell--1-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
-      <ul class="mdl-list" style="margin:auto;">
+      <ul v-if="matchinfo.victory_points" class="mdl-list" style="margin:auto;">
         <li>{{matchinfo.victory_points.green}}</li>
         <li>{{matchinfo.victory_points.blue}}</li>
         <li>{{matchinfo.victory_points.red}}</li>
+      </ul>
+      <ul v-else class="mdl-list" style="margin:auto;">
+        <li id="mi_vp_1"> N/A </li>
+        <MdlTooltip target="mi_vp_1">
+          Victory Points not available in custom data range mode.
+        </MdlTooltip>
+        <li id="mi_vp_2"> N/A </li>
+        <MdlTooltip target="mi_vp_2">
+          Victory Points not available in custom data range mode.
+        </MdlTooltip>
+        <li id="mi_vp_3"> N/A </li>
+        <MdlTooltip target="mi_vp_3">
+          Victory Points not available in custom data range mode.
+        </MdlTooltip>
       </ul>
     </div>
     <div class="mdl-cell--1-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
@@ -265,10 +279,12 @@
       },
 
       skirmish() {
+        let ret = { "green": 0, "blue": 0, "red": 0 }
         let ref = this.matchinfo.skirmishes
+        if (!ref) return ret
         let curSkirmish = ref[ref.length - 1]
-
-        return curSkirmish.scores
+        ret = curSkirmish.scores
+        return ret
       },
 
       /**
@@ -295,8 +311,8 @@
        * Calculates the percentages to fill the progress bars.
        */
       percentage() {
-        let leader = Math.max(this.skirmish.green, this.skirmish.blue, this.skirmish.red)
         if (this.useSkirmish) {
+          let leader = Math.max(this.skirmish.green, this.skirmish.blue, this.skirmish.red)
           return {
             green: ((this.skirmish.green / leader) * 100),
             blue: ((this.skirmish.blue / leader) * 100),
