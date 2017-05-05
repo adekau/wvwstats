@@ -211,7 +211,6 @@
 </template>
 
 <script>
-  import store from '../store'
   import MdlProgress from './MdlProgress'
   import MdlTooltip from './MdlTooltip'
 
