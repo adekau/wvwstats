@@ -2,7 +2,7 @@
   <button class="mdl-button mdl-js-button mdl-color--blue-grey-100 mdl-js-ripple-effect"
     v-on:click="clickHandler()">
     <slot></slot>
-  </div>
+  </button>
 </template>
 
 <script>

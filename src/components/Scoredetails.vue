@@ -136,28 +136,28 @@
           <li>{{objectives.camps.green}}</li>
           <li>{{objectives.camps.blue}}</li>
           <li>{{objectives.camps.red}}</li>
-          <ul>
+        </ul>
       </div>
       <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
         <ul style="text-align: left; list-style: none;">
           <li>{{objectives.towers.green}}</li>
           <li>{{objectives.towers.blue}}</li>
           <li>{{objectives.towers.red}}</li>
-          <ul>
+        </ul>
       </div>
       <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
         <ul style="text-align: left; list-style: none;">
           <li>{{objectives.keeps.green}}</li>
           <li>{{objectives.keeps.blue}}</li>
           <li>{{objectives.keeps.red}}</li>
-          <ul>
+        </ul>
       </div>
       <div class="mdl-cell mdl-cell--3-col mdl-cell--1-col-phone mdl-cell--2-col-tablet">
         <ul style="text-align: left; list-style: none;">
           <li>{{objectives.castles.green}}</li>
           <li>{{objectives.castles.blue}}</li>
           <li>{{objectives.castles.red}}</li>
-          <ul>
+        </ul>
       </div>
     </div>
     <div class="mdl-cell--1-col mdl-grid no-padding-left mdl-cell--hide-phone mdl-cell--hide-tablet">
