@@ -27,17 +27,12 @@
           </MdlTooltip>
         </li>
       </ul>
-      <!-- Tooltips for world names -->
-
     </div>
+    <!-- Tooltips for world names -->
     <div class="mdl-cell--2-col mdl-cell--1-col-phone mdl-cell--1-col-tablet mdl-grid">
       <ul class="mdl-list" style="width: 100%;">
         <li>
           <div class="first-place" style="padding: 10px;">
-            <!--<div v-bind:data-longtooltip =
-              "worldinfo.blue + ':' + scoreDiff.green.blue + '\n' + worldinfo.red + ':' + scoreDiff.green.red"
-              class="mdl-progress mdl-js-progress">
-            </div>-->
             <MdlProgress :id="'pgGreen' + matchinfo.id" v-bind:progress="percentage.green">
             </MdlProgress>
 
