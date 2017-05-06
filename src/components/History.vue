@@ -55,7 +55,7 @@
 
     data () {
       const data = {
-        t: [],
+        // t: [], I don't now why this is here.
         loading: false,
         server: 'All',
         transition: 'slide-up',
@@ -83,9 +83,6 @@
     },
 
     methods: {
-      test () {
-        console.log('it worked')
-      },
       loadItems (to = this.page, from = -1) {
         this.loading = true
         this.$store.dispatch('FETCH_MATCHHISTORY_IDS', { server: this.server }).then(() => {
