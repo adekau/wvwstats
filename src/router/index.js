@@ -13,6 +13,7 @@ import WorldTimezoneStats from '../components/WorldTimezoneStats.vue'
 import About from '../components/About.vue'
 import Embed from '../components/Embed.vue'
 import History from '../components/History.vue'
+import SkirmishHistory from '../components/SkirmishHistory.vue'
 
 const HomepageComponent = resolve => require(['../components/Homepage.vue'], resolve)
 const EUMatchesComponent = resolve => require(['../components/EUMatches.vue'], resolve)
@@ -24,6 +25,7 @@ const MatchComponent = resolve => require(['../components/Match.vue'], resolve)
 const GrapherComponent = resolve => require(['../components/Grapher.vue'], resolve)
 const AboutComponent = resolve => require(['../components/About.vue'], resolve)
 const HistoryComponent = resolve => require(['../components/History.vue'], resolve)
+const SkirmishHistoryComponent = resolve => require(['../components/SkirmishHistory.vue'], resolve)
 
 Vue.use(Router)
 
@@ -114,6 +116,18 @@ export default new Router({
       component: HistoryComponent,
       meta: {
         pageTitle: 'Match History'
+      }
+    }, {
+      path: '/skirmishes',
+      component: SkirmishHistoryComponent,
+      meta: {
+        pageTitle: 'Match Skirmish History'
+      }
+    }, {
+      path: '/skirmishes/:match',
+      component: SkirmishHistoryComponent,
+      meta: {
+        pageTitle: 'Match Skirmish History'
       }
     }, {
       path: '*',
