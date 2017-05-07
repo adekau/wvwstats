@@ -28,22 +28,22 @@
       }
     },
 
-    data () {
+    data() {
       return {
         map: false,
         objectiveInfo: {},
         mapMarkers: {},
         defaultIconSize: [26, 26],
         mapIcons: {
-          camp: {green: null, blue: null, red: null, neutral: null},
-          tower: {green: null, blue: null, red: null, neutral: null},
-          keep: {green: null, blue: null, red: null, neutral: null},
-          castle: {green: null, blue: null, red: null, neutral: null},
+          camp: { green: null, blue: null, red: null, neutral: null },
+          tower: { green: null, blue: null, red: null, neutral: null },
+          keep: { green: null, blue: null, red: null, neutral: null },
+          castle: { green: null, blue: null, red: null, neutral: null },
           claimed: {
-            camp: {green: null, blue: null, red: null, neutral: null},
-            tower: {green: null, blue: null, red: null, neutral: null},
-            keep: {green: null, blue: null, red: null, neutral: null},
-            castle: {green: null, blue: null, red: null, neutral: null}
+            camp: { green: null, blue: null, red: null, neutral: null },
+            tower: { green: null, blue: null, red: null, neutral: null },
+            keep: { green: null, blue: null, red: null, neutral: null },
+            castle: { green: null, blue: null, red: null, neutral: null }
           }
         },
         mapPrepared: 0,
@@ -52,7 +52,7 @@
       }
     },
 
-    mounted () {
+    mounted() {
       var southWest, northEast
 
       this.map = window.L.map('map', {
@@ -60,18 +60,18 @@
         maxZoom: 6,
         crs: window.L.CRS.Simple,
         maxBoundsViscosity: 1.0
-      }).setView([8192, 8192], 0)
+      }).setView([0,165],3)
 
       southWest = this.unproject([0, 16384])
-      northEast = this.unproject([16384, 0])
+      northEast = this.unproject([16384, 8192])
 
       this.map.setMaxBounds(new window.L.LatLngBounds(southWest, northEast))
 
-      window.L.tileLayer('https://tiles{s}.guildwars2.com/2/1/{z}/{x}/{y}.jpg', {
+      window.L.tileLayer('https://{s}.guildwars2.com/2/1/{z}/{x}/{y}.jpg', {
         minZoom: 0,
         maxZoom: 6,
         continuousWorld: true,
-        subdomains: '1234'
+        subdomains: ["tiles", "tiles1", "tiles2", "tiles3", "tiles4"]
       }).addTo(this.map)
 
       if (this.objectives.length > 0 && !this.mapPrepared && this.map) {
@@ -79,12 +79,12 @@
       }
     },
 
-    created () {
+    created() {
       this.prepareIcons()
     },
 
     computed: {
-      objectiveIds () {
+      objectiveIds() {
         return this.$store.getters.objectiveIds
       },
 
@@ -93,11 +93,11 @@
        * Loops through each match and assembles an object by world id with what
        * match that server is in.
        */
-      worldMatchIds () {
+      worldMatchIds() {
         var ret = {}
 
-        if(!this.matchArr) {
-            return ret
+        if (!this.matchArr) {
+          return ret
         }
 
         for (var i = 0; i < this.matchArr.length; i++) {
@@ -106,7 +106,7 @@
 
           Object.keys(matchServers).forEach((key) => {
             var serversArray = matchServers[key]
-            for(var server in serversArray) {
+            for (var server in serversArray) {
               ret[serversArray[server]] = matchId
             }
           })
@@ -118,7 +118,7 @@
        * objectivesById
        * returns an object indexed by id of the objectives in the match-up
        */
-      objectivesById () {
+      objectivesById() {
         var curMatchId = this.currentMatch // alias. force compute
         var curMatch = Object.create(null)
         var ret = Object.create(null)
@@ -129,12 +129,12 @@
 
         for (var i = 0; i < this.matchArr.length; i++) {
           let match = this.matchArr[i]
-          if(match.id === curMatchId) {
+          if (match.id === curMatchId) {
             curMatch = match
           }
         }
 
-        let temp = curMatch.maps.map( (obj) => {
+        let temp = curMatch.maps.map((obj) => {
           return obj.objectives
         })
 
@@ -152,7 +152,7 @@
        * currentMatch
        * using worldMatchIds, finds the current match of the selected world.
        */
-      currentMatch () {
+      currentMatch() {
         var server = this.selectedWorld
         var id = this.getWorldByName(server).id
         return this.worldMatchIds[id]
@@ -164,7 +164,7 @@
         return this.map.unproject(coord, this.map.getMaxZoom())
       },
 
-      timeDifference (current, previous) {
+      timeDifference(current, previous) {
         var msPerMinute = 60 * 1000;
         var msPerHour = msPerMinute * 60;
         var msPerDay = msPerHour * 24;
@@ -174,33 +174,33 @@
         var elapsed = current - previous;
 
         if (elapsed < msPerMinute) {
-          return (elapsed/1000) > 1 ? Math.round(elapsed/1000) + ' seconds ago'
-            : Math.round(elapsed/1000) + ' seconds ago'
+          return (elapsed / 1000) > 1 ? Math.round(elapsed / 1000) + ' seconds ago'
+            : Math.round(elapsed / 1000) + ' seconds ago'
         }
 
         else if (elapsed < msPerHour) {
-          return Math.round(elapsed/msPerMinute) > 1 ? Math.round(elapsed/msPerMinute) + ' minutes ago'
-            : Math.round(elapsed/msPerMinute) + ' minute ago'
+          return Math.round(elapsed / msPerMinute) > 1 ? Math.round(elapsed / msPerMinute) + ' minutes ago'
+            : Math.round(elapsed / msPerMinute) + ' minute ago'
         }
 
-        else if (elapsed < msPerDay ) {
-          return Math.round(elapsed/msPerHour) > 1 ? Math.round(elapsed/msPerHour) + ' hours ago'
-            : Math.round(elapsed/msPerHour) + ' hour ago'
+        else if (elapsed < msPerDay) {
+          return Math.round(elapsed / msPerHour) > 1 ? Math.round(elapsed / msPerHour) + ' hours ago'
+            : Math.round(elapsed / msPerHour) + ' hour ago'
         }
 
         else if (elapsed < msPerMonth) {
-          return Math.round(elapsed/msPerDay) > 1 ? 'approximately ' + Math.round(elapsed/msPerDay) + ' days ago'
-            : 'approximately ' + Math.round(elapsed/msPerDay) + ' day ago'
+          return Math.round(elapsed / msPerDay) > 1 ? 'approximately ' + Math.round(elapsed / msPerDay) + ' days ago'
+            : 'approximately ' + Math.round(elapsed / msPerDay) + ' day ago'
         }
 
         else if (elapsed < msPerYear) {
-          return Math.round(elapsed/msPerMonth) > 1 ? 'approximately ' + Math.round(elapsed/msPerMonth) + ' months ago'
-            : 'approximately ' + Math.round(elapsed/msPerMonth) + ' month ago'
+          return Math.round(elapsed / msPerMonth) > 1 ? 'approximately ' + Math.round(elapsed / msPerMonth) + ' months ago'
+            : 'approximately ' + Math.round(elapsed / msPerMonth) + ' month ago'
         }
 
         else {
-          return Math.round(elapsed/msPerYear) > 1 ? 'approximately ' + Math.round(elapsed/msPerYear) + ' years ago'
-            : 'approximately ' + Math.round(elapsed/msPerYear) + ' year ago'
+          return Math.round(elapsed / msPerYear) > 1 ? 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago'
+            : 'approximately ' + Math.round(elapsed / msPerYear) + ' year ago'
         }
       },
       /**
@@ -208,11 +208,11 @@
        * name: world's string name
        * returns the world object of the form: {id: _, name: _, population: _}
        */
-      getWorldByName (name) {
+      getWorldByName(name) {
         name = name.trim()
         for (var i = 0; i < this.worldlist.length; i++) {
           let curWorld = this.worldlist[i]
-          if(curWorld.name === name) {
+          if (curWorld.name === name) {
             return curWorld
           }
         }
@@ -222,7 +222,7 @@
        * prepareIcons
        * Prepares the mapIcons object.
        */
-      prepareIcons () {
+      prepareIcons() {
         var types = ['camp', 'tower', 'keep', 'castle']
         var colors = ['green', 'blue', 'red', 'neutral']
 
@@ -247,7 +247,7 @@
        * prepareMap
        * create neutral icons on the map and register the map markers.
        */
-      prepareMap () {
+      prepareMap() {
         if (!this.map) {
           return
         }
@@ -264,7 +264,7 @@
             title: name,
             icon: this.mapIcons[obj.type.toLowerCase()].neutral
           }).addTo(this.map)
-          .bindPopup(name)
+            .bindPopup(name)
         }
         this.mapPrepared = 1
       },
@@ -273,8 +273,8 @@
        * updateMap
        * Modify the icons based on who owns them
        */
-      updateMap () {
-        if(!this.mapPrepared) {
+      updateMap() {
+        if (!this.mapPrepared) {
           return
         }
 
@@ -299,11 +299,11 @@
        * takes an objective and fills the map with the correct icon and
        * tooltip with the correct information.
        */
-      handleObjective (curObjective, item) {
+      handleObjective(curObjective, item) {
         var unclaimedLastFlippedTime = new Date(curObjective.last_flipped)
         var unclaimedLastFlippedFmt = this.timeDifference(new Date(), unclaimedLastFlippedTime)
 
-        if(curObjective.claimed_by) {
+        if (curObjective.claimed_by) {
           let guildId = curObjective.claimed_by
           this.mapMarkers[item].setIcon(
             this.mapIcons.claimed[curObjective.type.toLowerCase()][curObjective.owner.toLowerCase()])
@@ -338,7 +338,7 @@
         }
       },
 
-      getGuildUpgrades (list) {
+      getGuildUpgrades(list) {
         let guildUpgrades = this.$store.getters.guildUpgrades
         let ret = list.map(item => {
           return `<img src='${guildUpgrades[item].static}'
@@ -365,14 +365,15 @@
               seconds = '0' + seconds
             }
             var labelText = minutes + ':' + seconds
-            this.mapMarkers[item].unbindLabel()
-            this.mapMarkers[item].bindLabel(labelText, {
-              noHide: true,
+            this.mapMarkers[item].unbindTooltip()
+            this.mapMarkers[item].bindTooltip(labelText, {
+              permanent: true,
               className: 'maptimer',
-              offset: [-16, 14]
-            }).showLabel()
+              direction: 'left',
+              offset: [23, 23]
+            }).openTooltip()
           } else {
-            this.mapMarkers[item].unbindLabel()
+            this.mapMarkers[item].unbindTooltip()
           }
         }
       }
@@ -404,13 +405,14 @@
     }
 
   }
+
 </script>
 
 <style>
   .leaflet-container {
     background: #fff;
   }
-
+  
   #map {
     position: absolute;
     top: 0;
@@ -419,12 +421,20 @@
     left: 0;
     z-index: 1;
   }
-
+  
   .maptimer {
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
     border: none;
     padding: 5px;
     padding-top: 0;
     padding-bottom: 0;
+  }
+  
+  .leaflet-tooltip-left.maptimer::before {
+    border-left: none;
+  }
+  
+  .leaflet-tooltip-right.maptimer::before {
+    border-right: none;
   }
 </style>
