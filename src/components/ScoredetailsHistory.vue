@@ -2,7 +2,7 @@
   <div class="mdl-shadow--2dp mdl-color--blue-grey-100 mdl-cell mdl-cell--12-col mdl-grid">
     <div class="mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
       <h6 style="text-align:center; margin-top: 9px; margin-bottom: -4px;">
-        Match {{new Date(matchinfo.start_time).toLocaleDateString()}} — {{new Date(matchinfo.end_time).toLocaleDateString()}}
+        Tier {{tier}} Match {{new Date(matchinfo.start_time).toLocaleDateString()}} — {{new Date(matchinfo.end_time).toLocaleDateString()}}
       </h6>
     </div>
     <div class="mdl-cell--2-col mdl-cell--2-col-phone mdl-cell--2-col-tablet mdl-grid">
@@ -366,6 +366,10 @@
           ret = {}
         }
         return ret
+      },
+
+      tier() {
+          return this.matchinfo.id.split("-")[1];
       }
 
     },
